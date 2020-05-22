@@ -1,0 +1,69 @@
+<form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
+    <app-toolbar [title]="title">
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar" (click)="back()" type="button">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit">
+            <i class="fa fa-save"></i>
+        </button>
+    </app-toolbar>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header p-b-0">
+                    <h5>Dados Cadastrais</h5>
+                    <hr />
+                </div>
+                <div class="card-body p-t-0">
+                    <div class="row form-group" [class.has-danger]="f.submitted && name.invalid">
+                        <label class="col-3 m-b-0">Nome</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" [(ngModel)]="person.name" name="name"
+                                #name="ngModel" required maxlength="100">
+                            <div class="col-form-label" *ngIf="f.submitted && name.invalid && name.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-3 m-b-0">Sobrenome</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" [(ngModel)]="person.lastName" name="lastName"
+                                #lastName="ngModel" maxlength="100">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-3 m-b-0">CPF</label>
+                        <div class="col-9">
+                            <input class="form-control m-w-200" type="text" [(ngModel)]="person.cpf" name="cpf"
+                                #cpf="ngModel" maxlength="14" mask="000.000.000-00" [dropSpecialCharacters]="false">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-3 m-b-0">Data de Nascimento</label>
+                        <div class="col-9 form-group">
+                            <div class="input-group">
+                                <input class="form-control m-w-120" type="text" [(ngModel)]="person.dateOfBirth"
+                                    name="dateOfBirth" #dateOfBirth="ngbDatepicker" placement="bottom-left" readonly
+                                    ngbDatepicker>
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary btn-sm" (click)="person.dateOfBirth=null"
+                                        type="button">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" (click)="dateOfBirth.toggle()" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6" >
+            <app-customer-contact [customer]="person"></app-customer-contact>
+        </div>
+    </div>
+</form>
+<app-toasts></app-toasts>

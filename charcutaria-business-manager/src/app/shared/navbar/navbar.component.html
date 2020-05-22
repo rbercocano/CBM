@@ -1,0 +1,25 @@
+<nav class="navbar header-navbar cbm-header">
+  <div class="logo">
+    <a [routerLink]="['/dashboard']">
+      <img class="img-fluid" src="../../../assets/images/pig_small.png">
+      <span class="title">CBM | {{companyName}}</span>
+    </a>
+    <a class="mobile-options" href="javascript:"><i class="ti-more"></i></a></div>
+</nav>
+<nav class="navbar navbar-expand-md cbm-menu">
+  <div class="collapse navbar-collapse" id="cbm-navbar">
+    <ul class="navbar-nav mr-auto">
+      <ng-container *ngFor="let m of modules">
+        <li class="nav-item" *ngIf="m.childModules.length == 0">
+          <a class="nav-link" [routerLink]="[m.route]">{{m.name}}</a>
+        </li>
+        <li class="nav-item dropdown" ngbDropdown *ngIf="m.childModules.length > 0">
+          <a class="nav-link dropdown-toggle" [id]="m.moduleId" ngbDropdownToggle>{{m.name}}</a>
+          <div class="dropdown-menu" [attr.aria-label]="m.moduleId" ngbDropdownMenu>
+            <a class="dropdown-item" [routerLink]="[c.route]" *ngFor="let c of m.childModules">{{c.name}}</a>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</nav>

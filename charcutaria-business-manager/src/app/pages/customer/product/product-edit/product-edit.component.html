@@ -1,0 +1,65 @@
+<form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
+    <app-toolbar [title]="title">
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit">
+            <i class="fa fa-save"></i>
+        </button>
+    </app-toolbar>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row form-group" [class.has-danger]="f.submitted && name.invalid">
+                        <label class="col-3 m-b-0">Nome</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" [(ngModel)]="product.name" name="name"
+                                #name="ngModel" maxlength="100" required>
+                            <div class="col-form-label" *ngIf="f.submitted && name.invalid && name.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" [class.has-danger]="f.submitted && measureUnitId.invalid">
+                        <label class="col-3 m-b-0">Unidade de Medida</label>
+                        <div class="col-9">
+                            <select class="form-control m-w-300" [(ngModel)]="product.measureUnitId"
+                                name="measureUnitId" #measureUnitId="ngModel" required>
+                                <option [ngValue]="null">Selecione</option>
+                                <option [ngValue]="u.measureUnitId" *ngFor="let u of measures">{{u.description}}
+                                </option>
+                            </select>
+                            <div class="col-form-label"
+                                *ngIf="f.submitted && measureUnitId.invalid && measureUnitId.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" [class.has-danger]="f.submitted && price.invalid">
+                        <label class="col-3 m-b-0">Preço</label>
+                        <div class="col-9">
+                            <input class="form-control m-w-300" type="text" [(ngModel)]="product.price" name="price"
+                                #price="ngModel" required currencyMask
+                                [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7">
+                            <div class="col-form-label" *ngIf="f.submitted && price.invalid && price.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-3 m-b-0">Status</label>
+                        <div class="col-9">
+                            <select class="form-control m-w-300" [(ngModel)]="product.activeForSale"
+                                name="activeForSale">
+                                <option [ngValue]="true">Ativo</option>
+                                <option [ngValue]="false">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<app-toasts></app-toasts>

@@ -1,0 +1,72 @@
+<app-toolbar [title]="'Produtos'">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Novo" (click)="new()">
+        <i class="fa fa-plus"></i>
+    </button>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="newSearch()">
+        <i class="fa fa-search"></i>
+    </button>
+</app-toolbar>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-4 form-inline">
+                        Exibir&nbsp;
+                        <select class="form-control-sm m-w-100 w-100p" [(ngModel)]="paginationInfo.recordsPerpage" (change)="changePageSize()">
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="15">15</option>
+                            <option [ngValue]="25">25</option>
+                            <option [ngValue]="50">50</option>
+                        </select>
+                        &nbsp;registros por página
+                    </div>
+                    <div class="col-4 text-center">
+                        <input type="text" class="form-control-sm m-w-350 w-100p" placeholder="Filtro"
+                            [(ngModel)]="filter">
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control-sm m-w-250 float-right w-100p" [(ngModel)]="active">
+                            <option [ngValue]="null">Todos Status</option>
+                            <option [ngValue]="true">Ativos</option>
+                            <option [ngValue]="false">Inativos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Preço</th>
+                            <th>Status</th>
+                            <th style="width: 15px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="products.length > 0">
+                            <tr *ngFor="let p of products">
+                                <td>{{p.name}}</td>
+                                <td>{{p.price | cbmCurrency}} / {{p.measureUnit}}</td>
+                                <td>{{p.activeForSale ? 'Ativo' : 'Inativo'}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar"
+                                        (click)="edit(p.productId)">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <tr *ngIf="products.length == 0">
+                            <td colspan="4" class="text-center">Nenhum produto encontrado</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-server-side-pager></app-server-side-pager>
+            </div>
+        </div>
+    </div>
+</div>
+<app-toasts></app-toasts>

@@ -1,0 +1,22 @@
+<div class="alert alert-info background-info">
+    <div class="contact-wrapper">
+        <div class="image-container">
+            <img class="img-fluid img-radius" src="../../../assets/images/contact/{{contact?.contactIcon}}" />
+        </div>
+        <div class="contact-info">
+            <span class="contact-type">
+                {{contact?.contactType}}: {{contact?.contact}}
+                <span class="m-l-10" style="color: #4099ff;cursor:pointer" (click)="editContact();">
+                    <i class="fa fa-pencil"></i>
+                </span>
+                <span class="m-l-5" style="color: #fb0000;cursor:pointer" (click)="deleteContact();">
+                    <i class="fa fa-times"></i>
+                </span>
+            </span>
+            <br />
+            <span class="additional-info">
+                {{contact?.additionalInfo}}
+            </span>
+        </div>
+    </div>
+</div>

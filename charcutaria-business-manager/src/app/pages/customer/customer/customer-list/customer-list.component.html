@@ -1,0 +1,116 @@
+<app-toolbar [title]="'Clientes'">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Adicionar Pessoa Física" (click)="newPerson()">
+        <i class="fa fa-user"></i>
+    </button>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Adicionar Pessoa Jurídica"
+        (click)="newCompany()">
+        <i class="fa fa-building"></i>
+    </button>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="newSearch()">
+        <i class="fa fa-search"></i>
+    </button>
+</app-toolbar>
+<div class="row">
+    <div class="col-12" >
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-4 form-inline">
+                        Exibir&nbsp;
+                        <select class="form-control-sm m-w-100 w-100p" [(ngModel)]="paginationInfo.recordsPerpage"
+                            (change)="changePageSize()">
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="15">15</option>
+                            <option [ngValue]="25">25</option>
+                            <option [ngValue]="50">50</option>
+                        </select>
+                        &nbsp;registros por página
+                    </div>
+                    <div class="col-4 text-center">
+                        <input type="text" class="form-control-sm m-w-350 w-100p" placeholder="Filtro"
+                            [(ngModel)]="filter">
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control-sm m-w-250 float-right w-100p" [(ngModel)]="customerTypeId"
+                            (change)="newSearch()">
+                            <option [ngValue]="t.customerTypeId" *ngFor="let t of customerTypes">{{t.description}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <ng-container *ngIf="customerTypeId == 1;then person else company"></ng-container>
+                </table>
+                <app-server-side-pager></app-server-side-pager>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #person>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Data de Nascimento</th>
+            <th>CPF</th>
+            <th style="width: 40px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngIf="people.length > 0">
+            <tr *ngFor="let c of people">
+                <td>{{c.name}} {{c.lastName}}</td>
+                <td>{{c.dateOfBirth | date:'dd/MM/yyyy'}}</td>
+                <td>{{c.cpf}}</td>
+                <td>
+                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar"
+                        (click)="edit(c.customerId)">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <!-- <button class="btn btn-primary btn-mini  m-l-5" placement="top" ngbTooltip="Visualizar"
+                        (click)="selectedCustomer = c">
+                        <i class="fa fa-eye"></i>
+                    </button> -->
+                </td>
+            </tr>
+        </ng-container>
+        <tr *ngIf="people.length == 0">
+            <td colspan="4" class="text-center">Nenhum cliente encontrado</td>
+        </tr>
+    </tbody>
+</ng-template>
+<ng-template #company>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Razão Social</th>
+            <th>CNPJ</th>
+            <th style="width: 40px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngIf="companies.length > 0">
+            <tr *ngFor="let c of companies">
+                <td>{{c.name}}</td>
+                <td>{{c.dbaName}}</td>
+                <td>{{c.cnpj}}</td>
+                <td>
+                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar"
+                        (click)="edit(c.customerId)">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <!-- <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Visualizar"
+                        (click)="selectedCustomer = c">
+                        <i class="fa fa-eye"></i>
+                    </button> -->
+                </td>
+            </tr>
+        </ng-container>
+        <tr *ngIf="companies.length == 0">
+            <td colspan="4" class="text-center">Nenhum cliente encontrado</td>
+        </tr>
+    </tbody>
+</ng-template>
+<app-toasts></app-toasts>

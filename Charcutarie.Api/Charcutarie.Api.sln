@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29403.142
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charcutarie.Api", "Charcutarie.Api\Charcutarie.Api.csproj", "{72329575-773B-40EC-AF52-09DF46886681}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charcutarie.Models", "Charcutarie.Models\Charcutarie.Models.csproj", "{4AAF72DC-4B2F-4F4E-91E0-3699CABA0537}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charcutarie.Services", "Charcutarie.Services\Charcutarie.Services.csproj", "{62ACE135-8797-4810-ACD7-D160A843505F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charcutarie.Application", "Charcutarie.Application\Charcutarie.Application.csproj", "{8ABBC4C8-41D6-44D6-9DFE-40C33B6EB8FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Charcutarie.Repository", "Charcutarie.Repository\Charcutarie.Repository.csproj", "{37F99343-5F5C-4F3A-BB8B-9859C01C85A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Charcutarie.Core", "Charcutarie.Core\Charcutarie.Core.csproj", "{91596682-D9CF-4736-9065-22AD8642CE0D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72329575-773B-40EC-AF52-09DF46886681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72329575-773B-40EC-AF52-09DF46886681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72329575-773B-40EC-AF52-09DF46886681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72329575-773B-40EC-AF52-09DF46886681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AAF72DC-4B2F-4F4E-91E0-3699CABA0537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AAF72DC-4B2F-4F4E-91E0-3699CABA0537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AAF72DC-4B2F-4F4E-91E0-3699CABA0537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AAF72DC-4B2F-4F4E-91E0-3699CABA0537}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62ACE135-8797-4810-ACD7-D160A843505F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62ACE135-8797-4810-ACD7-D160A843505F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62ACE135-8797-4810-ACD7-D160A843505F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62ACE135-8797-4810-ACD7-D160A843505F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ABBC4C8-41D6-44D6-9DFE-40C33B6EB8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ABBC4C8-41D6-44D6-9DFE-40C33B6EB8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ABBC4C8-41D6-44D6-9DFE-40C33B6EB8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ABBC4C8-41D6-44D6-9DFE-40C33B6EB8FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37F99343-5F5C-4F3A-BB8B-9859C01C85A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F99343-5F5C-4F3A-BB8B-9859C01C85A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F99343-5F5C-4F3A-BB8B-9859C01C85A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F99343-5F5C-4F3A-BB8B-9859C01C85A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91596682-D9CF-4736-9065-22AD8642CE0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91596682-D9CF-4736-9065-22AD8642CE0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91596682-D9CF-4736-9065-22AD8642CE0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91596682-D9CF-4736-9065-22AD8642CE0D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C79FC70B-A05E-4B8C-8490-5F1B2F8165FE}
+	EndGlobalSection
+EndGlobal

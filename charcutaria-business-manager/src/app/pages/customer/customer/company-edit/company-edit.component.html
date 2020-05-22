@@ -1,0 +1,54 @@
+<form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
+    <app-toolbar [title]="title">
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar" (click)="back()" type="button">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit">
+            <i class="fa fa-save"></i>
+        </button>
+    </app-toolbar>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header p-b-0">
+                    <h5>Dados Cadastrais</h5>
+                    <hr />
+                </div>
+                <div class="card-body p-t-0">
+                    <div class="row form-group" [class.has-danger]="f.submitted && name.invalid">
+                        <label class="col-3 m-b-0">Nome</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" [(ngModel)]="company.name" name="name"
+                                #name="ngModel" required maxlength="100">
+                            <div class="col-form-label" *ngIf="f.submitted && name.invalid && name.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-3 m-b-0">Razão Social</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" [(ngModel)]="company.dbaName" name="dbaName"
+                                #dbaName="ngModel" maxlength="100" required>
+                            <div class="col-form-label"
+                                *ngIf="f.submitted && dbaName.invalid && dbaName.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-3 m-b-0">CNPJ</label>
+                        <div class="col-9">
+                            <input class="form-control m-w-200" type="text" [(ngModel)]="company.cnpj" name="cnpj"
+                                #cpf="ngModel" mask="00.000.000/0000-00" [dropSpecialCharacters]="false">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <app-customer-contact [customer]="company"></app-customer-contact>
+        </div>
+    </div>
+</form>
+<app-toasts></app-toasts>

@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "Hu2qt2F1xvjj1KjnsD9/jm3L/fRqWF+o0J4b2ASI58zvclYcnxbAP4uWt0hmmSlC2rV6SiW1jLCTswUvkyCn9A==",
+  "success": true,
+  "projectFilePath": "E:\\Projects\\ET IT\\CBM\\Charcutarie.Api\\Charcutarie.Core\\Charcutarie.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.identitymodel.logging\\6.5.1\\microsoft.identitymodel.logging.6.5.1.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.5.1\\microsoft.identitymodel.tokens.6.5.1.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\system.security.cryptography.cng\\4.5.0\\system.security.cryptography.cng.4.5.0.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\unitsnet\\4.60.0\\unitsnet.4.60.0.nupkg.sha512"
+  ],
+  "logs": []
+}

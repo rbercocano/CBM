@@ -1,0 +1,55 @@
+.cbm-header{
+    position: fixed;
+    display: block;
+    min-height: 50px;
+    background: #e9ecf3;
+    color: #414141;
+    width: 100%;
+    z-index: 1024;
+    background: linear-gradient(to right, #4099ff, #73b4ff);
+    line-height: 35px;
+    padding: 0;
+    div.logo{
+        position: relative;
+        align-items: center;
+        display: flex;
+        float: left;
+        height: 56px;
+        text-align: center;
+        width: 400px;
+        padding: 10px;
+        a span.title{
+            padding: 0 0 0 10px;
+            color: #fff;
+            font-size: 18px;
+            line-height: 30px;
+            vertical-align: middle;
+        }
+        img.img-fluid{
+            width: 30px;
+            height: auto;
+        }
+    
+    }
+}
+.cbm-menu{    
+    top:56px;
+    background-color: #fff;
+    height: 44px;
+    display: block;
+    width: 100%;
+    z-index: 1023;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    position: fixed;
+    color: #666 !important;
+    font-size: 13px;
+    padding: 1px 10px;
+}
+.dropdown-menu{
+    padding: 0 !important;
+}
+.nav-item{
+    line-height: 26px;
+    vertical-align: middle;
+    cursor: pointer ;
+}

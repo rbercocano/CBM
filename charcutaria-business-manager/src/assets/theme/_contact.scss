@@ -1,0 +1,25 @@
+.contact-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    & .image-container{
+        position: relative;
+        float: left; 
+        width: 65px;
+        & img{
+            width: 60px;
+        }
+    }
+    & .contact-info{
+        position: relative;
+        float: left;
+        width: calc(100% - 65px);
+        & .contact-type{
+            font-weight: bold;
+        }
+        & .additional-info{
+            font-size: 12px;
+        }
+    }
+}

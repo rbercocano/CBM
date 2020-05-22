@@ -1,0 +1,9 @@
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\bin\Debug\netcoreapp3.0\Charcutarie.Models.deps.json
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\bin\Debug\netcoreapp3.0\Charcutarie.Models.dll
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\bin\Debug\netcoreapp3.0\Charcutarie.Models.pdb
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\obj\Debug\netcoreapp3.0\Charcutarie.Models.csproj.CoreCompileInputs.cache
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\obj\Debug\netcoreapp3.0\Charcutarie.Models.AssemblyInfoInputs.cache
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\obj\Debug\netcoreapp3.0\Charcutarie.Models.AssemblyInfo.cs
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\obj\Debug\netcoreapp3.0\Charcutarie.Models.dll
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\obj\Debug\netcoreapp3.0\Charcutarie.Models.pdb
+E:\Projects\ET IT\Charcutarie.Api\Charcutarie.Models\obj\Debug\netcoreapp3.0\Charcutarie.Models.csprojAssemblyReference.cache

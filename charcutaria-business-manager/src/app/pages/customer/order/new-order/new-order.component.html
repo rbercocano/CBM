@@ -1,0 +1,208 @@
+<form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
+    <app-toolbar [title]="title">
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar">
+            <i class="fa fa-arrow-left"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit">
+            <i class="fa fa-save"></i>
+        </button>
+    </app-toolbar>
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header p-b-0">
+                    <h5>Detalhes do Pedido</h5>
+                    <hr />
+                </div>
+                <div class="card-body p-t-0">
+                    <div class="row form-group" [class.has-danger]="f.submitted && selectedCustomer == null">
+                        <div class="col-12">
+                            <label class="m-b-0">Cliente</label>
+                            <input id="customerId" type="text" name="customerId" class="form-control"
+                                [(ngModel)]="selectedCustomer" [ngbTypeahead]="search"
+                                [resultFormatter]="customerResultFormatter" [inputFormatter]="customerInputFormatter"
+                                #instance="ngbTypeahead" [resultTemplate]="rt" />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-6 form-group">
+                            <label class="m-b-0">Data de entrega solicitada</label>
+                            <div class="input-group">
+                                <input class="form-control" type="text" [(ngModel)]="order.completeBy" name="completeBy"
+                                    #completeBy="ngbDatepicker" placement="bottom-left" readonly [minDate]="minDate"
+                                    ngbDatepicker>
+                                <div class="input-group-append">
+                                    <button class="btn btn-secondary btn-sm" (click)="order.completeBy=null"
+                                        type="button">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" (click)="completeBy.toggle()" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label class="m-b-0">Frete</label>
+                            <input class="form-control" type="text" [(ngModel)]="order.freightPrice" name="freightPrice"
+                                #freightPrice="ngModel" currencyMask (keyup)="calculateOrderValue()"
+                                [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7">
+                        </div>
+                        <div class="col-12 form-group">
+                            <label class="m-b-0">Valor Total</label>
+                            <input class="form-control" type="text" [(ngModel)]="order.totalPrice" name="totalPrice"
+                                #totalPrice="ngModel" currencyMask
+                                [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header p-b-0">
+                    <h5>Itens do Pedido</h5>
+                    <button class="btn btn-primary btn-mini float-right" (click)="open(content)" type="button"
+                        placement="top" ngbTooltip="Adicionar Item">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <hr />
+                </div>
+                <div class="card-body p-t-0">
+                    <div class="alert alert-warning background-warning text-center" *ngIf="order.orderItems.length==0">
+                        É necessário acresecentar ao menos um item para gerar o pedido!
+                    </div>
+                    <table class="table table-stripped" *ngIf="order.orderItems.length>0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Preço</th>
+                                <th>Desconto</th>
+                                <th>Preço Final</th>
+                                <th style="width: 30px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let oi of order.orderItems;let idx = index">
+                                <tr [class.no-p-b]="oi.additionalInfo != ''">
+                                    <td [attr.rowspan]="oi.additionalInfo != '' ? 2: 1">{{idx+1}}</td>
+                                    <td>{{oi.product}}</td>
+                                    <td>{{oi.quantity | cbmNumber}} {{oi.measureUnitShort}}</td>
+                                    <td>{{oi.originalPrice | cbmCurrency}}</td>
+                                    <td>{{oi.discount | cbmCurrency}}</td>
+                                    <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
+                                    <td [attr.rowspan]="oi.additionalInfo != '' ? 2: 1">
+                                        <button type="button" (click)="removeItem(oi)" class="btn btn-danger btn-mini"
+                                            placement="top" ngbTooltip="Remover Item">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="oi.additionalInfo != ''">
+                                    <td colspan="5" class="p-t-0"
+                                        style="border:none;font-size: 12px; font-style: italic;">
+                                        <span><b>Informações Adicionais:</b></span> {{oi.additionalInfo}}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<ng-template #rt let-r="result" let-t="term">
+    <i class="fa" [ngClass]="{'fa-user':r.customerTypeId==1, 'fa-building': r.customerTypeId==2}"></i>
+    <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+    <ng-container *ngIf="r.socialIdentifier != null">
+        <ng-container [ngSwitch]="r.customerTypeId">
+            <span *ngSwitchCase="1" style="font-size: 12px;">
+                &nbsp;(CPF:&nbsp;<ngb-highlight [result]="r.socialIdentifier" [term]="t"></ngb-highlight>)
+            </span>
+            <span *ngSwitchCase="2" style="font-size: 12px;">
+                &nbsp;(CNPJ:&nbsp;<ngb-highlight [result]="r.socialIdentifier" [term]="t"></ngb-highlight>)
+            </span>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">Adicionar Item ao Pedido</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="row form-group">
+            <div class="col-12">
+                <label class="m-b-0">Produto</label>
+                <select class="form-control" [(ngModel)]="currentQuote.product" name="product"
+                    (change)="changeProduct()">
+                    <option [ngValue]="p" *ngFor="let p of products">{{p.name}} ({{p.price | cbmCurrency}} /
+                        {{p.measureUnit}})</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Quantidade</label>
+                <div class="col-12 row p-r-0" [class.has-danger]="currentQuote.quantity == 0">
+                    <input class="form-control col-7 p-r-0" type="text" [(ngModel)]="currentQuote.quantity" currencyMask
+                        (keyup)="onQtdKeyUp()" [options]="{ prefix: '', thousands: '.', decimal: ',' }">
+                    <div class="input-group col-5 p-1 p-t-0 p-b-0">
+                        <select class="form-control" [(ngModel)]="currentQuote.measureUnit" name="measureUnit"
+                            (change)="calculatePrice()">
+                            <option [ngValue]="m" *ngFor="let m of measures">{{m.shortName}}
+                            </option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary btn-sm" (click)="calculatePrice()" type="button"
+                                placement="top" ngbTooltip="Calcular Preço">
+                                <i class="fa fa-calculator"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-form-label" *ngIf="currentQuote.quantity ==0">
+                        A quantidade deve ser maior que zero.
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Preço</label>
+                <input class="form-control" type="text" readonly [(ngModel)]="currentQuote.price" currencyMask
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7">
+            </div>
+            <div class="col-6" [class.has-danger]="currentQuote.discount > currentQuote.price">
+                <label class="m-b-0">Desconto</label>
+                <input class="form-control" type="text" [(ngModel)]="currentQuote.discount" currencyMask
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7"
+                    (keyup)="applyDiscout($event)">
+                <div class="col-form-label" *ngIf="currentQuote.discount > currentQuote.price">
+                    O desconto não pode ser maior que o valor total da venda
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Preço Final</label>
+                <input class="form-control" type="text" readonly [(ngModel)]="currentQuote.finalPrice" currencyMask
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7">
+            </div>
+            <div class="col-12">
+                <label class="m-b-0">Informações Adicionais</label>
+                <textarea class="form-control" type="text" [(ngModel)]="currentQuote.additionalInfo" rows="3"
+                    maxlength="200"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mini" (click)="resetModal()">
+            Limpar
+        </button>
+        <button type="button" class="btn btn-primary btn-mini" [class.btn-disabled]="!canAdd" (click)="addItem()"
+            [disabled]="!canAdd">
+            Adicionar Item
+        </button>
+    </div>
+</ng-template>
+<app-toasts></app-toasts>

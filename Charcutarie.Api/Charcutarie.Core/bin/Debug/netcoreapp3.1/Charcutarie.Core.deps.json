@@ -1,0 +1,104 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Charcutarie.Core/1.0.0": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Tokens": "6.5.1",
+          "UnitsNet": "4.60.0"
+        },
+        "runtime": {
+          "Charcutarie.Core.dll": {}
+        }
+      },
+      "Microsoft.CSharp/4.5.0": {},
+      "Microsoft.IdentityModel.Logging/6.5.1": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.IdentityModel.Logging.dll": {
+            "assemblyVersion": "6.5.1.0",
+            "fileVersion": "6.5.1.10424"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Tokens/6.5.1": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.5.0",
+          "Microsoft.IdentityModel.Logging": "6.5.1",
+          "System.Security.Cryptography.Cng": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.dll": {
+            "assemblyVersion": "6.5.1.0",
+            "fileVersion": "6.5.1.10424"
+          }
+        }
+      },
+      "System.Security.Cryptography.Cng/4.5.0": {},
+      "System.ValueTuple/4.5.0": {},
+      "UnitsNet/4.60.0": {
+        "dependencies": {
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/UnitsNet.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Charcutarie.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.CSharp/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kaj6Wb4qoMuH3HySFJhxwQfe8R/sJsNJnANrvv8WdFPMoNbKY5htfNscv+LHCu5ipz+49m2e+WQXpLXr9XYemQ==",
+      "path": "microsoft.csharp/4.5.0",
+      "hashPath": "microsoft.csharp.4.5.0.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Logging/6.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iujlW4mgBKaib0gB3wbJLCCRhaNmxt504O5aGMdIH0JLIjCw+LbX+q3SFf3u0C29rYErvQQ9xeAtGywjvSGLxg==",
+      "path": "microsoft.identitymodel.logging/6.5.1",
+      "hashPath": "microsoft.identitymodel.logging.6.5.1.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Tokens/6.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+kKU5tbizQmXee6iYJwqxROInlohMYhKYbLa37BUnU/YBhCvPapi2iywE4bVgno2NOF78p7VBERd/s+gYM/9dA==",
+      "path": "microsoft.identitymodel.tokens/6.5.1",
+      "hashPath": "microsoft.identitymodel.tokens.6.5.1.nupkg.sha512"
+    },
+    "System.Security.Cryptography.Cng/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WG3r7EyjUe9CMPFSs6bty5doUqT+q9pbI80hlNzo2SkPkZ4VTuZkGWjpp77JB8+uaL4DFPRdBsAY+DX3dBK92A==",
+      "path": "system.security.cryptography.cng/4.5.0",
+      "hashPath": "system.security.cryptography.cng.4.5.0.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
+    },
+    "UnitsNet/4.60.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eXoJqpI2naSMqcpz/4lglnDYUvZUcE1RSYwVJxmxSrWj8Wx4NJJM6J6HApQiVsYuqd9tsJlzIyhqDXSIwOsAqA==",
+      "path": "unitsnet/4.60.0",
+      "hashPath": "unitsnet.4.60.0.nupkg.sha512"
+    }
+  }
+}

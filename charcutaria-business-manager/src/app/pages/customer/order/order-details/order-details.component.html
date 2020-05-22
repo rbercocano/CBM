@@ -1,0 +1,122 @@
+<app-toolbar [title]="title">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar">
+        <i class="fa fa-arrow-left"></i>
+    </button>
+</app-toolbar>
+<div class="row" *ngIf="order != null">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row invoive-info ">
+                    <div class="col-3">
+                        <h6>Dados do Cliente:</h6>
+                        <h6 class="m-0">{{order.customer.name}}</h6>
+                        <p class="m-0 m-t-10" *ngFor="let c of order.customer.contacts">
+                            <img src="../../../../../assets/images/contact/{{c.contactIcon}}" style="width: 25px;" />
+                            {{c.contact}}
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <h6>Dados do Pedido:</h6>
+                        <table class="table table-responsive invoice-table invoice-order table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th>Número do Pedido:</th>
+                                    <td colspan="3">#{{order.orderNumber}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data do Pedido:</th>
+                                    <td>{{order.createdOn | date:'dd/MM/yyyy'}}</td>
+                                    <th>Finalizar em :</th>
+                                    <td>{{order.completeBy | date:'dd/MM/yyyy'}}</td>
+                                </tr>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <th>Status do Pedido:</th>
+                                    <td>
+                                        <app-order-status-label [status]="order.orderStatus">
+                                        </app-order-status-label>
+                                    </td>
+                                    <th>Status do Pagamento:</th>
+                                    <td>
+                                        <app-payment-status-label [status]="order.paymentStatus">
+                                        </app-payment-status-label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-3">
+                        <h6>Valores:</h6>
+                        <table class="table table-responsive invoice-table invoice-order table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th>Frete:</th>
+                                    <td class="text-center">{{order.freightPrice | cbmCurrency}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total s/ descontos:</th>
+                                    <td class="text-center">{{order.itemsTotal | cbmCurrency}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Descontos:</th>
+                                    <td class="text-center">-{{order.discountTotal | cbmCurrency}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total c/ descontos:</th>
+                                    <td class="text-center">{{order.itemsTotalAfterDiscounts | cbmCurrency}}</td>
+                                </tr>
+                                <tr style="border-top:solid black 1px">
+                                    <th>Total:</th>
+                                    <td class="text-center">
+                                        {{(order.itemsTotalAfterDiscounts + order.freightPrice)| cbmCurrency}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <table class="table order-items table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Produto</th>
+                                    <th>Status</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço</th>
+                                    <th>Desconto</th>
+                                    <th>Preço Final</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let oi of order.orderItems">
+                                    <td>{{oi.itemNumber}}</td>
+                                    <td>{{oi.product.name}}
+                                        <p>{{oi.additionalInfo}}</p>
+                                    </td>
+                                    <td>
+                                        <app-order-item-status-label [status]="oi.orderItemStatus">
+                                        </app-order-item-status-label>
+                                    </td>
+                                    <td>{{oi.quantity | cbmNumber}} {{oi.measureUnit.shortName}} x
+                                        {{oi.productPrice | cbmCurrency}}</td>
+                                    <td>{{oi.originalPrice | cbmCurrency}}</td>
+                                    <td>-{{oi.discount | cbmCurrency}}</td>
+                                    <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4">Totais</th>
+                                    <th>{{order.itemsTotal | cbmCurrency}}</th>
+                                    <th>-{{order.discountTotal | cbmCurrency}}</th>
+                                    <th>{{order.itemsTotalAfterDiscounts | cbmCurrency}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
