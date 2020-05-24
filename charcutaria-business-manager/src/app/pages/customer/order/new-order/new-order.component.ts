@@ -18,6 +18,7 @@ import { PricingRequest } from 'src/app/shared/models/pricingRequest';
 import { PricingService } from 'src/app/shared/services/pricing/pricing.service';
 import { OrderItem } from 'src/app/shared/models/orderItem';
 import { OrderService } from 'src/app/shared/services/order/order.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-order',
@@ -33,7 +34,7 @@ export class NewOrderComponent implements OnInit {
   public order: Order = {} as Order;
   public minDate: NgbDateStruct;
   private modal: NgbModalRef;
-  public currentQuote: ProductQuote = { quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: null, additionalInfo: '' };
+  public currentQuote: ProductQuote = {orderItemId: null, orderItemStatus: null, quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: null, additionalInfo: '' };
   private qtdSubject: Subject<number> = new Subject();
 
   constructor(private customerService: CustomerService,
@@ -43,7 +44,8 @@ export class NewOrderComponent implements OnInit {
     private modalService: NgbModal,
     private spinner: NgxSpinnerService,
     private pricingService: PricingService,
-    private orderService: OrderService) {
+    private orderService: OrderService,
+    private router: Router) {
     this.order.freightPrice = 0;
     this.order.orderItems = [];
     let today = new Date();
@@ -99,15 +101,15 @@ export class NewOrderComponent implements OnInit {
     return value;
   }
   save() {
-    if (!this.form.valid || this.order.orderItems.length == 0) return;
+    if (!this.form.valid || this.order.orderItems.length == 0 || this.order.completeBy == null) return;
     this.spinner.show();
     this.order.customerId = this.selectedCustomer.customerId;
     this.order.paymentStatusId = 1;
     this.order.orderStatusId = 1;
     this.orderService.create(this.order).subscribe(r => {
-      this.order.orderId = r;
       this.spinner.hide();
       this.notificationService.showSuccess('Sucesso', 'Pedido gerado com sucesso');
+      this.router.navigate(['/order/details', r]);
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -177,7 +179,7 @@ export class NewOrderComponent implements OnInit {
     this.calculateOrderValue();
   }
   resetModal() {
-    this.currentQuote = { quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: this.products[0], additionalInfo: '' };
+    this.currentQuote = {orderItemId: null, orderItemStatus: null, quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: this.products[0], additionalInfo: '' };
     this.setMeasure();
   }
 }

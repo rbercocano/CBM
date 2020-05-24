@@ -8,13 +8,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { OrderDetailsComponent } from './order-details/order-details.component';
+import { EditOrderComponent } from './edit-order/edit-order.component';
+import { OrderSearchComponent } from './order-search/order-search.component';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
 
 @NgModule({
-  declarations: [NewOrderComponent, OrderDetailsComponent],
+  declarations: [NewOrderComponent, OrderDetailsComponent, EditOrderComponent, OrderSearchComponent],
   imports: [
     CommonModule,
     OrderRoutingModule,

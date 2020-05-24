@@ -292,9 +292,6 @@ E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\Ch
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\Charcutarie.Services.pdb
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\Charcutarie.Core.pdb
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.csprojAssemblyReference.cache
-E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.csproj.CoreCompileInputs.cache
-E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.MvcApplicationPartsAssemblyInfo.cs
-E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.MvcApplicationPartsAssemblyInfo.cache
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.AssemblyInfoInputs.cache
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.AssemblyInfo.cs
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.RazorTargetAssemblyInfo.cache
@@ -304,3 +301,13 @@ E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\st
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.dll
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.pdb
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.genruntimeconfig.cache
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\nlog.config
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\NLog.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\NLog.Extensions.Logging.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\NLog.Web.AspNetCore.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.csproj.CoreCompileInputs.cache
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.MvcApplicationPartsAssemblyInfo.cs
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.MvcApplicationPartsAssemblyInfo.cache

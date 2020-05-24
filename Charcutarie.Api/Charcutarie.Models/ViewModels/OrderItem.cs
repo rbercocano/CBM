@@ -10,6 +10,7 @@ namespace Charcutarie.Models.ViewModels
         public Product Product { get; set; }
         public MeasureUnit MeasureUnit { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
+        public int OrderItemStatusId { get; set; }
         public double Quantity { get; set; }
         public string AdditionalInfo { get; set; }
         public double Discount { get; set; }
@@ -17,5 +18,7 @@ namespace Charcutarie.Models.ViewModels
         public double PriceAfterDiscount { get; set; }
         public double ProductPrice { get; set; }
         public int ItemNumber { get; set; }
+        public int OrderItemId { get; set; }
+        public Order Order { get; set; }
     }
 }

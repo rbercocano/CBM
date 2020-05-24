@@ -17,6 +17,7 @@ namespace Charcutarie.Models.ViewModels
         public DateTime CreatedOn { get; set; }
         public DateTime? LastUpdated { get; set; }
         public DateTime CompleteBy { get; set; }
+        public DateTime? PaidOn { get; set; }        
         public int OrderStatusId { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public int PaymentStatusId { get; set; }
@@ -24,8 +25,9 @@ namespace Charcutarie.Models.ViewModels
         public double FreightPrice { get; set; }
         public MergedCustomer Customer { get; set; }
         public List<OrderItem> OrderItems { get; set; }
-        public double DiscountTotal { get { return OrderItems.Sum(i => i.Discount); } }
-        public double ItemsTotal { get { return OrderItems.Sum(i => i.OriginalPrice); } }
-        public double ItemsTotalAfterDiscounts { get { return OrderItems.Sum(i => i.PriceAfterDiscount); } }
+        public double DiscountTotal { get { return OrderItems.Where(i => i.OrderItemStatusId != 3).Sum(i => i.Discount); } }
+        public double ItemsTotal { get { return OrderItems.Where(i => i.OrderItemStatusId != 3).Sum(i => i.OriginalPrice); } }
+        public double ItemsTotalAfterDiscounts { get { return OrderItems.Where(i => i.OrderItemStatusId != 3).Sum(i => i.PriceAfterDiscount); } }
+        public double OrderTotal { get { return ItemsTotalAfterDiscounts + FreightPrice; } }
     }
 }

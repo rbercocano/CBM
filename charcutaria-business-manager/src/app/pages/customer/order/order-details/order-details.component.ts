@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from 'src/app/shared/services/order/order.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationService } from 'src/app/shared/services/notification/notification.service';
 import { OrderDetails } from 'src/app/shared/models/orderDetails';
@@ -16,6 +16,7 @@ export class OrderDetailsComponent implements OnInit {
   constructor(private orderService: OrderService,
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
+    private router: Router,
     private notificationService: NotificationService) { }
 
   ngOnInit(): void {
@@ -29,5 +30,7 @@ export class OrderDetailsComponent implements OnInit {
       this.notificationService.notifyHttpError(e);
     });
   }
-
+  edit() {
+    this.router.navigate(['/order/edit', this.order.orderNumber]);
+  }
 }

@@ -11,7 +11,7 @@ namespace Charcutarie.Models.Entities
         public int ItemNumber { get; set; }
         public long ProductId { get; set; }
         public Product Product { get; set; }
-        public decimal  Quantity{ get; set; }
+        public double  Quantity{ get; set; }
         public int OrderItemStatusId { get; set; }
         public int MeasureUnitId { get; set; }
         public DateTime CreatedOn { get; set; }

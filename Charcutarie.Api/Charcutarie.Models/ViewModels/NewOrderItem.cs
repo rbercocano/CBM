@@ -13,6 +13,7 @@ namespace Charcutarie.Models.ViewModels
         public string AdditionalInfo { get; set; }
         public double Discount { get; set; }
         public int MeasureUnitId { get; set; }
+        public long OrderId { get; set; }
 
         [JsonIgnore]
         public int ItemNumber { get; set; }

@@ -20,7 +20,7 @@ namespace Charcutarie.Repository
         }
         public async Task<IEnumerable<PaymentStatus>> GetAll()
         {
-            var data = await context.OrderStatus.ToListAsync();
+            var data = await context.PaymentStatus.ToListAsync();
             var result = mapper.Map<IEnumerable<PaymentStatus>>(data);
             return result;
         }

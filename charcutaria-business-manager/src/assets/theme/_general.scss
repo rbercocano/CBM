@@ -323,6 +323,14 @@ h6 {
             font-size: 13px;
             margin-top: 5px;
         }
+        span.label-status {
+            display: block;
+            font-size: 13px;
+            margin-top: 0;
+            span {                
+                margin-top: 0;
+            }
+        }
 
         + .card-block,
         + .card-block-big {
@@ -5573,4 +5581,31 @@ a[data-toggle="lightbox"] .img-fluid {
 }
 .ngb-highlight{
     color:#ffd006;
+}
+
+table.order-items{
+    & tbody{
+        & td{
+            padding:10px;
+            vertical-align: middle;
+            & p{
+                font-size: 12px;
+                font-style: italic;
+                margin-bottom: 1px;
+            }
+        }
+        & td:nth-child(4),td:nth-child(5),td:nth-child(6),td:nth-child(7){
+            text-align: right;
+        }
+    }
+    & thead{        
+        &  th:nth-child(4),th:nth-child(5),th:nth-child(6),th:nth-child(7){
+            text-align: right;
+        }
+    }
+    & tfoot{
+        & th{
+            text-align: right;
+        }
+    }
 }

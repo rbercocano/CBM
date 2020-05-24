@@ -46,6 +46,7 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IPaymentStatusApp, PaymentStatusApp>();
             services.AddTransient<IOrderApp, OrderApp>();
             services.AddTransient<IPricingApp, PricingApp>();
+            services.AddTransient<IOrderItemApp, OrderItemApp>();
         }
         private static void AddReps(IServiceCollection services)
         {
@@ -64,6 +65,8 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IOrderItemStatusRepository, OrderItemStatusRepository>();
             services.AddTransient<IPaymentStatusRepository, PaymentStatusRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IOrderItemRepository, OrderItemRepository>();
+            
         }
     }
 }

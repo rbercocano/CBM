@@ -6,17 +6,13 @@ import { PaymentStatus } from '../models/paymentStatus';
   templateUrl: './payment-status-label.component.html',
   styleUrls: ['./payment-status-label.component.scss']
 })
-export class PaymentStatusLabelComponent implements OnInit {
+export class PaymentStatusLabelComponent {
   @Input("status") status: PaymentStatus;
-  public labelClass = '';
-  constructor() { }
-
-  ngOnInit(): void {
+  public get labelClass(): string {
     switch (this.status.paymentStatusId) {
-      case 1: this.labelClass = 'label-warning'; break;
-      case 2: this.labelClass = 'label-success'; break;
-      default: this.labelClass = 'label-info'; break;
+      case 1: return 'label-warning'; break;
+      case 2: return 'label-success'; break;
+      default: return 'label-info'; break;
     }
   }
-
 }

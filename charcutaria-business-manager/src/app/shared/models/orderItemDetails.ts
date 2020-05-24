@@ -13,4 +13,5 @@ export interface OrderItemDetails {
     priceAfterDiscount: number;
     originalPrice: number;
     productPrice: number;
+    orderItemId: number;
 }

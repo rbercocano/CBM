@@ -13,6 +13,7 @@ namespace Charcutarie.Models.Entities
         public DateTime CreatedOn { get; set; }
         public DateTime? LastUpdated { get; set; }
         public DateTime CompleteBy { get; set; }
+        public DateTime? PaidOn { get; set; }
         public int OrderStatusId { get; set; }
         public int PaymentStatusId { get; set; }
         public decimal FreightPrice { get; set; }

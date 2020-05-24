@@ -16,14 +16,16 @@ namespace Charcutarie.Services
         private readonly IOrderApp orderApp;
         private readonly IPricingApp pricingApp;
         private readonly IProductApp productApp;
+        private readonly IOrderItemApp orderItemApp;
 
-        public OrderService(IOrderApp orderApp, IPricingApp pricingApp, IProductApp productApp)
+        public OrderService(IOrderApp orderApp, IPricingApp pricingApp, IProductApp productApp, IOrderItemApp orderItemApp)
         {
             this.orderApp = orderApp;
             this.pricingApp = pricingApp;
             this.productApp = productApp;
+            this.orderItemApp = orderItemApp;
         }
-        public async Task<long> Add(NewOrder model, int corpClientId)
+        public async Task<int> Add(NewOrder model, int corpClientId)
         {
             var ids = model.OrderItems.Select(i => i.ProductId).ToList();
             var prods = await productApp.GetRange(corpClientId, ids);
@@ -45,6 +47,11 @@ namespace Charcutarie.Services
             return await orderApp.Add(model, corpClientId);
         }
 
+        public async Task ChangeStatus(UpdateOrderStatus model, int corpClientId)
+        {
+            await orderApp.ChangeStatus(model, corpClientId);
+        }
+
         public async Task<Order> Get(long orderId, int corpClientId)
         {
             return await orderApp.Get(orderId, corpClientId);
@@ -53,6 +60,93 @@ namespace Charcutarie.Services
         public async Task<Order> GetByNumber(int orderNumber, int corpClientId)
         {
             return await orderApp.GetByNumber(orderNumber, corpClientId);
+        }
+
+        public async Task Update(UpdateOrder model, int corpClientId)
+        {
+            await orderApp.Update(model, corpClientId);
+        }
+        public async Task<int> RestoreOrderStatus(int orderNumber, int corpClientId)
+        {
+            var status = await orderApp.GetCurrentStatus(orderNumber, corpClientId);
+            if (status != 4) return status;
+            var nextStatus = await GetNextOrderStatus(orderNumber, corpClientId);
+            await orderApp.ChangeStatus(new UpdateOrderStatus
+            {
+                OrderNumber = orderNumber,
+                OrderStatusId = nextStatus
+            }, corpClientId);
+            return nextStatus;
+        }
+        private async Task<int> GetNextOrderStatus(int orderNumber, int corpClientId)
+        {
+            int nextStatus = 1;
+            var orderItems = await orderItemApp.GetAll(orderNumber, corpClientId);
+            if (!orderItems.Any()) return nextStatus;
+            if (orderItems.All(i => i.OrderItemStatusId == 1))
+                nextStatus = 1;
+            else if (orderItems.All(i => i.OrderItemStatusId == 2))
+                nextStatus = 3;
+            else if (orderItems.Any(i => i.OrderItemStatusId == 2 || i.OrderItemStatusId == 4))
+                nextStatus = 2;
+            return nextStatus;
+        }
+
+        public async Task RemoveOrderItem(long orderId, long orderItemId, int corpClientId)
+        {
+            await orderItemApp.Remove(orderId, orderItemId, corpClientId);
+            var order = await orderApp.Get(orderId, corpClientId);
+            var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
+            await orderApp.ChangeStatus(new UpdateOrderStatus
+            {
+                OrderNumber = order.OrderNumber,
+                OrderStatusId = nextStatus
+            }, corpClientId);
+        }
+
+        public async Task UpdateOrderItem(UpdateOrderItem model, int corpClientId)
+        {
+            var order = await orderApp.Get(model.OrderId, corpClientId);
+            var prodPrice = order.OrderItems.FirstOrDefault(i => i.OrderItemId == model.OrderItemId).ProductPrice;
+            var prod = await productApp.Get(corpClientId, model.ProductId);
+            model.ProductPrice = prodPrice;
+            model.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
+            {
+                ProductMeasureUnit = (MeasureUnitEnum)prod.MeasureUnitId,
+                ProductPrice = prodPrice,
+                Quantity = model.Quantity,
+                QuantityMeasureUnit = (MeasureUnitEnum)model.MeasureUnitId
+            });
+            await orderItemApp.Update(model, corpClientId);
+            var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
+            await orderApp.ChangeStatus(new UpdateOrderStatus
+            {
+                OrderNumber = order.OrderNumber,
+                OrderStatusId = nextStatus
+            }, corpClientId);
+        }
+
+        public async Task<long> AddOrderItem(NewOrderItem model, int corpClientId)
+        {
+            var order = await orderApp.Get(model.OrderId, corpClientId);
+            var prod = await productApp.Get(corpClientId, model.ProductId);
+            model.ProductPrice = prod.Price;
+            model.ItemNumber = await orderItemApp.GetLastItemNumber(order.OrderNumber, corpClientId) + 1;
+            model.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
+            {
+                ProductMeasureUnit = (MeasureUnitEnum)prod.MeasureUnitId,
+                ProductPrice = prod.Price,
+                Quantity = model.Quantity,
+                QuantityMeasureUnit = (MeasureUnitEnum)model.MeasureUnitId
+            });
+            var result = await orderItemApp.AddOrderItem(model, corpClientId);
+            var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
+            await orderApp.ChangeStatus(new UpdateOrderStatus
+            {
+                OrderNumber = order.OrderNumber,
+                OrderStatusId = nextStatus
+            }, corpClientId);
+            return result;
         }
     }
 }

@@ -2,6 +2,9 @@
     <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar">
         <i class="fa fa-arrow-left"></i>
     </button>
+    <button *ngIf="order != null"  class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar" (click)="edit()">
+        <i class="fa fa-pencil"></i>
+    </button>
 </app-toolbar>
 <div class="row" *ngIf="order != null">
     <div class="col-12">
@@ -22,15 +25,9 @@
                             <tbody>
                                 <tr>
                                     <th>Número do Pedido:</th>
-                                    <td colspan="3">#{{order.orderNumber}}</td>
-                                </tr>
-                                <tr>
+                                    <td>#{{order.orderNumber}}</td>
                                     <th>Data do Pedido:</th>
                                     <td>{{order.createdOn | date:'dd/MM/yyyy'}}</td>
-                                    <th>Finalizar em :</th>
-                                    <td>{{order.completeBy | date:'dd/MM/yyyy'}}</td>
-                                </tr>
-                                <tr>
                                 </tr>
                                 <tr>
                                     <th>Status do Pedido:</th>
@@ -38,11 +35,19 @@
                                         <app-order-status-label [status]="order.orderStatus">
                                         </app-order-status-label>
                                     </td>
+                                    <th>Finalizar em :</th>
+                                    <td>{{order.completeBy | date:'dd/MM/yyyy'}}</td>
+                                </tr>
+                                <tr>
+                                </tr>
+                                <tr>
                                     <th>Status do Pagamento:</th>
                                     <td>
                                         <app-payment-status-label [status]="order.paymentStatus">
                                         </app-payment-status-label>
                                     </td>
+                                    <th>Data do Pagamento :</th>
+                                    <td>{{order.paidOn | date:'dd/MM/yyyy'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -70,7 +75,7 @@
                                 <tr style="border-top:solid black 1px">
                                     <th>Total:</th>
                                     <td class="text-center">
-                                        {{(order.itemsTotalAfterDiscounts + order.freightPrice)| cbmCurrency}}</td>
+                                        {{(order.orderTotal)| cbmCurrency}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -120,3 +125,4 @@
         </div>
     </div>
 </div>
+<app-toasts></app-toasts>

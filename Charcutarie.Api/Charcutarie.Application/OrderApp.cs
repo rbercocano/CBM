@@ -13,9 +13,14 @@ namespace Charcutarie.Application
         {
             this.repository = repository;
         }
-        public async Task<long> Add(NewOrder model, int corpClientId)
+        public async Task<int> Add(NewOrder model, int corpClientId)
         {
             return await repository.Add(model, corpClientId);
+        }
+
+        public async Task ChangeStatus(UpdateOrderStatus model, int corpClientId)
+        {
+            await repository.ChangeStatus(model, corpClientId);
         }
 
         public async Task<Order> Get(long orderId, int corpClientId)
@@ -26,6 +31,16 @@ namespace Charcutarie.Application
         public async Task<Order> GetByNumber(int orderNumber, int corpClientId)
         {
             return await repository.GetByNumber(orderNumber, corpClientId);
+        }
+
+        public async Task<int> GetCurrentStatus(int orderNumber, int corpClientId)
+        {
+            return await repository.GetCurrentStatus(orderNumber, corpClientId);
+        }
+
+        public async Task Update(UpdateOrder model, int corpClientId)
+        {
+            await repository.Update(model, corpClientId);
         }
     }
 }

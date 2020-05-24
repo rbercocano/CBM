@@ -9,6 +9,7 @@ export interface OrderDetails {
     createdOn: string;
     lastUpdated: string;
     completeBy: string;
+    paidOn: string;
     orderStatusId: number;
     orderStatus: OrderStatus;
     paymentStatusId: number;
@@ -19,4 +20,5 @@ export interface OrderDetails {
     discountTotal: number;
     itemsTotal: number;
     itemsTotalAfterDiscounts: number;
+    orderTotal: number;
 }

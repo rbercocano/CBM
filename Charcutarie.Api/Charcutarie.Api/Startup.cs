@@ -12,13 +12,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace Charcutarie.Api
 {
     public class Startup
     {
-        public static readonly LoggerFactory DbCommandDebugLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider() }
-       );
+        public static readonly LoggerFactory DbCommandDebugLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider() });
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,8 +32,10 @@ namespace Charcutarie.Api
                 options.EnableSensitiveDataLogging(true);
                 options.UseSqlServer(Configuration.GetConnectionString("CharcutarieDB"));
             }, ServiceLifetime.Transient);
-            services.AddMvc()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewCorpClientValidator>());
+            services.AddMvc().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewCorpClientValidator>());
             services.AddCors(options =>
             {
                 options.AddPolicy("CBM", p =>

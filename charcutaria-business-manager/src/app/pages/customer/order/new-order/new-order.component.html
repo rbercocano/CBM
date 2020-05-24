@@ -25,8 +25,8 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-6 form-group">
-                            <label class="m-b-0">Data de entrega solicitada</label>
+                        <div class="col-6 form-group" [class.has-danger]="f.submitted && order.completeBy==null">
+                            <label class="m-b-0">Finalizar em</label>
                             <div class="input-group">
                                 <input class="form-control" type="text" [(ngModel)]="order.completeBy" name="completeBy"
                                     #completeBy="ngbDatepicker" placement="bottom-left" readonly [minDate]="minDate"
@@ -40,6 +40,9 @@
                                         <i class="fa fa-calendar"></i>
                                     </button>
                                 </div>
+                            </div>
+                            <div class="col-form-label p-t-0" *ngIf="f.submitted && order.completeBy==null">
+                                Campo Obrigatório
                             </div>
                         </div>
                         <div class="col-6 form-group">
@@ -103,7 +106,7 @@
                                 <tr *ngIf="oi.additionalInfo != ''">
                                     <td colspan="5" class="p-t-0"
                                         style="border:none;font-size: 12px; font-style: italic;">
-                                        <span><b>Informações Adicionais:</b></span> {{oi.additionalInfo}}
+                                        {{oi.additionalInfo}}
                                     </td>
                                 </tr>
                             </ng-container>
