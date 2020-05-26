@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xbcjHgNVlyNbjRQzh3zZE07Asb9aJlZRrYbGXjdsP0uIhr6ExuQrKmwvCZmbmnFKUB+jNc2++2lmyKhqAtnepg==",
+  "dgSpecHash": "zh26424qPMD80z9YugeABz8PpTIwYjzxEzsQLBqVd52OjCx/3kxgmidISvhpjQNrsbJ08GWUczIBLgXEt4C4nQ==",
   "success": true,
   "projectFilePath": "E:\\Projects\\ET IT\\CBM\\Charcutarie.Api\\Charcutarie.Repository\\Charcutarie.Repository.csproj",
   "expectedPackageFiles": [
@@ -95,7 +95,8 @@
     "C:\\Users\\rodri\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\rodri\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\rodri\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\rodri\\.nuget\\packages\\unitsnet\\4.60.0\\unitsnet.4.60.0.nupkg.sha512"
+    "C:\\Users\\rodri\\.nuget\\packages\\unitsnet\\4.60.0\\unitsnet.4.60.0.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
   ],
   "logs": []
 }

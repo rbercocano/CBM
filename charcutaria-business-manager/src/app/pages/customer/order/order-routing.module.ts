@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NewOrderComponent } from './new-order/new-order.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { EditOrderComponent } from './edit-order/edit-order.component';
+import { OrderSearchComponent } from './order-search/order-search.component';
 
 
 const routes: Routes = [{
@@ -14,6 +15,9 @@ const routes: Routes = [{
 }, {
   path: 'edit/:id',
   component: EditOrderComponent
+}, {
+  path: 'search',
+  component: OrderSearchComponent
 }];
 
 @NgModule({

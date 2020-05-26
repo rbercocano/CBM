@@ -83,6 +83,7 @@ namespace Charcutarie.Models.MappingProfile
                 .ForMember(m => m.CustomerType, m => m.MapFrom(s => s.CustomerType.Description));
             CreateMap<ef.Customer, vm.CompanyCustomer>()
                 .ForMember(m => m.CustomerType, m => m.MapFrom(s => s.CustomerType.Description));
+            CreateMap<ef.OrderSummary, vm.OrderSummary>().ReverseMap();
         }
     }
 }

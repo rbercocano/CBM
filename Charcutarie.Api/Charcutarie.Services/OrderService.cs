@@ -2,6 +2,7 @@
 using Charcutarie.Application.Contracts;
 using Charcutarie.Models;
 using Charcutarie.Models.Enums;
+using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Services.Contracts;
 using System;
@@ -147,6 +148,11 @@ namespace Charcutarie.Services
                 OrderStatusId = nextStatus
             }, corpClientId);
             return result;
+        }
+
+        public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo, DateTime? paidOnFrom, DateTime? paidOnTo, DateTime? completeByFrom, DateTime? completeByTo, int? paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
+        {
+            return orderApp.GetOrderSummary(corpClientId, customer, createdOnFrom, createdOnTo, paidOnFrom, paidOnTo, completeByFrom, completeByTo, paymentStatus, orderStatus, orderBy, direction, page, pageSize);
         }
     }
 }

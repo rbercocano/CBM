@@ -1,1 +1,239 @@
-<p>order-search works!</p>
+<app-toolbar [title]="'Pedidos'">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Novo" (click)="new()">
+        <i class="fa fa-plus"></i>
+    </button>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="open(content)">
+        <i class="fa fa-search"></i>
+    </button>
+</app-toolbar>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-12 form-inline">
+                        Exibir&nbsp;
+                        <select class="form-control-sm m-w-100 w-100p" [(ngModel)]="paginationInfo.recordsPerpage"
+                            (change)="changePageSize()">
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="15">15</option>
+                            <option [ngValue]="25">25</option>
+                            <option [ngValue]="50">50</option>
+                        </select>
+                        &nbsp;registros por página
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Status do Pedido</th>
+                            <th>Status do Pagamento</th>
+                            <th>Data do Pedido</th>
+                            <th>Finalizar em</th>
+                            <th>Data do Pagamento</th>
+                            <th>Preço Final</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="orders.length > 0">
+                            <tr *ngFor="let o of orders">
+                                <td>#{{o.orderNumber}}</td>
+                                <td>
+                                    {{o.name}}
+                                    <p *ngIf="o.socialIdentifier">
+                                        <span *ngIf="o.customerTypeId==1">CPF: </span>
+                                        <span *ngIf="o.customerTypeId==2">CNPJ: </span>
+                                        {{o.socialIdentifier}}
+                                    </p>
+                                </td>
+                                <td>
+                                    <app-order-status-label
+                                        [status]="{orderStatusId:o.orderStatusId, description: o.orderStatus}">
+                                    </app-order-status-label>
+                                </td>
+                                <td>
+                                    <app-payment-status-label
+                                        [status]="{paymentStatusId:o.paymentStatusId, description: o.paymentStatus}">
+                                    </app-payment-status-label>
+                                </td>
+                                <td>{{o.createdOn | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{o.completeBy | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{o.paidOn | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{o.finalPrice | cbmCurrency}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar"
+                                        (click)="details(o.orderNumber)">
+                                        <i class="fa fa-list"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Editar"
+                                        (click)="edit(o.orderNumber)">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <tr *ngIf="orders.length == 0">
+                            <td colspan="9" class="text-center">Nenhum pedido encontrado</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-server-side-pager></app-server-side-pager>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">Adicionar Item ao Pedido</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="row form-group">
+            <div class="col-12">
+                <label class="m-b-0">Nome do Cliente</label>
+                <input type="text" class="form-control" [(ngModel)]="filter.customer" maxlength="100">
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Status do Pedido</label>
+                <select class="form-control" [(ngModel)]="filter.orderStatus" name="orderStatus">
+                    <option [ngValue]="null">Todos</option>
+                    <option [ngValue]="s.orderStatusId" *ngFor="let s of orderStatus">{{s.description}}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Status do Pagamento</label>
+                <select class="form-control" [(ngModel)]="filter.paymentStatus" name="paymentStatus">
+                    <option [ngValue]="null">Todos</option>
+                    <option [ngValue]="s.paymentStatusId" *ngFor="let s of paymentStatus">{{s.description}}</option>
+                </select>
+            </div>
+            <div class="col-12  p-r-0">
+                <label class="m-b-0">Data do Pedido</label>
+                <div class="row col-12 p-r-0">
+                    <div class="col-6 p-l-0">
+                        De
+                        <div class="input-group ">
+                            <input class="form-control" type="text" [(ngModel)]="filter.createdOnFrom"
+                                name="createdOnFrom" #createdOnFrom="ngbDatepicker" placement="bottom-left" readonly
+                                ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="filter.createdOnFrom=null"
+                                    type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="createdOnFrom.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-r-0">Até
+                        <div class="input-group ">
+                            <input class="form-control" type="text" [(ngModel)]="filter.createdOnTo" name="createdOnTo"
+                                #createdOnTo="ngbDatepicker" placement="bottom-left" readonly ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="filter.createdOnTo=null"
+                                    type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="createdOnTo.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12  p-r-0">
+                <label class="m-b-0">Data do Pagamento</label>
+                <div class="row col-12 p-r-0">
+                    <div class="col-6 p-l-0">
+                        De
+                        <div class="input-group ">
+                            <input class="form-control" type="text" [(ngModel)]="filter.paidOnFrom" name="paidOnFrom"
+                                #paidOnFrom="ngbDatepicker" placement="bottom-left" readonly ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="filter.paidOnFrom=null" type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="paidOnFrom.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-r-0">Até
+                        <div class="input-group ">
+                            <input class="form-control" type="text" [(ngModel)]="filter.paidOnTo" name="createdOnTo"
+                                #paidOnTo="ngbDatepicker" placement="bottom-left" readonly ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="filter.paidOnTo=null" type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="paidOnTo.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12  p-r-0">
+                <label class="m-b-0">Data para Finalizar Pedido</label>
+                <div class="row col-12 p-r-0">
+                    <div class="col-6 p-l-0">
+                        De
+                        <div class="input-group ">
+                            <input class="form-control" type="text" [(ngModel)]="filter.completeByFrom"
+                                name="completeByFrom" #completeByFrom="ngbDatepicker" placement="bottom-left" readonly
+                                ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="filter.completeByFrom=null"
+                                    type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="completeByFrom.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-r-0">Até
+                        <div class="input-group ">
+                            <input class="form-control" type="text" [(ngModel)]="filter.completeByTo"
+                                name="completeByTo" #completeByTo="ngbDatepicker" placement="bottom-left" readonly
+                                ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="filter.completeByTo=null"
+                                    type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="completeByTo.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mini" (click)="resetFilter()">
+            Limpar
+        </button>
+        <button type="button" class="btn btn-primary btn-mini" (click)="newSearch()">
+            Pesquisar
+        </button>
+    </div>
+</ng-template>
+<app-toasts></app-toasts>

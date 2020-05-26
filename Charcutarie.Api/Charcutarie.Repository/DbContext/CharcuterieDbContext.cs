@@ -59,6 +59,7 @@ namespace Charcutarie.Repository.DbContext
         public DbSet<OrderItemStatus> OrderItemStatus { get; set; }
         public DbSet<OrderStatus> OrderStatus { get; set; }
         public DbSet<PaymentStatus> PaymentStatus { get; set; }
+        public DbSet<OrderSummary> OrderSummaries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,6 +78,7 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new ContactTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerContactConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderSummaryConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemStatusConfiguration());
             modelBuilder.ApplyConfiguration(new OrderStatusConfiguration());

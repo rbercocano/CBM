@@ -228,6 +228,7 @@ export class EditOrderComponent implements OnInit {
 
   }
   public saveItem() {
+    this.modal.close();
     this.spinner.show();
     let item: NewOrderItem = {
       additionalInfo: this.currentQuote.additionalInfo,
@@ -244,7 +245,7 @@ export class EditOrderComponent implements OnInit {
     })).subscribe(r => {
       this.setOrder(r);
       this.spinner.hide();
-      this.notificationService.showSuccess('Sucesso', 'Item adicionado com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Item atualizado com sucesso.');
     }, e => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);

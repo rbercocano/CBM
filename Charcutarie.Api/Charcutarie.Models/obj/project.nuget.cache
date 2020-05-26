@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "WW6IhK9zj1U+HVSaNYwX4+yOBAkVRjOdCVssrxv/oAhMbbsNfNo+WQvYxXGuvpdAWUXkNLHhH8Qx4P3IVj88lw==",
+  "dgSpecHash": "w2nfH+f7EAtn+cnPvCxeDdOaFLkECkEV2M7nMPtxqsymidZl0ITuwDVUA1sveu5WGiHTF79tzZEYAL63L2qOOw==",
   "success": true,
   "projectFilePath": "E:\\Projects\\ET IT\\CBM\\Charcutarie.Api\\Charcutarie.Models\\Charcutarie.Models.csproj",
   "expectedPackageFiles": [
@@ -15,7 +15,8 @@
     "C:\\Users\\rodri\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\rodri\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
     "C:\\Users\\rodri\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
-    "C:\\Users\\rodri\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512"
+    "C:\\Users\\rodri\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
+    "C:\\Users\\rodri\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
   ],
   "logs": []
 }

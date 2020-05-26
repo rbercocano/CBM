@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Charcutarie.Models;
+using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -62,7 +65,7 @@ namespace Charcutarie.Api.Controllers.v1
         public async Task<ActionResult<Order>> GetByNumber(int number)
         {
             var data = await service.GetByNumber(number, UserData.CorpClientId.Value);
-            if (number != null)
+            if (data != null)
                 return Ok(data);
             return NoContent();
         }
@@ -83,6 +86,14 @@ namespace Charcutarie.Api.Controllers.v1
         {
             var id = await service.AddOrderItem(model, UserData.CorpClientId.Value);
             return Ok(id);
+        }
+        [HttpGet("{page:int}/{pageSize:int}")]
+        public ActionResult<PagedResult<OrderSummary>> GetOrderSummary([FromQuery] string? customer, [FromQuery] DateTime? createdOnFrom, [FromQuery] DateTime? createdOnTo, [FromQuery] DateTime? paidOnFrom, [FromQuery] DateTime? paidOnTo, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] int? paymentStatus, [FromQuery] List<int> orderStatus, [FromQuery] OrderSummaryOrderBy orderBy = OrderSummaryOrderBy.CreatedOn, [FromQuery] OrderByDirection direction = OrderByDirection.Desc, int? page = 1, int? pageSize = 10)
+        {
+            var data = service.GetOrderSummary(UserData.CorpClientId.Value, customer, createdOnFrom, createdOnTo, paidOnFrom, paidOnTo, completeByFrom, completeByTo, paymentStatus, orderStatus, orderBy, direction, page, pageSize);
+            if (data.Data.Any())
+                return Ok(data);
+            return NoContent();
         }
     }
 }

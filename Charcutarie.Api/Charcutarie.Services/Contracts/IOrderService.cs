@@ -1,4 +1,8 @@
-﻿using Charcutarie.Models.ViewModels;
+﻿using Charcutarie.Models;
+using Charcutarie.Models.Enums.OrderBy;
+using Charcutarie.Models.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Charcutarie.Services.Contracts
@@ -14,5 +18,6 @@ namespace Charcutarie.Services.Contracts
         Task RemoveOrderItem(long orderId, long orderItemId, int corpClientId);
         Task UpdateOrderItem(UpdateOrderItem model, int corpClientId);
         Task<long> AddOrderItem(NewOrderItem model, int corpClientId);
+        PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo, DateTime? paidOnFrom, DateTime? paidOnTo, DateTime? completeByFrom, DateTime? completeByTo, int? paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize);
     }
 }

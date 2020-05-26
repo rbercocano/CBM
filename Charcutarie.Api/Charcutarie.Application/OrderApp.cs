@@ -1,6 +1,10 @@
 ﻿using Charcutarie.Application.Contracts;
+using Charcutarie.Models;
+using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Repository.Contracts;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Charcutarie.Application
@@ -36,6 +40,11 @@ namespace Charcutarie.Application
         public async Task<int> GetCurrentStatus(int orderNumber, int corpClientId)
         {
             return await repository.GetCurrentStatus(orderNumber, corpClientId);
+        }
+
+        public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo, DateTime? paidOnFrom, DateTime? paidOnTo, DateTime? completeByFrom, DateTime? completeByTo, int? paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
+        {
+            return repository.GetOrderSummary(corpClientId, customer, createdOnFrom, createdOnTo, paidOnFrom, paidOnTo, completeByFrom, completeByTo, paymentStatus, orderStatus, orderBy, direction, page, pageSize);
         }
 
         public async Task Update(UpdateOrder model, int corpClientId)

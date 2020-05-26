@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgbDateAdapter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
+import * as moment from 'moment';
 @Injectable()
 export class BRDateAdapter extends NgbDateAdapter<string> {
 
@@ -8,18 +8,19 @@ export class BRDateAdapter extends NgbDateAdapter<string> {
 
     fromModel(value: string | null): NgbDateStruct | null {
         if (value) {
-            let date = new Date(value);
-            let day = date.getUTCDate();
-            return {
-                day: day,
-                month: date.getMonth() + 1,
-                year: date.getFullYear()
+            let date = moment(value);
+            let d = {
+                day: parseInt(date.format("DD")),
+                month: parseInt(date.format("MM")),
+                year: parseInt(date.format("YYYY"))
             };
+            return d;
         }
         return null;
     }
 
     toModel(date: NgbDateStruct | null): string | null {
-        return date ? new Date(date.year, date.month, date.day).toISOString() : null;
+        return date ?
+            moment(`${date.year}-${date.month}-${date.day}`).format() : null;
     }
 }

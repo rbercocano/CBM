@@ -1,4 +1,8 @@
-﻿using Charcutarie.Models.ViewModels;
+﻿using Charcutarie.Models;
+using Charcutarie.Models.Enums.OrderBy;
+using Charcutarie.Models.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Charcutarie.Repository.Contracts
@@ -11,5 +15,11 @@ namespace Charcutarie.Repository.Contracts
         Task Update(UpdateOrder model, int corpClientId);
         Task ChangeStatus(UpdateOrderStatus model, int corpClientId);
         Task<int> GetCurrentStatus(int orderNumber, int corpClientId);
-    }
+        PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo,
+                                                         DateTime? paidOnFrom, DateTime? paidOnTo,
+                                                         DateTime? completeByFrom, DateTime? completeByTo,
+                                                         int? paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
+                                                         int? page, int? pageSize);
+        
+        }
 }
