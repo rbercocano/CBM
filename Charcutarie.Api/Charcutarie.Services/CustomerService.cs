@@ -20,10 +20,10 @@ namespace Charcutarie.Services
             this.companyCustomerApp = companyCustomerApp;
             this.customerContactApp = customerContactApp;
         }
-        public async Task<IEnumerable<MergedCustomer>> FilterCustomers(string filter)
+        public async Task<IEnumerable<MergedCustomer>> FilterCustomers(string filter, int corpClientId)
         {
-            var tPeople = personCustomerApp.Filter(filter);
-            var tCompanies = companyCustomerApp.Filter(filter);
+            var tPeople = personCustomerApp.Filter(filter, corpClientId);
+            var tCompanies = companyCustomerApp.Filter(filter, corpClientId);
             var people = await tPeople;
             var companies = await tCompanies;
 
@@ -44,16 +44,16 @@ namespace Charcutarie.Services
             })).ToList();
             return result;
         }
-        public async Task<PagedResult<T>> GetPaged<T>(int page, int pageSize, string filter, int customerTypeId) where T : Customer
+        public async Task<PagedResult<T>> GetPaged<T>(int page, int pageSize, string filter, int customerTypeId, int corpClientId) where T : Customer
         {
             if (customerTypeId == 1)
             {
-                var data = await personCustomerApp.GetPaged(page, pageSize, filter);
+                var data = await personCustomerApp.GetPaged(page, pageSize, filter, corpClientId);
                 return data.As<T>();
             }
             else
             {
-                var data = await companyCustomerApp.GetPaged(page, pageSize, filter);
+                var data = await companyCustomerApp.GetPaged(page, pageSize, filter, corpClientId);
                 return data.As<T>();
             }
         }
@@ -86,16 +86,16 @@ namespace Charcutarie.Services
                 return (data as Customer);
             }
         }
-        public async Task<Customer> Get(int id, int customerTypeId)
+        public async Task<Customer> Get(int id, int customerTypeId, int corpClientId)
         {
             if (customerTypeId == 1)
             {
-                var data = await personCustomerApp.Get(id);
+                var data = await personCustomerApp.Get(id, corpClientId);
                 return (data as Customer);
             }
             else
             {
-                var data = await companyCustomerApp.Get(id);
+                var data = await companyCustomerApp.Get(id, corpClientId);
                 return (data as Customer);
             }
         }

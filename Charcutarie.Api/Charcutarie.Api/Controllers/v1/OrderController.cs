@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Charcutarie.Models;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Services.Contracts;
@@ -42,13 +43,13 @@ namespace Charcutarie.Api.Controllers.v1
         {
             await service.ChangeStatus(new UpdateOrderStatus
             {
-                OrderStatusId = 4,
+                OrderStatusId = OrderStatusEnum.Cancelado,
                 OrderNumber = orderNumber
             }, UserData.CorpClientId.Value);
             return Ok();
         }
         [HttpPost("Restore/{orderNumber:int}")]
-        public async Task<ActionResult> Restore(int orderNumber)
+        public async Task<ActionResult<OrderStatusEnum>> Restore(int orderNumber)
         {
             var nextStatus = await service.RestoreOrderStatus(orderNumber, UserData.CorpClientId.Value);
             return Ok(nextStatus);

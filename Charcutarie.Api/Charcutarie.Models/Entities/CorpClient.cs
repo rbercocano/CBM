@@ -11,5 +11,6 @@ namespace Charcutarie.Models.Entities
         public string DBAName { get; set; }
         public bool Active { get; set; }
         public DateTime CreatedOn { get; set; }
+        public List<Customer> Customers { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Models;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models.ViewModels;
 using System;
@@ -14,7 +15,7 @@ namespace Charcutarie.Services.Contracts
         Task<Order> GetByNumber(int orderNumber, int corpClientId);
         Task Update(UpdateOrder model, int corpClientId);
         Task ChangeStatus(UpdateOrderStatus model, int corpClientId);
-        Task<int> RestoreOrderStatus(int orderNumber, int corpClientId);
+        Task<OrderStatusEnum> RestoreOrderStatus(int orderNumber, int corpClientId);
         Task RemoveOrderItem(long orderId, long orderItemId, int corpClientId);
         Task UpdateOrderItem(UpdateOrderItem model, int corpClientId);
         Task<long> AddOrderItem(NewOrderItem model, int corpClientId);

@@ -29,14 +29,54 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Cliente</th>
-                            <th>Status do Pedido</th>
-                            <th>Status do Pagamento</th>
-                            <th>Data do Pedido</th>
-                            <th>Finalizar em</th>
-                            <th>Data do Pagamento</th>
-                            <th>Preço Final</th>
+                            <th>
+                                <a href="javascript:" (click)="sort(1)">#
+                                    <ng-container *ngIf="sortColumn == 1; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(2)">Cliente
+                                    <ng-container *ngIf="sortColumn == 2; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(5)">Status do Pedido
+                                    <ng-container *ngIf="sortColumn == 5; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(4)">Status do Pagamento
+                                    <ng-container *ngIf="sortColumn == 4; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(7)">Data do Pedido
+                                    <ng-container *ngIf="sortColumn == 7; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(6)">Finalizar em
+                                    <ng-container *ngIf="sortColumn == 6; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(8)">Data do Pagamento
+                                    <ng-container *ngIf="sortColumn == 8; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>
+                                <a href="javascript:" (click)="sort(9)">Preço Final
+                                    <ng-container *ngIf="sortColumn == 9; then sorting;else nosorting">
+                                    </ng-container>
+                                </a>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -88,7 +128,15 @@
         </div>
     </div>
 </div>
-
+<ng-template #sorting>
+    <ng-container [ngSwitch]="sortDirection">
+        <i class="fa fa-sort-down" *ngSwitchCase="1"></i>
+        <i class="fa fa-sort-up" *ngSwitchCase="2"></i>
+    </ng-container>
+</ng-template>
+<ng-template #nosorting>
+    <i class="fa fa-sort" ng-switch-default></i>
+</ng-template>
 <ng-template #content let-modal>
     <div class="modal-header">
         <h5 class="modal-title" id="modal-basic-title">Adicionar Item ao Pedido</h5>

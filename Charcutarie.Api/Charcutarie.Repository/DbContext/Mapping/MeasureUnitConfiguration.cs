@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Models.Entities;
+using Charcutarie.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,6 +12,9 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.ToTable("MeasureUnit");
             builder.HasKey(p => p.MeasureUnitId);
 
+            builder.Property(p => p.MeasureUnitId)
+                 .HasConversion(v => (int)v,
+                                v => (MeasureUnitEnum)v);
             builder.Property(p => p.Description)
                 .HasColumnType("VARCHAR(100)")
                 .IsRequired();

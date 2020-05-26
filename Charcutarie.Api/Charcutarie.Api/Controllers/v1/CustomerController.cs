@@ -22,9 +22,9 @@ namespace Charcutarie.Api.Controllers.v1
         }
 
         [HttpGet("Person/{page:int}/{pageSize:int}")]
-        public async Task<ActionResult<PagedResult<PersonCustomer>>> GetPagedPerson(int page, int pageSize, [FromQuery]string? filter = null)
+        public async Task<ActionResult<PagedResult<PersonCustomer>>> GetPagedPerson(int page, int pageSize, [FromQuery] string? filter = null)
         {
-            var data = await service.GetPaged<PersonCustomer>(page, pageSize, filter, 1);
+            var data = await service.GetPaged<PersonCustomer>(page, pageSize, filter, 1, UserData.CorpClientId.Value);
             if (data.Data.Any())
                 return Ok(data);
             return NoContent();
@@ -42,6 +42,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpPut("Person")]
         public async Task<ActionResult<PersonCustomer>> UpdatePerson(UpdatePersonCustomer model)
         {
+            model.CorpClientId = UserData.CorpClientId.Value;
             model.CustomerTypeId = 1;
             var data = await service.Update(model);
             if (data != null)
@@ -51,7 +52,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpGet("Person/{id:int}")]
         public async Task<ActionResult<Customer>> GetPerson(int id)
         {
-            var data = await service.Get(id, 1);
+            var data = await service.Get(id, 1, UserData.CorpClientId.Value);
             if (data != null)
                 return Ok(data);
             return NoContent();
@@ -59,9 +60,9 @@ namespace Charcutarie.Api.Controllers.v1
 
 
         [HttpGet("Company/{page:int}/{pageSize:int}")]
-        public async Task<ActionResult<PagedResult<CompanyCustomer>>> GetPagedCompany(int page, int pageSize, [FromQuery]string? filter = null)
+        public async Task<ActionResult<PagedResult<CompanyCustomer>>> GetPagedCompany(int page, int pageSize, [FromQuery] string? filter = null)
         {
-            var data = await service.GetPaged<CompanyCustomer>(page, pageSize, filter, 2);
+            var data = await service.GetPaged<CompanyCustomer>(page, pageSize, filter, 2, UserData.CorpClientId.Value);
             if (data.Data.Any())
                 return Ok(data);
             return NoContent();
@@ -79,6 +80,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpPut("Company")]
         public async Task<ActionResult<CompanyCustomer>> UpdateCompany(UpdateCompanyCustomer model)
         {
+            model.CorpClientId = UserData.CorpClientId.Value;
             var data = await service.Update(model);
             model.CustomerTypeId = 2;
             if (data != null)
@@ -88,7 +90,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpGet("Company/{id:int}")]
         public async Task<ActionResult<Customer>> GetCompany(int id)
         {
-            var data = await service.Get(id, 2);
+            var data = await service.Get(id, 2, UserData.CorpClientId.Value);
             if (data != null)
                 return Ok(data);
             return NoContent();
@@ -126,7 +128,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpGet("Merged/{filter}")]
         public async Task<ActionResult> Filter(string filter)
         {
-            var data = await service.FilterCustomers(filter);
+            var data = await service.FilterCustomers(filter, UserData.CorpClientId.Value);
             if (data != null)
                 return Ok(data);
             return NoContent();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Charcutarie.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,10 +10,10 @@ namespace Charcutarie.Models.ViewModels
     {
         public long ProductId { get; set; }
         public double Quantity { get; set; }
-        public int OrderItemStatusId { get; set; }
+        public OrderItemStatusEnum OrderItemStatusId { get; set; }
         public string AdditionalInfo { get; set; }
         public double Discount { get; set; }
-        public int MeasureUnitId { get; set; }
+        public MeasureUnitEnum MeasureUnitId { get; set; }
         public long OrderId { get; set; }
 
         [JsonIgnore]

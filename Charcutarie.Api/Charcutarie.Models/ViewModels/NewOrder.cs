@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Charcutarie.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -13,7 +14,7 @@ namespace Charcutarie.Models.ViewModels
         }
         public long CustomerId { get; set; }
         public DateTime CompleteBy { get; set; }
-        public int PaymentStatusId { get; set; }
+        public PaymentStatusEnum PaymentStatusId { get; set; }
         public decimal FreightPrice { get; set; }
         public List<NewOrderItem> OrderItems { get; set; }
 

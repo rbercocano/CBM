@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Charcutarie.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,8 +15,8 @@ namespace Charcutarie.Models.Entities
         public DateTime? LastUpdated { get; set; }
         public DateTime CompleteBy { get; set; }
         public DateTime? PaidOn { get; set; }
-        public int OrderStatusId { get; set; }
-        public int PaymentStatusId { get; set; }
+        public OrderStatusEnum OrderStatusId { get; set; }
+        public PaymentStatusEnum PaymentStatusId { get; set; }
         public decimal FreightPrice { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public OrderStatus OrderStatus { get; set; }

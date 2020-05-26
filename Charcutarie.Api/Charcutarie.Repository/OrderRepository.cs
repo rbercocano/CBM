@@ -15,6 +15,7 @@ using System.Text;
 using System.Data;
 using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models;
+using Charcutarie.Models.Enums;
 
 namespace Charcutarie.Repository
 {
@@ -34,7 +35,7 @@ namespace Charcutarie.Repository
             model.OrderNumber = lastNumber + 1;
 
             var entity = mapper.Map<EF.Order>(model);
-            if (model.PaymentStatusId == 2)
+            if (model.PaymentStatusId == PaymentStatusEnum.Pago)
                 entity.PaidOn = DateTime.Now;
             context.Orders.Add(entity);
             var rows = await context.SaveChangesAsync();
@@ -44,9 +45,9 @@ namespace Charcutarie.Repository
         {
             var entity = await context.Orders.FirstOrDefaultAsync(o => o.Customer.CorpClientId == corpClientId && o.OrderNumber == model.OrderNumber);
 
-            if (entity.PaymentStatusId == 1 && model.PaymentStatusId == 2)
+            if (entity.PaymentStatusId == PaymentStatusEnum.Pendente && model.PaymentStatusId == PaymentStatusEnum.Pago)
                 entity.PaidOn = DateTime.Now;
-            else if (entity.PaymentStatusId == 2 && model.PaymentStatusId == 1)
+            else if (entity.PaymentStatusId == PaymentStatusEnum.Pago && model.PaymentStatusId == PaymentStatusEnum.Pendente)
                 entity.PaidOn = null;
 
             entity.CompleteBy = model.CompleteBy;
@@ -65,114 +66,44 @@ namespace Charcutarie.Repository
         }
         public async Task<Order> Get(long orderId, int corpClientId)
         {
-            var cTypeId = context.Customers.Where(o => o.Orders.Any(p => p.OrderId == orderId) && o.CorpClientId == corpClientId).Select(c => c.CustomerTypeId).FirstOrDefault();
-            if (cTypeId == 0)
-                return null;
-            if (cTypeId == 1)
-            {
-                var data = await context.PersonCustomers
-                                    .Include(o => o.Contacts)
-                                    .ThenInclude(o => o.ContactType)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.PaymentStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.Product)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.OrderItemStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.MeasureUnit)
-                                    .FirstOrDefaultAsync(o => o.Orders.Any(p => p.OrderId == orderId) && o.CorpClientId == corpClientId);
-                if (data == null) return null;
-                var result = mapper.Map<Order>(data.Orders.FirstOrDefault());
-                result.Customer = mapper.Map<MergedCustomer>(data);
-                return result;
-            }
-            else
-            {
-                var data = await context.CompanyCustomers
-                                    .Include(o => o.Contacts)
-                                    .ThenInclude(o => o.ContactType)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.PaymentStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.Product)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.OrderItemStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.MeasureUnit)
-                                    .FirstOrDefaultAsync(o => o.Orders.Any(p => p.OrderId == orderId) && o.CorpClientId == corpClientId);
-                if (data == null) return null;
-                var result = mapper.Map<Order>(data.Orders.FirstOrDefault());
-                result.Customer = mapper.Map<MergedCustomer>(data);
-                return result;
-            }
+            var data = await context.Orders.Where(o => o.OrderId == orderId
+                                             && o.Customer.CorpClientId == corpClientId)
+                                            .Include(o => o.Customer)
+                                                .ThenInclude(o => o.Contacts)
+                                                    .ThenInclude(o => o.ContactType)
+                                            .Include(o => o.OrderStatus)
+                                            .Include(o => o.PaymentStatus)
+                                            .Include(o => o.OrderItems)
+                                                .ThenInclude(o => o.OrderItemStatus)
+                                            .Include(o => o.OrderItems)
+                                                .ThenInclude(o => o.Product)
+                                            .Include(o => o.OrderItems)
+                                                .ThenInclude(o => o.MeasureUnit)
+                                                .ToListAsync();
+            var result = mapper.Map<Order>(data.FirstOrDefault());
+            return result;
         }
 
         public async Task<Order> GetByNumber(int orderNumber, int corpClientId)
         {
-            var cTypeId = context.Customers.Where(o => o.Orders.Any(p => p.OrderNumber == orderNumber) && o.CorpClientId == corpClientId).Select(c => c.CustomerTypeId).FirstOrDefault();
-            if (cTypeId == 0)
-                return null;
-            if (cTypeId == 1)
-            {
-                var data = await context.PersonCustomers
-                                    .Include(o => o.Contacts)
-                                    .ThenInclude(o => o.ContactType)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.PaymentStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.Product)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.OrderItemStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.MeasureUnit)
-                                    .FirstOrDefaultAsync(o => o.Orders.Any(p => p.OrderNumber == orderNumber) && o.CorpClientId == corpClientId);
-                if (data == null) return null;
-                var result = mapper.Map<Order>(data.Orders.FirstOrDefault());
-                result.Customer = mapper.Map<MergedCustomer>(data);
-                return result;
-            }
-            else
-            {
-                var data = await context.CompanyCustomers
-                                    .Include(o => o.Contacts)
-                                    .ThenInclude(o => o.ContactType)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.PaymentStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.Product)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.OrderItemStatus)
-                                    .Include(o => o.Orders)
-                                    .ThenInclude(o => o.OrderItems)
-                                    .ThenInclude(o => o.MeasureUnit)
-                                    .FirstOrDefaultAsync(o => o.Orders.Any(p => p.OrderNumber == orderNumber) && o.CorpClientId == corpClientId);
-                if (data == null) return null;
-                var result = mapper.Map<Order>(data.Orders.FirstOrDefault());
-                result.Customer = mapper.Map<MergedCustomer>(data);
-                return result;
-            }
+            var data = await context.Orders.Where(o => o.OrderNumber == orderNumber
+                                             && o.Customer.CorpClientId == corpClientId)
+                                            .Include(o => o.Customer)
+                                                .ThenInclude(o => o.Contacts)
+                                                    .ThenInclude(o => o.ContactType)
+                                            .Include(o => o.OrderStatus)
+                                            .Include(o => o.PaymentStatus)
+                                            .Include(o => o.OrderItems)
+                                                .ThenInclude(o => o.OrderItemStatus)
+                                            .Include(o => o.OrderItems)
+                                                .ThenInclude(o => o.Product)
+                                            .Include(o => o.OrderItems)
+                                                .ThenInclude(o => o.MeasureUnit)
+                                                .ToListAsync();
+            var result = mapper.Map<Order>(data.FirstOrDefault());
+            return result;
         }
-        public async Task<int> GetCurrentStatus(int orderNumber, int corpClientId)
+        public async Task<OrderStatusEnum> GetCurrentStatus(int orderNumber, int corpClientId)
         {
             return await context.Orders.Where(o => o.OrderNumber == orderNumber && o.Customer.CorpClientId == corpClientId).Select(o => o.OrderStatusId).FirstOrDefaultAsync();
         }

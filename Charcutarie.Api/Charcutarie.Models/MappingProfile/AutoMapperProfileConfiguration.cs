@@ -72,7 +72,9 @@ namespace Charcutarie.Models.MappingProfile
                 .ForMember(m => m.Name, m => m.MapFrom(p => p.DBAName))
                 .ForMember(m => m.SocialIdentifier, m => m.MapFrom(p => p.Cnpj));
 
-            CreateMap<ef.Customer, vm.MergedCustomer>().ReverseMap();
+            CreateMap<ef.Customer, vm.MergedCustomer>()
+                .ForMember(m => m.Name, m => m.MapFrom(s => s is ef.PersonCustomer ? $"{((ef.PersonCustomer)s).Name} {((ef.PersonCustomer)s).LastName}".Trim() : ((ef.CompanyCustomer)s).DBAName))
+                .ForMember(m => m.SocialIdentifier, m => m.MapFrom(s => s is ef.PersonCustomer ? ((ef.PersonCustomer)s).Cpf : ((ef.CompanyCustomer)s).Cnpj));
             CreateMap<ef.Customer, vm.UpdatePersonCustomer>().ReverseMap();
             CreateMap<ef.Customer, vm.NewPersonCustomer>().ReverseMap();
 

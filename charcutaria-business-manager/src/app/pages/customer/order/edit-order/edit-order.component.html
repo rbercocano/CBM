@@ -32,6 +32,11 @@
                     <div class="row">
                         <div class="col-12">
                             <h6 class="m-0">{{order.customer.name}}</h6>
+                            <p *ngIf="order.customer.socialIdentifier" style="font-size: 12px;font-style: italic;">
+                                <span *ngIf="order.customer.customerTypeId==1">CPF: </span>
+                                <span *ngIf="order.customer.customerTypeId==2">CNPJ: </span>
+                                {{order.customer.socialIdentifier}}
+                            </p>
                             <p class="m-0 m-t-10" *ngFor="let c of order.customer.contacts">
                                 <img src="../../../../../assets/images/contact/{{c.contactIcon}}"
                                     style="width: 25px;" />

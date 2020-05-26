@@ -311,3 +311,5 @@ E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\NL
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.csproj.CoreCompileInputs.cache
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.MvcApplicationPartsAssemblyInfo.cs
 E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\obj\Debug\netcoreapp3.1\Charcutarie.Api.MvcApplicationPartsAssemblyInfo.cache
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll

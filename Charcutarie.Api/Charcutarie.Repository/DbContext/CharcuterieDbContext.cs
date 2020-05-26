@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
 using System;
+using System.Data;
 
 namespace Charcutarie.Repository.DbContext
 {
@@ -14,7 +15,7 @@ namespace Charcutarie.Repository.DbContext
         public CharcuterieDbContext(DbContextOptions<CharcuterieDbContext> options)
             : base(options)
         {
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -85,6 +86,15 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new PaymentStatusConfiguration());
 
 
+        }
+        public async Task<int> ExecuteScalar(string command)
+        {
+            using var connection = this.Database.GetDbConnection();
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = command;
+            if (connection.State.Equals(ConnectionState.Closed)) { connection.Open(); }
+            var result = await cmd.ExecuteScalarAsync();
+            return result == null ? 0 : (int)result;
         }
     }
 }

@@ -35,7 +35,7 @@ export class CustomerListComponent implements OnInit {
     private paginationService: PaginationService,
     private notificationService: NotificationService) {
     this.paginationInfo.currentPage = 1;
-    this.paginationInfo.recordsPerpage = 5;
+    this.paginationInfo.recordsPerpage = 10;
     this.paginationService.onChangePage.subscribe(r => {
       if (r != null)
         this.search();

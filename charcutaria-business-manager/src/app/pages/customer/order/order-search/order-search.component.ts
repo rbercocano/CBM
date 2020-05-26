@@ -37,7 +37,7 @@ export class OrderSearchComponent implements OnInit {
     private domainService: DomainService) {
     this.resetFilter();
     this.paginationInfo.currentPage = 1;
-    this.paginationInfo.recordsPerpage = 5;
+    this.paginationInfo.recordsPerpage = 10;
     this.paginationService.onChangePage.subscribe(r => {
       if (r != null)
         this.search();
@@ -89,7 +89,8 @@ export class OrderSearchComponent implements OnInit {
         this.orders = info.data;
         this.paginationInfo = info;
         this.paginationService.updatePaging(info);
-        this.modal.close();
+        if (this.modal)
+          this.modal.close();
       }, (e) => {
         this.spinner.hide();
         this.notificationService.notifyHttpError(e);
@@ -106,5 +107,20 @@ export class OrderSearchComponent implements OnInit {
     this.filter = new orderSummaryFilter();
     this.filter.paymentStatus = null;
     this.filter.orderStatus = null;
+  }
+  sort(column: number) {
+    if (this.lastFilter.orderBy == column) {
+      this.lastFilter.direction = this.lastFilter.direction == 1 ? 2 : 1;
+    } else {
+      this.lastFilter.orderBy = column;
+      this.lastFilter.direction = 1;
+    }
+    this.search();
+  }
+  public get sortColumn(): number {
+    return this.lastFilter.orderBy;
+  }
+  public get sortDirection(): number {
+    return this.lastFilter.direction;
   }
 }

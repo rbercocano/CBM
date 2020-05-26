@@ -1,5 +1,5 @@
 <app-toolbar [title]="title">
-    <button *ngIf="order != null"  class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar" (click)="edit()">
+    <button *ngIf="order != null" class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar" (click)="edit()">
         <i class="fa fa-pencil"></i>
     </button>
 </app-toolbar>
@@ -10,7 +10,12 @@
                 <div class="row invoive-info ">
                     <div class="col-3">
                         <h6>Dados do Cliente:</h6>
-                        <h6 class="m-0">{{order.customer.name}}</h6>
+                        <h6 class="m-0">{{order.customer.name}}</h6>                        
+                        <p *ngIf="order.customer.socialIdentifier" style="font-size: 12px;font-style: italic;">
+                            <span *ngIf="order.customer.customerTypeId==1">CPF: </span>
+                            <span *ngIf="order.customer.customerTypeId==2">CNPJ: </span>
+                            {{order.customer.socialIdentifier}}
+                        </p>
                         <p class="m-0 m-t-10" *ngFor="let c of order.customer.contacts">
                             <img src="../../../../../assets/images/contact/{{c.contactIcon}}" style="width: 25px;" />
                             {{c.contact}}

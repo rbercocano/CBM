@@ -1,6 +1,8 @@
 ﻿using Charcutarie.Models.Entities;
+using Charcutarie.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Charcutarie.Repository.DbContext.Mapping
 {
@@ -27,10 +29,14 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
             builder.Property(p => p.OrderStatusId)
                 .HasColumnType("INT")
-                .IsRequired();
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (OrderStatusEnum)v);
             builder.Property(p => p.PaymentStatusId)
                 .HasColumnType("INT")
-                .IsRequired();
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (PaymentStatusEnum)v);
             builder.Property(p => p.FreightPrice)
                 .HasColumnType("DECIMAL(18,2)")
                 .IsRequired();

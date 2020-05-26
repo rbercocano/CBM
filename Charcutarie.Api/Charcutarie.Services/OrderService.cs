@@ -43,7 +43,7 @@ namespace Charcutarie.Services
                     Quantity = item.Quantity,
                     QuantityMeasureUnit = (MeasureUnitEnum)item.MeasureUnitId
                 });
-                item.ItemNumber++;
+                i++;
             }
             return await orderApp.Add(model, corpClientId);
         }
@@ -67,10 +67,10 @@ namespace Charcutarie.Services
         {
             await orderApp.Update(model, corpClientId);
         }
-        public async Task<int> RestoreOrderStatus(int orderNumber, int corpClientId)
+        public async Task<OrderStatusEnum> RestoreOrderStatus(int orderNumber, int corpClientId)
         {
             var status = await orderApp.GetCurrentStatus(orderNumber, corpClientId);
-            if (status != 4) return status;
+            if (status != OrderStatusEnum.Cancelado) return status;
             var nextStatus = await GetNextOrderStatus(orderNumber, corpClientId);
             await orderApp.ChangeStatus(new UpdateOrderStatus
             {
@@ -79,17 +79,19 @@ namespace Charcutarie.Services
             }, corpClientId);
             return nextStatus;
         }
-        private async Task<int> GetNextOrderStatus(int orderNumber, int corpClientId)
+        private async Task<OrderStatusEnum> GetNextOrderStatus(int orderNumber, int corpClientId)
         {
-            int nextStatus = 1;
+            var nextStatus = OrderStatusEnum.Criado;
             var orderItems = await orderItemApp.GetAll(orderNumber, corpClientId);
             if (!orderItems.Any()) return nextStatus;
-            if (orderItems.All(i => i.OrderItemStatusId == 1))
-                nextStatus = 1;
-            else if (orderItems.All(i => i.OrderItemStatusId == 2))
-                nextStatus = 3;
-            else if (orderItems.Any(i => i.OrderItemStatusId == 2 || i.OrderItemStatusId == 4))
-                nextStatus = 2;
+            if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.AguardandoProducao))
+                nextStatus = OrderStatusEnum.Criado;
+            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Pronto))
+                nextStatus = OrderStatusEnum.Finalizado;
+            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
+                nextStatus = OrderStatusEnum.Finalizado;
+            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento || i.OrderItemStatusId == OrderItemStatusEnum.Pronto))
+                nextStatus = OrderStatusEnum.EmAndamento;
             return nextStatus;
         }
 
@@ -138,7 +140,7 @@ namespace Charcutarie.Services
                 ProductMeasureUnit = (MeasureUnitEnum)prod.MeasureUnitId,
                 ProductPrice = prod.Price,
                 Quantity = model.Quantity,
-                QuantityMeasureUnit = (MeasureUnitEnum)model.MeasureUnitId
+                QuantityMeasureUnit = model.MeasureUnitId
             });
             var result = await orderItemApp.AddOrderItem(model, corpClientId);
             var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);

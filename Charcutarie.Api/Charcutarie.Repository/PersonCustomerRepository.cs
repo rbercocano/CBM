@@ -30,7 +30,7 @@ namespace Charcutarie.Repository
         }
         public async Task<PersonCustomer> Update(UpdatePersonCustomer model)
         {
-            var entity = context.PersonCustomers.Find(model.CustomerId);
+            var entity = context.PersonCustomers.Where(p => p.CustomerId == model.CustomerId && p.CorpClientId == model.CorpClientId).FirstOrDefault();
             entity.Name = model.Name;
             entity.Cpf = model.Cpf;
             entity.LastName = model.LastName;
@@ -40,16 +40,16 @@ namespace Charcutarie.Repository
             var result = mapper.Map<PersonCustomer>(entity);
             return await Task.FromResult(result);
         }
-        public async Task<PagedResult<PersonCustomer>> GetPaged(int page, int pageSize, string filter)
+        public async Task<PagedResult<PersonCustomer>> GetPaged(int page, int pageSize, string filter, int corpClientId)
         {
-            var query = context.PersonCustomers.Include(p => p.CustomerType).AsQueryable();
+            var query = context.PersonCustomers.Include(p => p.CustomerType).Where(p => p.CorpClientId == corpClientId).AsQueryable();
             if (!string.IsNullOrEmpty(filter))
                 query = query.Where(c => c.Name.Contains(filter) || c.Cpf.Contains(filter));
 
 
             var count = query.Count();
 
-            var data = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var data = await query.OrderBy(p => p.Name).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return new PagedResult<PersonCustomer>
             {
@@ -59,15 +59,15 @@ namespace Charcutarie.Repository
                 RecordsPerpage = pageSize
             };
         }
-        public async Task<IEnumerable<PersonCustomer>> Filter(string filter)
+        public async Task<IEnumerable<PersonCustomer>> Filter(string filter, int corpClientId)
         {
-            var query = context.PersonCustomers.Include(p => p.CustomerType).Where(c =>  (c.Name.Contains(filter) || c.Cpf.Contains(filter)));
+            var query = context.PersonCustomers.Include(p => p.CustomerType).Where(c => c.CorpClientId == corpClientId && (c.Name.Contains(filter) || c.Cpf.Contains(filter)));
             var data = await query.ToListAsync();
             return mapper.Map<IEnumerable<PersonCustomer>>(data);
         }
-        public async Task<PersonCustomer> Get(long id)
+        public async Task<PersonCustomer> Get(long id, int corpClientId)
         {
-            var entity = await context.PersonCustomers.Include(p => p.CustomerType).FirstOrDefaultAsync(p => p.CustomerId == id);
+            var entity = await context.PersonCustomers.Include(p => p.CustomerType).Where(p => p.CorpClientId == corpClientId).FirstOrDefaultAsync(p => p.CustomerId == id);
             var result = mapper.Map<PersonCustomer>(entity);
             return result;
         }

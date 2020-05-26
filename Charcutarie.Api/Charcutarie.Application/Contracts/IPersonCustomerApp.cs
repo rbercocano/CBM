@@ -7,11 +7,11 @@ namespace Charcutarie.Application.Contracts
 {
     public interface IPersonCustomerApp
     {
-        Task<PagedResult<PersonCustomer>> GetPaged(int page, int pageSize, string filter);
+        Task<PagedResult<PersonCustomer>> GetPaged(int page, int pageSize, string filter, int corpClientId);
         Task<long> Add(NewPersonCustomer model);
 
         Task<PersonCustomer> Update(UpdatePersonCustomer model);
-        Task<PersonCustomer> Get(int id);
-        Task<IEnumerable<PersonCustomer>> Filter(string filter);
+        Task<PersonCustomer> Get(int id, int corpClientId);
+        Task<IEnumerable<PersonCustomer>> Filter(string filter, int corpClientId);
     }
 }

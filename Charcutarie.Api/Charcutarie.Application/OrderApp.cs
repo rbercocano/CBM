@@ -1,5 +1,6 @@
 ﻿using Charcutarie.Application.Contracts;
 using Charcutarie.Models;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Repository.Contracts;
@@ -37,7 +38,7 @@ namespace Charcutarie.Application
             return await repository.GetByNumber(orderNumber, corpClientId);
         }
 
-        public async Task<int> GetCurrentStatus(int orderNumber, int corpClientId)
+        public async Task<OrderStatusEnum> GetCurrentStatus(int orderNumber, int corpClientId)
         {
             return await repository.GetCurrentStatus(orderNumber, corpClientId);
         }

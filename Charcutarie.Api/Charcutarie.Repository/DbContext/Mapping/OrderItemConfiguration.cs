@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Models.Entities;
+using Charcutarie.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -27,10 +28,14 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
             builder.Property(p => p.OrderItemStatusId)
                 .HasColumnType("INT")
-                .IsRequired();
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (OrderItemStatusEnum)v);
             builder.Property(p => p.MeasureUnitId)
                 .HasColumnType("INT")
-                .IsRequired();
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (MeasureUnitEnum)v);
             builder.Property(p => p.AdditionalInfo)
                 .HasColumnType("VARCHAR(200)")
                 .IsRequired();

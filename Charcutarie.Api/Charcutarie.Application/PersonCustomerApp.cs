@@ -21,19 +21,19 @@ namespace Charcutarie.Application
             return await personCustomerRepository.Add(model);
         }
 
-        public async Task<IEnumerable<PersonCustomer>> Filter(string filter)
+        public async Task<IEnumerable<PersonCustomer>> Filter(string filter, int corpClientId)
         {
-            return await personCustomerRepository.Filter(filter);
+            return await personCustomerRepository.Filter(filter, corpClientId);
         }
 
-        public async Task<PersonCustomer> Get(int id)
+        public async Task<PersonCustomer> Get(int id, int corpClientId)
         {
-            return await personCustomerRepository.Get(id);
+            return await personCustomerRepository.Get(id, corpClientId);
         }
 
-        public async Task<PagedResult<PersonCustomer>> GetPaged(int page, int pageSize, string filter)
+        public async Task<PagedResult<PersonCustomer>> GetPaged(int page, int pageSize, string filter, int corpClientId)
         {
-            return await personCustomerRepository.GetPaged(page, pageSize, filter);
+            return await personCustomerRepository.GetPaged(page, pageSize, filter, corpClientId);
         }
 
         public async Task<PersonCustomer> Update(UpdatePersonCustomer model)

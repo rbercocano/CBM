@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Charcutarie.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,8 +13,8 @@ namespace Charcutarie.Models.Entities
         public long ProductId { get; set; }
         public Product Product { get; set; }
         public double  Quantity{ get; set; }
-        public int OrderItemStatusId { get; set; }
-        public int MeasureUnitId { get; set; }
+        public OrderItemStatusEnum OrderItemStatusId { get; set; }
+        public MeasureUnitEnum MeasureUnitId { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? LastUpdated { get; set; }
         public string AdditionalInfo { get; set; }

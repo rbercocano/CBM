@@ -8,8 +8,8 @@ namespace Charcutarie.Services.Contracts
     public interface ICustomerService
     {
         Task<long> Add(Customer model);
-        Task<Customer> Get(int id, int customerTypeId);
-        Task<PagedResult<T>> GetPaged<T>(int page, int pageSize, string filter, int customerTypeId) where T : Customer;
+        Task<Customer> Get(int id, int customerTypeId, int corpClientId);
+        Task<PagedResult<T>> GetPaged<T>(int page, int pageSize, string filter, int customerTypeId, int corpClientId) where T : Customer;
         Task<Customer> Update(Customer model);
 
 
@@ -18,6 +18,6 @@ namespace Charcutarie.Services.Contracts
         Task<IEnumerable<CustomerContact>> GetAllContacts(long customerId, int corpClientId);
         Task UpdateContact(UpdateCustomerContact model, int corpClientId);
 
-        Task<IEnumerable<MergedCustomer>> FilterCustomers(string filter);
+        Task<IEnumerable<MergedCustomer>> FilterCustomers(string filter, int corpClientId);
     }
 }

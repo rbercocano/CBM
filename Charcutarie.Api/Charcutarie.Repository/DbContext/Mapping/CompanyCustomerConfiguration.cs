@@ -8,6 +8,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
     {
         public void Configure(EntityTypeBuilder<CompanyCustomer> builder)
         {
+            builder.HasBaseType<Customer>();
             builder.Property(p => p.Name)
                 .HasColumnName("NAME")
                 .HasColumnType("VARCHAR(100)");

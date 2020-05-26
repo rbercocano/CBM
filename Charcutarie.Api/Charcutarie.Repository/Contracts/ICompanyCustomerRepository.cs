@@ -7,10 +7,10 @@ namespace Charcutarie.Repository.Contracts
 {
     public interface ICompanyCustomerRepository
     {
-        public Task<PagedResult<CompanyCustomer>> GetPaged(int page, int pageSize, string filter);
         Task<long> Add(NewCompanyCustomer model);
         Task<CompanyCustomer> Update(UpdateCompanyCustomer model);
-        Task<CompanyCustomer> Get(long id);
-        Task<IEnumerable<CompanyCustomer>> Filter(string filter);
+        Task<CompanyCustomer> Get(long id, int corpClientId);
+        Task<IEnumerable<CompanyCustomer>> Filter(string filter, int corpClientId);
+        public Task<PagedResult<CompanyCustomer>> GetPaged(int page, int pageSize, string filter, int corpClientId);
     }
 }

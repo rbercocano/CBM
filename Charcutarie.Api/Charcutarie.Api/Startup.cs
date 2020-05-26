@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Charcutarie.Api.Infra.Middlewares;
 
 namespace Charcutarie.Api
 {
@@ -60,6 +61,7 @@ namespace Charcutarie.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCBMErrorLogging();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

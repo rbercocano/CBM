@@ -33,7 +33,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpPost]
         public async Task<ActionResult<long>> Add(NewProduct model)
         {
-            model.CorpClientId = UserData.CorpClientId.Value;
+             model.CorpClientId = UserData.CorpClientId.Value;
             var id = await service.Add(model);
             if (id > 0)
                 return Ok(id);
