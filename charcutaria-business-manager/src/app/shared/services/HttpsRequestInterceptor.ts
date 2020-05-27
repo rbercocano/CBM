@@ -12,7 +12,8 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     constructor(private authService: AuthService) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (req.url == `${environment.apiUrl}/Authentication/Login` ||
-            req.url == `${environment.apiUrl}/Authentication/Token/Refresh`)
+            req.url == `${environment.apiUrl}/Authentication/Token/Refresh`||
+            req.url == `${environment.apiUrl}/api/v1/CorpClient/Actives`)
             return next.handle(req);
         let now = new Date();
         let tokenObj: TokenInfo = this.authService.tokenInfo ?? { expiration: now, refreshToken: null, accessToken: null, authenticated: false, created: null, message: null, userData: null };
