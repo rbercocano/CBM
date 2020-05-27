@@ -1,0 +1,13 @@
+/Charcutarie.Api/bin/*
+/Charcutarie.Application/bin/*
+/Charcutarie.Core/bin/*
+/Charcutarie.Models/bin/*
+/Charcutarie.Repository/bin/*
+/Charcutarie.Services/bin/*
+
+/Charcutarie.Api/obj/*
+/Charcutarie.Application/obj/*
+/Charcutarie.Core/obj/*
+/Charcutarie.Models/obj/*
+/Charcutarie.Repository/obj/*
+/Charcutarie.Services/obj/*
