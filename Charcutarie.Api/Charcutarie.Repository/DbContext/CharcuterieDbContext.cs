@@ -15,7 +15,7 @@ namespace Charcutarie.Repository.DbContext
         public CharcuterieDbContext(DbContextOptions<CharcuterieDbContext> options)
             : base(options)
         {
-            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -61,6 +61,9 @@ namespace Charcutarie.Repository.DbContext
         public DbSet<OrderStatus> OrderStatus { get; set; }
         public DbSet<PaymentStatus> PaymentStatus { get; set; }
         public DbSet<OrderSummary> OrderSummaries { get; set; }
+        public DbSet<DataSheet> DataSheets { get; set; }
+        public DbSet<DataSheetItem> DataSheetItems { get; set; }
+        public DbSet<RawMaterial> RawMaterials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,6 +87,9 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new OrderItemStatusConfiguration());
             modelBuilder.ApplyConfiguration(new OrderStatusConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentStatusConfiguration());
+            modelBuilder.ApplyConfiguration(new RawMaterialConfiguration());
+            modelBuilder.ApplyConfiguration(new DataSheetItemConfiguration());
+            modelBuilder.ApplyConfiguration(new DataSheetConfiguration());
 
 
         }

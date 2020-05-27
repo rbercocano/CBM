@@ -13,5 +13,6 @@ namespace Charcutarie.Models.Entities
         public int CorpClientId { get; set; }
 
         public MeasureUnit MeasureUnit { get; set; }
+        public DataSheet DataSheet { get; set; }
     }
 }

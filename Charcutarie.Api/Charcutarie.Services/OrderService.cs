@@ -1,5 +1,4 @@
-﻿using Charcutarie.Application;
-using Charcutarie.Application.Contracts;
+﻿using Charcutarie.Application.Contracts;
 using Charcutarie.Models;
 using Charcutarie.Models.Enums;
 using Charcutarie.Models.Enums.OrderBy;
@@ -38,10 +37,10 @@ namespace Charcutarie.Services
                 item.ItemNumber = i;
                 item.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
                 {
-                    ProductMeasureUnit = (MeasureUnitEnum)prod.MeasureUnitId,
+                    ProductMeasureUnit = prod.MeasureUnitId,
                     ProductPrice = prod.Price,
                     Quantity = item.Quantity,
-                    QuantityMeasureUnit = (MeasureUnitEnum)item.MeasureUnitId
+                    QuantityMeasureUnit = item.MeasureUnitId
                 });
                 i++;
             }
@@ -115,10 +114,10 @@ namespace Charcutarie.Services
             model.ProductPrice = prodPrice;
             model.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
             {
-                ProductMeasureUnit = (MeasureUnitEnum)prod.MeasureUnitId,
+                ProductMeasureUnit = prod.MeasureUnitId,
                 ProductPrice = prodPrice,
                 Quantity = model.Quantity,
-                QuantityMeasureUnit = (MeasureUnitEnum)model.MeasureUnitId
+                QuantityMeasureUnit = model.MeasureUnitId
             });
             await orderItemApp.Update(model, corpClientId);
             var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
@@ -137,7 +136,7 @@ namespace Charcutarie.Services
             model.ItemNumber = await orderItemApp.GetLastItemNumber(order.OrderNumber, corpClientId) + 1;
             model.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
             {
-                ProductMeasureUnit = (MeasureUnitEnum)prod.MeasureUnitId,
+                ProductMeasureUnit = prod.MeasureUnitId,
                 ProductPrice = prod.Price,
                 Quantity = model.Quantity,
                 QuantityMeasureUnit = model.MeasureUnitId

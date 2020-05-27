@@ -40,7 +40,12 @@ export class AuthService {
   }
   logIn(loginInfo: Login): Observable<TokenInfo> {
     const url = `${environment.apiUrl}/Authentication/login`;
-    return this.http.post<TokenInfo>(url, loginInfo).pipe(map(jwt => {
+    return this.http.post<TokenInfo>(url, {
+      clientSecret: environment.clientSecret,
+      username: loginInfo.username,
+      password: loginInfo.password,
+      corpClientId: loginInfo.corpClientId
+    }).pipe(map(jwt => {
       if (jwt && jwt.authenticated) {
         localStorage.setItem('currentUser', JSON.stringify(jwt));
         this.currentUserSubject.next(jwt);

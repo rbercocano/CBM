@@ -36,6 +36,8 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("INT")
                 .IsRequired();
 
+            builder.HasOne(p => p.DataSheet)
+                .WithOne(p => p.Product);
         }
     }
 }

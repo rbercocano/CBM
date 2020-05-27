@@ -259,7 +259,7 @@ export class EditOrderComponent implements OnInit {
     })).subscribe(r => {
       this.setOrder(r);
       this.spinner.hide();
-      this.notificationService.showSuccess('Sucesso', 'Ordem restaurada com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Item removido com sucesso.');
     }, e => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);

@@ -52,6 +52,12 @@ namespace Charcutarie.Api.Controllers.v1
                     Message = "Usuário Inativo"
                 });
             }
+            if(signingConfigurations.ClientSecret != request.ClientSecret)
+                return Ok(new TokenData
+                {
+                    Authenticated = false,
+                    Message = "Ocorreu um problema na autenticação. Entre em contato com o administrador do sistema."
+                });
 
             var claims = new[]
             {

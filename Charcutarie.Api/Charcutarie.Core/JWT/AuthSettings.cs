@@ -7,5 +7,6 @@ namespace Charcutarie.Core.JWT
     public class AuthSettings
     {
         public string SecretKey { get; set; }
+        public string ClientSecret { get; set; }
     }
 }

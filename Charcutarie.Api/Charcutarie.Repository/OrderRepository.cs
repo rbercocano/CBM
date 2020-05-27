@@ -4,12 +4,10 @@ using EF = Charcutarie.Models.Entities;
 using Charcutarie.Repository.Contracts;
 using Charcutarie.Repository.DbContext;
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
-using System.ComponentModel;
 using Microsoft.Data.SqlClient;
 using System.Text;
 using System.Data;
@@ -181,9 +179,8 @@ namespace Charcutarie.Repository
             query.Append($" ORDER BY {orderBy} {direction}");
 
             if (page.HasValue && pageSize.HasValue)
-            {
                 query.Append($" OFFSET {(page > 0 ? page - 1 : 0) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY");
-            }
+
             var data = context.OrderSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToList();
             var result = mapper.Map<IEnumerable<OrderSummary>>(data);
             return new PagedResult<OrderSummary>

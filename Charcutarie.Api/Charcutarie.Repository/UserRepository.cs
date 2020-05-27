@@ -75,6 +75,7 @@ namespace Charcutarie.Repository
         {
             var entity = await context.Users
                 .Include(c => c.CorpClient)
+                .Include(c => c.Role)
                 .FirstOrDefaultAsync(p => p.Username == username
                                                                   && p.Password == password
                                                                   && p.CorpClientId == corpClientId);
