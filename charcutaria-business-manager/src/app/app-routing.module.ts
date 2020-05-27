@@ -3,9 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './layout/admin/admin.component';
 import { AuthComponent } from './layout/auth/auth.component';
 import { CustomerComponent } from './layout/customer/customer.component';
+import { AuthGuard } from './shared/guards/AuthGuard';
 
 
 const routes: Routes = [{
+  canActivate: [AuthGuard],
   path: '',
   component: CustomerComponent,
   children: [
@@ -36,6 +38,7 @@ const routes: Routes = [{
     }]
 },
 {
+  canActivate: [AuthGuard],
   path: 'system',
   component: AdminComponent,
   children: [

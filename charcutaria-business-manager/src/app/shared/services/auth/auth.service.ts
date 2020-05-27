@@ -24,6 +24,10 @@ export class AuthService {
   public get userData(): JWTUserInfo {
     return this.currentUserSubject.value.userData;
   }
+  public get isAuthenticated(): boolean {
+    return (this.currentUserSubject.value != null &&
+      this.currentUserSubject.value.userData != null);
+  }
   refreshToken(): Observable<TokenInfo> {
     const url = `${environment.apiUrl}/Authentication/Token/Refresh`;
     let data = {
@@ -39,7 +43,7 @@ export class AuthService {
     }));
   }
   logIn(loginInfo: Login): Observable<TokenInfo> {
-    const url = `${environment.apiUrl}/Authentication/login`;
+    const url = `${environment.apiUrl}/Authentication/Login`;
     return this.http.post<TokenInfo>(url, {
       clientSecret: environment.clientSecret,
       username: loginInfo.username,
