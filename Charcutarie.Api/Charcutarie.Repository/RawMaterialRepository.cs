@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Charcutarie.Models;
 using Charcutarie.Models.ViewModels;
+using ef = Charcutarie.Models.Entities;
 using Charcutarie.Repository.Contracts;
 using Charcutarie.Repository.DbContext;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,8 @@ namespace Charcutarie.Repository
         }
         public async Task<PagedResult<RawMaterial>> GetPaged(int corpClientId, int page, int pageSize, string name, OrderByDirection direction)
         {
-            var query = context.RawMaterials.Include(p => p.MeasureUnit).Where(p => p.CorpClientId == corpClientId).AsQueryable();
+            var query = context.RawMaterials.Include(p => p.MeasureUnit)
+                .Where(p => p.CorpClientId == corpClientId).AsQueryable();
             if (!string.IsNullOrEmpty(name))
                 query = query.Where(c => c.Name.Contains(name));
 
@@ -53,6 +55,25 @@ namespace Charcutarie.Repository
             var entity = await query.ToListAsync();
             var result = mapper.Map<IEnumerable<RawMaterial>>(entity);
             return result;
+        }
+
+        public async Task<long> Add(NewRawMaterial model)
+        {
+            var entity = mapper.Map<ef.RawMaterial>(model);
+            context.Add(entity);
+            var rows = await context.SaveChangesAsync();
+            return await Task.FromResult(entity.RawMaterialId);
+        }
+        public async Task<RawMaterial> Update(UpdateRawmaterial model)
+        {
+            var entity = context.RawMaterials.FirstOrDefault(p => p.CorpClientId == model.CorpClientId && p.RawMaterialId == model.RawMaterialId);
+            entity.Name = model.Name;
+            entity.MeasureUnitId = model.MeasureUnitId;
+            entity.Price = model.Price;
+            context.Update(entity);
+            var rows = await context.SaveChangesAsync();
+            var result = mapper.Map<RawMaterial>(entity);
+            return await Task.FromResult(result);
         }
     }
 }

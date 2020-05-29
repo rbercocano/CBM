@@ -11,6 +11,7 @@ namespace Charcutarie.Models.Enums
         Miligrama = 3,
         Kilo = 4,
         Mililitro = 5,
-        Litro = 6
+        Litro = 6,
+        Onca = 7
     }
 }

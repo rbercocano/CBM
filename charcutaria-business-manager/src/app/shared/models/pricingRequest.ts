@@ -3,4 +3,5 @@ export interface PricingRequest {
     productMeasureUnit: number;
     quantity: number;
     quantityMeasureUnit: number;
+    resultPrecision:number;
 }

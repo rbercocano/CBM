@@ -11,5 +11,7 @@ namespace Charcutarie.Models.ViewModels
         public MeasureUnitEnum ProductMeasureUnit { get; set; }
         public double Quantity { get; set; }
         public MeasureUnitEnum QuantityMeasureUnit { get; set; }
+        private int resultPrecision;
+        public int ResultPrecision { get { return resultPrecision; } set { resultPrecision = value == 0 ? 2 : value; } }
     }
 }

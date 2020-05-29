@@ -10,7 +10,10 @@ import { PricingRequest } from '../../models/pricingRequest';
 export class PricingService {
 
   constructor(private httpClient: HttpClient) { }
-  public calculatePrice(pricingRequest: PricingRequest): Observable<number> {
-    return this.httpClient.post<number>(`${environment.apiUrl}/Pricing`, pricingRequest);
+  public calculateProductPrice(pricingRequest: PricingRequest): Observable<number> {
+    return this.httpClient.post<number>(`${environment.apiUrl}/Pricing/Product`, pricingRequest);
+  }
+  public calculateRawMaterialPrice(pricingRequest: PricingRequest): Observable<number> {
+    return this.httpClient.post<number>(`${environment.apiUrl}/Pricing/RawMaterial`, pricingRequest);
   }
 }

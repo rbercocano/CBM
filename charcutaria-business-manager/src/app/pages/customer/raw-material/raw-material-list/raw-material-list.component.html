@@ -1,0 +1,173 @@
+<app-toolbar [title]="'Matéria Prima'">
+
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="newSearch()">
+        <i class="fa fa-search"></i>
+    </button>
+</app-toolbar>
+<div class="row">
+    <div class="col-5">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5>{{currentRawMaterial.rawMaterialId > 0 ?'Atualizar' : 'Adicionar'}} Matéria Prima</h5>
+                <hr />
+            </div>
+            <div class="card-body p-t-0">
+                <form #f="ngForm" (ngSubmit)="save()" novalidate>
+                    <div class="row" [class.has-danger]="f.submitted && name.invalid">
+                        <label class="col-12 m-b-0">Nome</label>
+                        <div class="col-12">
+                            <input class="form-control" type="text" [(ngModel)]="currentRawMaterial.name" name="name"
+                                #name="ngModel" maxlength="100" required>
+                            <div class="col-form-label" *ngIf="f.submitted && name.invalid && name.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-t-10">
+                        <div class="col-lg-6 p-0">
+                            <label class="col-12 m-b-0">Preço</label>
+                            <div class="col-12">
+                                <input class="form-control" type="text" [(ngModel)]="currentRawMaterial.price"
+                                    name="price" #price="ngModel" currencyMask
+                                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',',precision :4 }"
+                                    maxlength="7">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 p-0">
+                            <label class="col-12 m-b-0">Unidade de Medida</label>
+                            <div class="col-12">
+                                <select class="form-control" [(ngModel)]="currentRawMaterial.measureUnitId"
+                                    name="measureUnitId" #measureUnitId="ngModel" required>
+                                    <option [ngValue]="u.measureUnitId" *ngFor="let u of measures">{{u.description}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-t-10">
+                        <div class="col-12">
+                            <a href="javascript:" (click)="open(content)">Precisa de ajuda para calcular o preço? Clique
+                                aqui.</a>
+                            <button type="submit" placement="top" ngbTooltip="Salvar"
+                                class="btn btn-mini btn-primary float-right">
+                                <i class="fa fa-save"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-6 form-inline">
+                        Exibir&nbsp;
+                        <select class="form-control-sm m-w-100 w-100p" [(ngModel)]="paginationInfo.recordsPerpage"
+                            (change)="changePageSize()">
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="15">15</option>
+                            <option [ngValue]="25">25</option>
+                            <option [ngValue]="50">50</option>
+                        </select>
+                        &nbsp;registros por página
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control-sm m-w-350 w-100p float-right" placeholder="Filtro"
+                            [(ngModel)]="filter">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a href="javascript:" (click)="sort()">Nome
+                                    <ng-container [ngSwitch]="sortDirection">
+                                        <i class="fa fa-sort-down" *ngSwitchCase="1"></i>
+                                        <i class="fa fa-sort-up" *ngSwitchCase="2"></i>
+                                    </ng-container>
+                                </a>
+                            </th>
+                            <th>Preço</th>
+                            <th style="width: 30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="rawMaterials.length > 0">
+                            <tr *ngFor="let p of rawMaterials">
+                                <td>{{p.name}}</td>
+                                <td>{{p.price | cbmCurrency:4}} / {{p.measureUnit}}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar"
+                                        (click)="edit(p)">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <tr *ngIf="rawMaterials.length == 0">
+                            <td colspan="4" class="text-center">Nenhuma matéria prima encontrada</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-server-side-pager></app-server-side-pager>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">Calculadora</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="row">
+            <div class="col-6 form-group">
+                <label class="col-12 m-b-0">Preço Pago</label>
+                <div class="col-12">
+                    <input class="form-control" type="text" [(ngModel)]="quote.productPrice" n currencyMask
+                        [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',',precision :2 }" maxlength="7">
+
+                </div>
+            </div>
+            <div class="col-6  form-group">
+                <label class="col-12 m-b-0 p-l-0">Peso</label>
+                <div class="col-12 row">
+                    <input class="form-control col-7" type="text" [(ngModel)]="quote.quantity" currencyMask
+                        [options]="{ prefix: '', thousands: '.', decimal: ',',precision :2 }" maxlength="7">
+                    <select class="form-control col-5" [(ngModel)]="quote.productMeasureUnit">
+                        <option [ngValue]="u.measureUnitId" *ngFor="let u of measures">{{u.shortName}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 form-group">
+                <hr />
+                <div class="col-12">
+                    <label class="col-12 m-b-0 p-l-0">Preço pago por {{quotedMeasureUnit}}</label>
+                    <div class="col-12 row p-r-0">
+                        <input class="form-control col-8" readonly type="text" [(ngModel)]="pricePaid" currencyMask
+                            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',',precision :4 }" maxlength="7">
+                        <select class="form-control col-4" [(ngModel)]="quote.quantityMeasureUnit">
+                            <option [ngValue]="u.measureUnitId" *ngFor="let u of measures">{{u.shortName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer ">
+        <button class="btn btn-mini btn-primary" (click)="calculatePrice()">
+            Calcular
+        </button>
+    </div>
+</ng-template>
+<app-toasts></app-toasts>

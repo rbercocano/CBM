@@ -17,9 +17,13 @@ namespace Charcutarie.Services
         {
             this.pricingApp = pricingApp;
         }
-        public double CalculatePrice(PriceRequest model)
+        public double CalculatePricePerTotalWeight(PriceRequest model)
         {
-            return pricingApp.CalculatePrice(model);
+            return pricingApp.CalculatePricePerTotalWeight(model);
+        }
+        public double CalculatePricePerUnit(PriceRequest model)
+        {
+            return pricingApp.CalculatePricePerUnit(model);
         }
     }
 }

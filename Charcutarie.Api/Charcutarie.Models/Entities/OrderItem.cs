@@ -16,6 +16,8 @@ namespace Charcutarie.Models.Entities
         public OrderItemStatusEnum OrderItemStatusId { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
         public DateTime CreatedOn { get; set; }
+        public DateTime LastStatusDate { get; set; }
+        
         public DateTime? LastUpdated { get; set; }
         public string AdditionalInfo { get; set; }
         public double OriginalPrice { get; set; }

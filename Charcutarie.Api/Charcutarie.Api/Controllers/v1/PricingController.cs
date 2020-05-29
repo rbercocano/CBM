@@ -21,10 +21,17 @@ namespace Charcutarie.Api.Controllers.v1
             this.service = service;
         }
 
-        [HttpPost()]
-        public ActionResult<double> CalculatePrice(PriceRequest priceRequest)
+        [HttpPost("Product")]
+        public ActionResult<double> CalculateProductPrice(PriceRequest priceRequest)
         {
-            var data = service.CalculatePrice(priceRequest);
+            var data = service.CalculatePricePerTotalWeight(priceRequest);
+            return Ok(data);
+        }
+
+        [HttpPost("RawMaterial")]
+        public ActionResult<double> CalculatRawMaterialPrice(PriceRequest priceRequest)
+        {
+            var data = service.CalculatePricePerUnit(priceRequest);
             return Ok(data);
         }
     }

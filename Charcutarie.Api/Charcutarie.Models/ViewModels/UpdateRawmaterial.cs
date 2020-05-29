@@ -2,16 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Charcutarie.Models.ViewModels
 {
-    public class RawMaterial
+    public class NewRawMaterial
     {
-        public long RawMaterialId { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
+        [JsonIgnore]
         public int CorpClientId { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
-        public string MeasureUnit { get; set; }
     }
 }

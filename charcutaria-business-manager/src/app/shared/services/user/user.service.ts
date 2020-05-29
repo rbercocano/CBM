@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { environment } from 'src/environments/environment';
 import { ParentModule } from '../../models/parentModule';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,6 @@ import { ParentModule } from '../../models/parentModule';
 export class UserService {
 
   constructor(private httpClient: HttpClient) { }
-
   public GetUser(userId: number): Observable<User> {
     return this.httpClient.get<User>(`${environment.apiUrl}/User/${userId}`);
   }
@@ -31,6 +31,14 @@ export class UserService {
     return this.httpClient.put<User>(`${environment.apiUrl}/User`, user);
   }
   public GetUserModules(userId: number): Observable<ParentModule[]> {
-    return this.httpClient.get<ParentModule[]>(`${environment.apiUrl}/User/Menus/${userId}`);
+    return this.httpClient.get<ParentModule[]>(`${environment.apiUrl}/User/Menus/${userId}`)
+      .pipe(map(r => {
+        sessionStorage.setItem('user-modules', JSON.stringify(r));
+        return r;
+      }));
+  }
+  public get userModules(): ParentModule[] {
+    let modules: ParentModule[] = JSON.parse(sessionStorage.getItem('user-modules'));
+    return modules;
   }
 }

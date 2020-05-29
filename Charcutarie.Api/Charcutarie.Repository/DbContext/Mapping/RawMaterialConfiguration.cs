@@ -16,12 +16,17 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.Name)
                 .HasColumnType("VARCHAR(200)")
                 .IsRequired();
-            builder.Property(p => p.PricePerGram)
-                .HasColumnType("DECIMAL(18,2)")
+            builder.Property(p => p.Price)
+                .HasColumnType("DECIMAL(18,4)")
                 .IsRequired();
             builder.Property(p => p.CorpClientId)
                 .HasColumnType("INT")
                 .IsRequired();
+            builder.Property(p => p.MeasureUnitId)
+                .HasColumnType("INT")
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (MeasureUnitEnum)v);
         }
     }
 }

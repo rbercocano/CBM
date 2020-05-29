@@ -122,12 +122,13 @@ export class EditOrderComponent implements OnInit {
   }
   calculatePrice() {
     let request: PricingRequest = {
+      resultPrecision: 2,
       productMeasureUnit: this.currentQuote.product.measureUnitId,
       productPrice: this.currentQuote.product.price,
       quantity: this.currentQuote.quantity,
       quantityMeasureUnit: this.currentQuote.measureUnit.measureUnitId
     };
-    this.pricingService.calculatePrice(request).subscribe(r => {
+    this.pricingService.calculateProductPrice(request).subscribe(r => {
       this.currentQuote.price = r;
       this.currentQuote.finalPrice = this.currentQuote.price - this.currentQuote.discount;
     });

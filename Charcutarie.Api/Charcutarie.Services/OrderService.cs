@@ -35,7 +35,7 @@ namespace Charcutarie.Services
                 var prod = prods.FirstOrDefault(p => p.ProductId == item.ProductId);
                 item.ProductPrice = prod.Price;
                 item.ItemNumber = i;
-                item.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
+                item.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
                 {
                     ProductMeasureUnit = prod.MeasureUnitId,
                     ProductPrice = prod.Price,
@@ -112,7 +112,7 @@ namespace Charcutarie.Services
             var prodPrice = order.OrderItems.FirstOrDefault(i => i.OrderItemId == model.OrderItemId).ProductPrice;
             var prod = await productApp.Get(corpClientId, model.ProductId);
             model.ProductPrice = prodPrice;
-            model.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
+            model.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
             {
                 ProductMeasureUnit = prod.MeasureUnitId,
                 ProductPrice = prodPrice,
@@ -134,7 +134,7 @@ namespace Charcutarie.Services
             var prod = await productApp.Get(corpClientId, model.ProductId);
             model.ProductPrice = prod.Price;
             model.ItemNumber = await orderItemApp.GetLastItemNumber(order.OrderNumber, corpClientId) + 1;
-            model.OriginalPrice = pricingApp.CalculatePrice(new PriceRequest
+            model.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
             {
                 ProductMeasureUnit = prod.MeasureUnitId,
                 ProductPrice = prod.Price,

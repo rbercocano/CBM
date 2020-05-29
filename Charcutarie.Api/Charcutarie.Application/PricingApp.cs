@@ -10,14 +10,23 @@ namespace Charcutarie.Application
 {
     public class PricingApp : IPricingApp
     {
-        public double CalculatePrice(PriceRequest model)
+        public double CalculatePricePerTotalWeight(PriceRequest model)
         {
 
             var weightInGrams = ToBaseUnit(model.ProductMeasureUnit, 1);
             var pricePerGram = model.ProductPrice / weightInGrams;
             var orderedWeight = ToBaseUnit(model.QuantityMeasureUnit, model.Quantity);
             var totalPrice = orderedWeight * pricePerGram;
-            return Math.Round(totalPrice, 2);
+            return Math.Round(totalPrice, model.ResultPrecision);
+        }
+        public double CalculatePricePerUnit(PriceRequest model)
+        {
+
+            var weightInGrams = ToBaseUnit(model.ProductMeasureUnit, model.Quantity);
+            var pricePerGram = model.ProductPrice / weightInGrams;
+            var orderedWeight = ToBaseUnit(model.QuantityMeasureUnit, 1);
+            var totalPrice = orderedWeight * pricePerGram;
+            return Math.Round(totalPrice, model.ResultPrecision);
         }
         private double ToBaseUnit(MeasureUnitEnum from, double quantity)
         {
@@ -29,6 +38,7 @@ namespace Charcutarie.Application
                 MeasureUnitEnum.Miligrama => UnitsNet.Mass.FromMilligrams(quantity).Grams,
                 MeasureUnitEnum.Litro => UnitsNet.Volume.FromLiters(quantity).Milliliters,
                 MeasureUnitEnum.Mililitro => UnitsNet.Volume.FromLiters(quantity).Milliliters,
+                MeasureUnitEnum.Onca => UnitsNet.Mass.FromOunces(quantity).Grams,
                 _ => 0,
             };
         }

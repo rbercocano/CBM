@@ -72,6 +72,8 @@ export class OrderSearchComponent implements OnInit {
     this.router.navigate(['/order/edit', orderNumber]);
   }
   newSearch() {
+    this.filter.direction = 1;
+    this.filter.orderBy = 1;
     this.lastFilter = { ...this.filter };
     this.paginationInfo.currentPage = 1;
     this.search();

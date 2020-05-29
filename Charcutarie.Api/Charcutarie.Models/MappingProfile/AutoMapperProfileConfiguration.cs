@@ -40,6 +40,7 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.User, vm.UpdateUser>().ReverseMap();
             CreateMap<ef.User, vm.JWTUserInfo>()
                 .ForMember(m => m.CompanyName, opt => opt.MapFrom(m => m.CorpClient == null ? "" : m.CorpClient.Name))
+                .ForMember(m => m.Role, opt => opt.MapFrom(m => m.Role.Name))
                 .ForMember(m => m.DBAName, opt => opt.MapFrom(m => m.CorpClient == null ? "" : m.CorpClient.DBAName));
 
 
@@ -86,6 +87,13 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.Customer, vm.CompanyCustomer>()
                 .ForMember(m => m.CustomerType, m => m.MapFrom(s => s.CustomerType.Description));
             CreateMap<ef.OrderSummary, vm.OrderSummary>().ReverseMap();
+
+
+            CreateMap<ef.RawMaterial, vm.RawMaterial>()
+                .ForMember(m => m.MeasureUnit, m => m.MapFrom(s => s.MeasureUnit.Description));
+
+            CreateMap<ef.RawMaterial, vm.NewRawMaterial>().ReverseMap();
+            CreateMap<ef.RawMaterial, vm.UpdateRawmaterial>().ReverseMap();
         }
     }
 }

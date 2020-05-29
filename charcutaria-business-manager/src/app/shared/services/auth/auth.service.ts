@@ -37,7 +37,7 @@ export class AuthService {
     let userData = this.currentUserSubject.value.userData;
     return this.http.post<TokenInfo>(url, data).pipe(map(jwt => {
       jwt.userData = userData
-      localStorage.setItem('currentUser', JSON.stringify(jwt));
+      sessionStorage.setItem('currentUser', JSON.stringify(jwt));
       this.currentUserSubject.next(jwt);
       return jwt;
     }));
@@ -51,7 +51,7 @@ export class AuthService {
       corpClientId: loginInfo.corpClientId
     }).pipe(map(jwt => {
       if (jwt && jwt.authenticated) {
-        localStorage.setItem('currentUser', JSON.stringify(jwt));
+        sessionStorage.setItem('currentUser', JSON.stringify(jwt));
         this.currentUserSubject.next(jwt);
       }
       return jwt;

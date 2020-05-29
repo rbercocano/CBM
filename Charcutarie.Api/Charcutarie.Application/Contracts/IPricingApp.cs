@@ -4,6 +4,7 @@ namespace Charcutarie.Application.Contracts
 {
     public interface IPricingApp
     {
-        double CalculatePrice(PriceRequest model);
+        double CalculatePricePerTotalWeight(PriceRequest model);
+        double CalculatePricePerUnit(PriceRequest model);
     }
 }

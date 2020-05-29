@@ -33,7 +33,7 @@ namespace Charcutarie.Api.Controllers.v1
 
         [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<ActionResult> GetToken([FromBody]Login request)
+        public async Task<ActionResult> GetToken([FromBody] Login request)
         {
             var userData = await accountService.DoLogin(request.CorpClientId, request.Username, request.Password);
             if (userData == null)
@@ -52,7 +52,7 @@ namespace Charcutarie.Api.Controllers.v1
                     Message = "Usuário Inativo"
                 });
             }
-            if(signingConfigurations.ClientSecret != request.ClientSecret)
+            if (signingConfigurations.ClientSecret != request.ClientSecret)
                 return Ok(new TokenData
                 {
                     Authenticated = false,
@@ -62,7 +62,7 @@ namespace Charcutarie.Api.Controllers.v1
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                new Claim(ClaimTypes.Role, Constants.JWTAllowedRoles[0]),
+                new Claim(ClaimTypes.Role, userData.Role),
                 new Claim(nameof(userData.CorpClientId), userData.CorpClientId?.ToString()),
                 new Claim(nameof(userData.DBAName), userData.DBAName),
                 new Claim(nameof(userData.CompanyName), userData.CompanyName),
@@ -89,7 +89,7 @@ namespace Charcutarie.Api.Controllers.v1
 
         [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         [HttpPost("Token/Refresh")]
-        public async Task<IActionResult> Refresh([FromBody]RequestTokenRefresh token)
+        public async Task<IActionResult> Refresh([FromBody] RequestTokenRefresh token)
         {
             var principal = GetPrincipalFromExpiredToken(token.Token);
             var userid = Convert.ToInt64(principal.Claims.First(c => c.Type == "UserId").Value);
