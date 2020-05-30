@@ -20,10 +20,10 @@ namespace Charcutarie.Repository
             this.context = context;
             this.mapper = mapper;
         }
-        public async Task<DataSheetItem> Get(long productId, int corpClientId)
+        public async Task<DataSheetItem> Get(long itemId, int corpClientId)
         {
             var data = await context.DataSheetItems
-                .Where(d => d.DataSheet.ProductId == productId && d.DataSheet.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
+                .Where(d => d.DataSheetItemId == itemId && d.DataSheet.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
             var result = mapper.Map<DataSheetItem>(data);
             return result;
         }
@@ -37,7 +37,7 @@ namespace Charcutarie.Repository
             await context.SaveChangesAsync();
             return entity.DataSheetItemId;
         }
-        public async Task<IEnumerable<DataSheetItem>> AddRange(IEnumerable<UpdateDataSheetItem> items, int corpClientId)
+        public async Task<IEnumerable<DataSheetItem>> AddRange(IEnumerable<NewDataSheetItem> items, int corpClientId)
         {
             var data = await context.DataSheets
                 .Where(d => d.ProductId == items.FirstOrDefault().ProductId && d.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
@@ -55,6 +55,13 @@ namespace Charcutarie.Repository
             data.Percentage = item.Percentage;
             data.AdditionalInfo = item.AdditionalInfo;
             context.DataSheetItems.Update(data);
+            await context.SaveChangesAsync(); ;
+        }
+        public async Task Delete(long itemId, int corpClientId)
+        {
+            var data = await context.DataSheetItems
+                .Where(d => d.DataSheetItemId == itemId && d.DataSheet.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
+            context.DataSheetItems.Remove(data);
             await context.SaveChangesAsync(); ;
         }
     }

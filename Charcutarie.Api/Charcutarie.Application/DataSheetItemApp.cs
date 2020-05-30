@@ -21,17 +21,21 @@ namespace Charcutarie.Application
         {
             return await repository.Add(item, corpClientId);
         }
-        public async Task<IEnumerable<DataSheetItem>> AddRange(IEnumerable<UpdateDataSheetItem> items, int corpClientId)
+        public async Task<IEnumerable<DataSheetItem>> AddRange(IEnumerable<NewDataSheetItem> items, int corpClientId)
         {
             return await repository.AddRange(items, corpClientId);
         }
-        public async Task<DataSheetItem> Get(long productId, int corpClientId)
+        public async Task<DataSheetItem> Get(long itemId, int corpClientId)
         {
-            return await repository.Get(productId, corpClientId);
+            return await repository.Get(itemId, corpClientId);
         }
         public async Task Update(UpdateDataSheetItem item, int corpClientId)
         {
             await repository.Update(item, corpClientId);
+        }
+        public async Task Delete(long itemId, int corpClientId)
+        {
+            await repository.Get(itemId, corpClientId);
         }
     }
 }

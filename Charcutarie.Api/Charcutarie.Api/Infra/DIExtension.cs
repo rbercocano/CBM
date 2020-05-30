@@ -28,6 +28,7 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IPricingService, PricingService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IRawMaterialService, RawMaterialService>();
+            services.AddTransient<IDataSheetService, DataSheetService>();
         }
         private static void AddApps(IServiceCollection services)
         {
