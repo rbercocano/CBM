@@ -113,7 +113,6 @@ export class RawMaterialListComponent implements OnInit {
       this.update();
   }
   add() {
-
     this.rawMaterialService.Add(this.currentRawMaterial)
       .pipe(flatMap(r => {
         this.paginationInfo.currentPage = 1;
