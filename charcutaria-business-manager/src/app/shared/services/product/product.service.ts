@@ -4,6 +4,11 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PagedResult } from '../../models/pagedResult';
+import { DataSheet } from '../../models/dataSheet';
+import { DataSheetItem } from '../../models/dataSheetItem';
+import { SaveDataSheet } from '../../models/saveDataSheet';
+import { NewDataSheetItem } from '../../models/newDataSheetItem';
+import { UpdateDataSheetItem } from '../../models/updateDataSheetItem';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +36,26 @@ export class ProductService {
   }
   public GetAll(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(`${environment.apiUrl}/Product`);
+  }
+  public getDataSheet(productId: number): Observable<DataSheet> {
+    return this.httpClient.get<DataSheet>(`${environment.apiUrl}/DataSheet/${productId}`);
+  }
+  public getDataSheetItem(id: number): Observable<DataSheetItem> {
+    return this.httpClient.get<DataSheetItem>(`${environment.apiUrl}/DataSheet/${id}`);
+  }
+  public createDataSheet(dataSheet: DataSheet): Observable<number> {
+    return this.httpClient.post<number>(`${environment.apiUrl}/DataSheet`, dataSheet);
+  }
+  public updateDataSheet(dataSheet: SaveDataSheet): Observable<number> {
+    return this.httpClient.put<number>(`${environment.apiUrl}/DataSheet`, dataSheet);
+  }
+  public addDataSheetItem(item: NewDataSheetItem): Observable<number> {
+    return this.httpClient.post<number>(`${environment.apiUrl}/DataSheet/Item`, item);
+  }
+  public updateDataSheetItem(item: UpdateDataSheetItem): Observable<any> {
+    return this.httpClient.put<any>(`${environment.apiUrl}/DataSheet/Item`, item);
+  }
+  public deleteDataSheetItem(itemId: number): Observable<any> {
+    return this.httpClient.delete<any>(`${environment.apiUrl}/DataSheet/Item/${itemId}`);
   }
 }

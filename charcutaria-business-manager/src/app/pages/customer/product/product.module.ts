@@ -8,12 +8,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { NgxCurrencyModule } from "ngx-currency";
+import { DataSheetComponent } from './data-sheet/data-sheet.component';
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
 @NgModule({
-  declarations: [ProductListComponent, ProductEditComponent],
+  declarations: [ProductListComponent, ProductEditComponent, DataSheetComponent],
   imports: [
     CommonModule,
     FormsModule,
