@@ -35,7 +35,7 @@ namespace Charcutarie.Application
         }
         public async Task Delete(long itemId, int corpClientId)
         {
-            await repository.Get(itemId, corpClientId);
+            await repository.Delete(itemId, corpClientId);
         }
     }
 }

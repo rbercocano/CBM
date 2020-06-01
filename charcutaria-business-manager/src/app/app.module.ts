@@ -9,6 +9,8 @@ import { AdminComponent } from './layout/admin/admin.component';
 import { CustomerComponent } from './layout/customer/customer.component';
 import { UserSearchComponent } from './pages/customer/user/user-search/user-search.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import 'froala-editor/js/plugins.pkgd.min.js';
+
 
 @NgModule({
   declarations: [

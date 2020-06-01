@@ -1,9 +1,12 @@
-﻿using Charcutarie.Application.Contracts;
+﻿using Charcutarie.Application;
+using Charcutarie.Application.Contracts;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,11 +16,13 @@ namespace Charcutarie.Services
     {
         private readonly IDataSheetApp dataSheetApp;
         private readonly IDataSheetItemApp dataSheetItemApp;
+        private readonly IPricingApp pricingApp;
 
-        public DataSheetService(IDataSheetApp dataSheetApp, IDataSheetItemApp dataSheetItemApp)
+        public DataSheetService(IDataSheetApp dataSheetApp, IDataSheetItemApp dataSheetItemApp, IPricingApp pricingApp)
         {
             this.dataSheetApp = dataSheetApp;
             this.dataSheetItemApp = dataSheetItemApp;
+            this.pricingApp = pricingApp;
         }
         public async Task<long> Create(DataSheet dataSheet, int corpClientId)
         {
@@ -58,6 +63,28 @@ namespace Charcutarie.Services
         public async Task<DataSheet> GetDataSheet(long productId, int corpClientId)
         {
             return await dataSheetApp.Get(productId, corpClientId);
+        }
+        public async Task<IEnumerable<ProductionItem>> CalculateProduction(long productId, MeasureUnitEnum measureId, double quantity, int corpClientId)
+        {
+            var items = new List<ProductionItem>();
+            var dataSheet = await dataSheetApp.Get(productId, corpClientId);
+            foreach (var di in dataSheet.DataSheetItems)
+            {
+                var item = new ProductionItem
+                {
+                    AdditionalInfo = di.AdditionalInfo,
+                    DataSheetId = di.DataSheetId,
+                    DataSheetItemId = di.DataSheetItemId,
+                    IsBaseItem = di.IsBaseItem,
+                    RawMaterial = di.RawMaterial,
+                    Percentage = di.Percentage,
+                    RawMaterialId = di.RawMaterialId
+                };
+                quantity = UnitConverter.ToBaseUnit(measureId, quantity);
+                item.Quantity = quantity * item.Percentage / 100;
+                items.Add(item);
+            }
+            return items;
         }
     }
 }

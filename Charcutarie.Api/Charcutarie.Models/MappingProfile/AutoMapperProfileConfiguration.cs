@@ -94,6 +94,16 @@ namespace Charcutarie.Models.MappingProfile
 
             CreateMap<ef.RawMaterial, vm.NewRawMaterial>().ReverseMap();
             CreateMap<ef.RawMaterial, vm.UpdateRawmaterial>().ReverseMap();
+
+
+            CreateMap<ef.DataSheet, vm.DataSheet>().ReverseMap();
+            CreateMap<ef.DataSheetItem, vm.DataSheetItem>()
+                .ForMember(m => m.RawMaterial, m => m.MapFrom(s => s.RawMaterial.Name)).ReverseMap();
+
+            CreateMap<ef.DataSheetItem, vm.NewDataSheetItem>().ReverseMap();
+            CreateMap<ef.DataSheetItem, vm.UpdateDataSheetItem>().ReverseMap();
+
+            CreateMap<ef.DataSheet, vm.SaveDataSheet>().ReverseMap();
         }
     }
 }

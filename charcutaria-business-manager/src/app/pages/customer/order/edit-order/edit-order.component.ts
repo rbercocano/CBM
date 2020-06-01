@@ -39,7 +39,7 @@ export class EditOrderComponent implements OnInit {
   private lastStatus: { paymentStatusId, orderStatusId } = null;
   public currentQuote: ProductQuote = { orderItemId: null, orderItemStatus: null, quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: null, additionalInfo: '' };
   private qtdSubject: Subject<number> = new Subject();
-
+  public canEditItem = true;
   constructor(private orderService: OrderService,
     private route: ActivatedRoute,
     private router: Router,
@@ -164,6 +164,8 @@ export class EditOrderComponent implements OnInit {
   }
 
   open(content, orderItem: OrderItemDetails) {
+    this.canEditItem = orderItem == null ? true :
+      this.allowUpdateStatus && orderItem.orderItemStatus.orderItemStatusId != 2;
     if (orderItem == null)
       this.resetModal();
     else {

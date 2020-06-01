@@ -3,3 +3,136 @@
         <i class="fa fa-arrow-left"></i>
     </button>
 </app-toolbar>
+<div class="row">
+    <div class="col-5">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5>Ingredientes</h5>
+                <button class="btn btn-mini btn-primary float-right" placement="top" ngbTooltip="Adicionar"
+                    (click)="open(content,null)">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info background-info text-center" *ngIf="dataSheet.dataSheetItems.length == 0">
+                    Nenhum ingrediente cadastrado
+                </div>
+                <table class="table order-items table-striped" *ngIf="baseItems.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Ingrediente Base</th>
+                            <th>%</th>
+                            <th style="width:75px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of baseItems">
+                            <td>{{item.rawMaterial}}</td>
+                            <td>
+                                {{item.percentage}} %
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-mini" (click)="open(content, item)">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button class="btn btn-danger btn-mini m-l-5" (click)="remove(item)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table order-items table-striped" *ngIf="otherItems.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Ingrediente Adicional</th>
+                            <th>%</th>
+                            <th style="width:75px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of otherItems">
+                            <td>{{item.rawMaterial}}</td>
+                            <td>
+                                {{item.percentage}} %
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-mini" (click)="open(content, item)">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button class="btn btn-danger btn-mini m-l-5" (click)="remove(item)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5>Procedimento</h5>
+                <button class="btn btn-mini btn-primary float-right" placement="top" ngbTooltip="Salvar" (click)="save()">
+                    <i class="fa fa-save"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div [froalaEditor]="options" [(froalaModel)]="dataSheet.procedureDescription"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title"><span
+                *ngIf="currentItem.dataSheetItemId == null">Adicionar</span><span
+                *ngIf="currentItem.dataSheetItemId != null">Atualizar</span> Ingrediente</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="row form-group">
+            <div class="col-12">{{currentItem.rawMaterialId}}
+                <label class="m-b-0 col-12">Ingrediente</label>
+                <div class="col-12">
+                    <select class="form-control" [(ngModel)]="currentItem.rawMaterialId">
+                        <option *ngFor="let r of rawMaterials" [ngValue]="r.rawMaterialId">{{r.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0 col-12 ">Tipo</label>
+                <div class="col-12">
+                    <select class="form-control" [(ngModel)]="currentItem.isBaseItem">
+                        <option [ngValue]="true">Base</option>
+                        <option [ngValue]="false">Complementar</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0 col-12">Porcentagem</label>
+                <div class="col-12">
+                    <input type="text" class="form-control" currencyMask
+                        [options]="{ prefix: '', suffix:' %', thousands: '.', decimal: ',',allowNegative:false,precision:5 }"
+                        maxlength="8" [(ngModel)]="currentItem.percentage" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-mini" (click)="addItem()"
+            *ngIf="currentItem.dataSheetItemId==null">
+            Adicionar Item
+        </button>
+        <button type="button" class="btn btn-primary btn-mini" (click)="saveItem()"
+            *ngIf="currentItem.dataSheetItemId!=null">
+            Salvar
+        </button>
+    </div>
+</ng-template>
+<app-toasts></app-toasts>

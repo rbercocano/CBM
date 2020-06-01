@@ -23,6 +23,7 @@ namespace Charcutarie.Repository
         {
             var data = await context.DataSheets
                 .Include(d => d.DataSheetItems)
+                .ThenInclude(d => d.RawMaterial)
                 .Where(d => d.ProductId == productId && d.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
             var result = mapper.Map<DataSheet>(data);
             return result;
@@ -34,12 +35,16 @@ namespace Charcutarie.Repository
                 .Where(d => d.ProductId == dataSheet.ProductId && d.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
             if (data == null)
             {
-                data = mapper.Map<ef.DataSheet>(data);
+                data = mapper.Map<ef.DataSheet>(dataSheet);
                 context.DataSheets.Add(data);
                 await context.SaveChangesAsync();
             }
             else
+            {
                 data.ProcedureDescription = dataSheet.ProcedureDescription;
+                context.DataSheets.Update(data);
+                await context.SaveChangesAsync();
+            }
 
             return mapper.Map<DataSheet>(data); 
         }

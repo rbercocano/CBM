@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Charcutarie.Models;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -67,11 +68,19 @@ namespace Charcutarie.Api.Controllers.v1
             await service.UpdateItem(item, UserData.CorpClientId.Value);
             return Ok();
         }
-        [HttpDelete("Item")]
+        [HttpDelete("Item/{itemId:long}")]
         public async Task<ActionResult> DeleteItem(long itemId)
         {
             await service.DeleteItem(itemId, UserData.CorpClientId.Value);
             return Ok();
+        }
+        [HttpGet("Production/{productId:long}/{measureId:int}/{quantity:double}")]
+        public async Task<ActionResult<IEnumerable<ProductionItem>>> CalculateProduction(long productId, int measureId, double quantity)
+        {
+            var data = await service.CalculateProduction(productId, (MeasureUnitEnum)measureId, quantity, UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
         }
     }
 

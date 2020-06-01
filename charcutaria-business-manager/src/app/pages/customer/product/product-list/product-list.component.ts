@@ -63,5 +63,10 @@ export class ProductListComponent implements OnInit {
   changePageSize() {
     this.paginationService.changePageSize(this.paginationInfo.recordsPerpage);
   }
-
+  datasheet(productId: number) {
+    this.router.navigate(['/product', productId, 'datasheet']);
+  }
+  datasheetDetails(productId: number) {
+    this.router.navigate(['/product', productId, 'datasheet','details']);
+  }
 }

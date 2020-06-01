@@ -42,7 +42,7 @@
                             <th>Produto</th>
                             <th>Preço</th>
                             <th>Status</th>
-                            <th style="width: 15px;"></th>
+                            <th style="width: 110px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +52,15 @@
                                 <td>{{p.price | cbmCurrency}} / {{p.measureUnit}}</td>
                                 <td>{{p.activeForSale ? 'Ativo' : 'Inativo'}}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar"
+                                    <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Visualizar Ficha Técnica"
+                                        (click)="datasheetDetails(p.productId)">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-mini  m-l-5" placement="top" ngbTooltip="Editar Ficha Técnica"
+                                        (click)="datasheet(p.productId)">
+                                        <i class="fa fa-tasks"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Editar"
                                         (click)="edit(p.productId)">
                                         <i class="fa fa-pencil"></i>
                                     </button>

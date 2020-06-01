@@ -31,7 +31,7 @@ namespace Charcutarie.Repository
         {
             var data = await context.DataSheets
                 .Where(d => d.ProductId == item.ProductId && d.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
-            var entity = mapper.Map<ef.DataSheetItem>(data);
+            var entity = mapper.Map<ef.DataSheetItem>(item);
             entity.DataSheetId = data.DataSheetId;
             context.DataSheetItems.Add(entity);
             await context.SaveChangesAsync();
@@ -54,6 +54,7 @@ namespace Charcutarie.Repository
                 .Where(d => d.DataSheetItemId == item.DataSheetItemId && d.DataSheet.Product.CorpClientId == corpClientId).FirstOrDefaultAsync();
             data.Percentage = item.Percentage;
             data.AdditionalInfo = item.AdditionalInfo;
+            data.IsBaseItem = item.IsBaseItem;
             context.DataSheetItems.Update(data);
             await context.SaveChangesAsync(); ;
         }

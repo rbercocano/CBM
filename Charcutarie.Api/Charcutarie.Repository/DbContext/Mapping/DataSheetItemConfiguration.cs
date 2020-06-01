@@ -12,13 +12,16 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.HasKey(p => p.DataSheetItemId);
 
             builder.Property(p => p.Percentage)
-                .HasColumnType("DECIMAL(5,2)")
+                .HasColumnType("DECIMAL(9,5)")
                 .IsRequired();
             builder.Property(p => p.DataSheetId)
-                .HasColumnType("INT")
+                .HasColumnType("BIGINT")
                 .IsRequired();
             builder.Property(p => p.RawMaterialId)
-                .HasColumnType("INT")
+                .HasColumnType("BIGINT")
+                .IsRequired();
+            builder.Property(p => p.IsBaseItem)
+                .HasColumnType("BIT")
                 .IsRequired();
         }
     }

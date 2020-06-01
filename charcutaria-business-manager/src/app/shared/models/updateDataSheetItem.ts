@@ -4,4 +4,5 @@ export interface UpdateDataSheetItem {
     rawMaterialId: number;
     percentage: number;
     additionalInfo: string;
+    isBaseItem: boolean;
 }

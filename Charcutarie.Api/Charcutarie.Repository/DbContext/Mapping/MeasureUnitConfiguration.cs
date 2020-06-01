@@ -22,6 +22,9 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.ShortName)
                 .HasColumnType("VARCHAR(10)")
                 .IsRequired();
+            builder.Property(p => p.MeasureUnitTypeId)
+                 .HasConversion(v => (int)v,
+                                v => (MeasureUnitTypeEnum)v);
 
         }
     }

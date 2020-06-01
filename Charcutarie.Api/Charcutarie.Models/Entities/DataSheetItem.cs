@@ -12,5 +12,7 @@ namespace Charcutarie.Models.Entities
         public double Percentage { get; set; }
         public string AdditionalInfo { get; set; }
         public DataSheet DataSheet { get; set; }
+        public RawMaterial RawMaterial { get; set; }
+        public bool IsBaseItem { get; set; }
     }
 }

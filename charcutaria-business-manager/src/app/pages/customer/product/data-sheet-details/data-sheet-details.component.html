@@ -1,0 +1,86 @@
+<app-toolbar [title]="title">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Voltar" (click)="back()">
+        <i class="fa fa-arrow-left"></i>
+    </button>
+</app-toolbar>
+<div class="row">
+    <div class="col-5">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5>Ingredientes</h5>
+                <hr />
+            </div>
+            <div class="card-body p-t-0">
+                <div class="col-12 row p-r-0 ">
+                    <label class="col-12 p-l-0">Calcular produção de </label>
+                    <input class="form-control col-7" type="text" [(ngModel)]="production.quantity" currencyMask
+                        [options]="{ prefix: '', thousands: '.', decimal: ',' }">
+                    <div class="input-group col-5 p-r-0">
+                        <select class="form-control" [(ngModel)]="production.measureUnit" name="measureUnit">
+                            <option [ngValue]="m.measureUnitId" *ngFor="let m of measures">{{m.description}}
+                            </option>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary btn-sm" (click)="calculate()" type="button" placement="top"
+                                ngbTooltip="Calcular Produção">
+                                <i class="fa fa-calculator"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info background-info text-center" *ngIf="dataSheet.dataSheetItems.length == 0">
+                    Nenhum ingrediente cadastrado
+                </div>
+                <table class="table order-items table-striped m-t-10" *ngIf="baseItems.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Ingrediente Base</th>
+                            <th>%</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of baseItems">
+                            <td>{{item.rawMaterial}}</td>
+                            <td>
+                                {{item.percentage}} %
+                            </td>
+                            <td>
+                                {{item.quantity | cbmNumber}}g
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table order-items table-striped" *ngIf="otherItems.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Ingrediente Adicional</th>
+                            <th>%</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of otherItems">
+                            <td>{{item.rawMaterial}}</td>
+                            <td>
+                                {{item.percentage}} %
+                            </td>
+                            <td>
+                                {{item.quantity | cbmNumber}}g
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="card">
+            <div class="card-body">
+                <div *ngIf="dataSheet.procedureDescription != null"
+                    [innerHtml]="dataSheet.procedureDescription | safeHtml"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-toasts></app-toasts>

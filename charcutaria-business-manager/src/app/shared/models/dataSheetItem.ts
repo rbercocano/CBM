@@ -5,4 +5,5 @@ export interface DataSheetItem {
     rawMaterial: string;
     percentage: number;
     additionalInfo: string;
+    isBaseItem: boolean;
 }

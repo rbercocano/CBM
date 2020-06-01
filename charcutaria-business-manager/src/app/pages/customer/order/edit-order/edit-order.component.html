@@ -135,7 +135,8 @@
                                 <td>-{{oi.discount | cbmCurrency}}</td>
                                 <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
                                 <td>
-                                    <button type="button" placement="top" ngbTooltip="Editar Item" *ngIf="allowEdit"
+                                    <button type="button" placement="top" ngbTooltip="Editar Item"
+                                        *ngIf="allowUpdateStatus"
                                         (click)="open(content,oi)" class="btn btn-mini btn-primary " type="button">
                                         <i class="fa fa-pencil"></i>
                                     </button>
@@ -188,31 +189,31 @@
             <div class="col-6">
                 <label class="m-b-0">Produto</label>
                 <select class="form-control" [(ngModel)]="currentQuote.product" name="product"
-                    (change)="changeProduct()" [disabled]="currentQuote.orderItemId != null">
+                    (change)="changeProduct()" [disabled]="!canEditItem">
                     <option [ngValue]="p" *ngFor="let p of products">{{p.name}} ({{p.price | cbmCurrency}} /
                         {{p.measureUnit}})</option>
                 </select>
             </div>
             <div class="col-6">
                 <label class="m-b-0">Status</label>
-                <select class="form-control" [(ngModel)]="currentQuote.orderItemStatus" name="orderStatus">
+                <select  class="form-control" [(ngModel)]="currentQuote.orderItemStatus" name="orderStatus">
                     <option [ngValue]="s" *ngFor="let s of orderItemStatus">{{s.description}}</option>
                 </select>
             </div>
             <div class="col-6">
                 <label class="m-b-0">Quantidade</label>
                 <div class="col-12 row p-r-0" [class.has-danger]="currentQuote.quantity == 0">
-                    <input class="form-control col-7 p-r-0" type="text" [(ngModel)]="currentQuote.quantity" currencyMask
+                    <input class="form-control col-7 p-r-0" type="text" [(ngModel)]="currentQuote.quantity" currencyMask [readonly]="!canEditItem"
                         (keyup)="onQtdKeyUp()" [options]="{ prefix: '', thousands: '.', decimal: ',' }">
                     <div class="input-group col-5 p-1 p-t-0 p-b-0">
-                        <select class="form-control" [(ngModel)]="currentQuote.measureUnit" name="measureUnit"
+                        <select class="form-control" [disabled]="!canEditItem" [(ngModel)]="currentQuote.measureUnit" name="measureUnit"
                             (change)="calculatePrice()">
                             <option [ngValue]="m" *ngFor="let m of measures">{{m.shortName}}
                             </option>
                         </select>
                         <div class="input-group-append">
                             <button class="btn btn-primary btn-sm" (click)="calculatePrice()" type="button"
-                                placement="top" ngbTooltip="Calcular Preço">
+                                placement="top" ngbTooltip="Calcular Preço" [class.btn-disabled]="!canEditItem" [disabled]="!canEditItem">
                                 <i class="fa fa-calculator"></i>
                             </button>
                         </div>
@@ -225,11 +226,11 @@
             <div class="col-6">
                 <label class="m-b-0">Preço</label>
                 <input class="form-control" type="text" readonly [(ngModel)]="currentQuote.price" currencyMask
-                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7">
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7" [readonly]="!canEditItem">
             </div>
             <div class="col-6" [class.has-danger]="currentQuote.discount > currentQuote.price">
                 <label class="m-b-0">Desconto</label>
-                <input class="form-control" type="text" [(ngModel)]="currentQuote.discount" currencyMask
+                <input class="form-control" type="text" [(ngModel)]="currentQuote.discount" currencyMask [readonly]="!canEditItem"
                     [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7"
                     (keyup)="applyDiscout($event)">
                 <div class="col-form-label" *ngIf="currentQuote.discount > currentQuote.price">
@@ -243,7 +244,7 @@
             </div>
             <div class="col-12">
                 <label class="m-b-0">Informações Adicionais</label>
-                <textarea class="form-control" type="text" [(ngModel)]="currentQuote.additionalInfo" rows="3"
+                <textarea class="form-control" type="text" [(ngModel)]="currentQuote.additionalInfo" rows="3" [readonly]="!canEditItem"
                     maxlength="200"></textarea>
             </div>
         </div>

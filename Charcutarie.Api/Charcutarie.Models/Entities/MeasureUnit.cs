@@ -10,5 +10,6 @@ namespace Charcutarie.Models.Entities
         public MeasureUnitEnum MeasureUnitId { get; set; }
         public string Description { get; set; }
         public string ShortName { get; set; }
+        public MeasureUnitTypeEnum MeasureUnitTypeId { get; set; }
     }
 }

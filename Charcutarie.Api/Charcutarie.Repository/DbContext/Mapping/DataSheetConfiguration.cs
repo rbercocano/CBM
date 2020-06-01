@@ -12,11 +12,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.HasKey(p => p.DataSheetId);
             builder.HasIndex(p => p.ProductId).IsUnique();
             builder.Property(p => p.ProductId)
-                .HasColumnType("INT")
+                .HasColumnType("BIGINT")
                 .IsRequired();
             builder.Property(p => p.ProcedureDescription)
-                .HasColumnType("VARCHAR(MAX)")
-                .IsRequired();
+                .HasColumnType("VARCHAR(MAX)");
 
             builder.HasOne(p => p.Product)
                 .WithOne(p => p.DataSheet);

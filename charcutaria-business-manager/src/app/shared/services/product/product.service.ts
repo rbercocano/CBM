@@ -9,6 +9,7 @@ import { DataSheetItem } from '../../models/dataSheetItem';
 import { SaveDataSheet } from '../../models/saveDataSheet';
 import { NewDataSheetItem } from '../../models/newDataSheetItem';
 import { UpdateDataSheetItem } from '../../models/updateDataSheetItem';
+import { ProductionItem } from '../../models/productionItem';
 
 @Injectable({
   providedIn: 'root'
@@ -43,10 +44,7 @@ export class ProductService {
   public getDataSheetItem(id: number): Observable<DataSheetItem> {
     return this.httpClient.get<DataSheetItem>(`${environment.apiUrl}/DataSheet/${id}`);
   }
-  public createDataSheet(dataSheet: DataSheet): Observable<number> {
-    return this.httpClient.post<number>(`${environment.apiUrl}/DataSheet`, dataSheet);
-  }
-  public updateDataSheet(dataSheet: SaveDataSheet): Observable<number> {
+  public saveDataSheet(dataSheet: SaveDataSheet): Observable<number> {
     return this.httpClient.put<number>(`${environment.apiUrl}/DataSheet`, dataSheet);
   }
   public addDataSheetItem(item: NewDataSheetItem): Observable<number> {
@@ -57,5 +55,8 @@ export class ProductService {
   }
   public deleteDataSheetItem(itemId: number): Observable<any> {
     return this.httpClient.delete<any>(`${environment.apiUrl}/DataSheet/Item/${itemId}`);
+  }
+  public calculateProduction(productId: number, measureId: number, quantity: number): Observable<ProductionItem[]> {
+    return this.httpClient.get<ProductionItem[]>(`${environment.apiUrl}/DataSheet/Production/${productId}/${measureId}/${quantity}`);
   }
 }

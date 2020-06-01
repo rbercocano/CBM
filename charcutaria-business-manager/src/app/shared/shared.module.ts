@@ -30,6 +30,8 @@ import { OrderService } from './services/order/order.service';
 import { OrderStatusLabelComponent } from './order-status-label/order-status-label.component';
 import { PaymentStatusLabelComponent } from './payment-status-label/payment-status-label.component';
 import { OrderItemStatusLabelComponent } from './order-item-status-label/order-item-status-label.component';
+import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
+
 
 
 
@@ -45,7 +47,8 @@ import { OrderItemStatusLabelComponent } from './order-item-status-label/order-i
     CbmNumberPipe,
     OrderStatusLabelComponent,
     PaymentStatusLabelComponent,
-    OrderItemStatusLabelComponent],
+    OrderItemStatusLabelComponent,
+    SafeHtmlPipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -62,6 +65,7 @@ import { OrderItemStatusLabelComponent } from './order-item-status-label/order-i
     NgxMaskModule,
     CbmCurrencyPipe,
     CbmNumberPipe,
+    SafeHtmlPipe,
     ServerSidePagerComponent,
     ContactInfoComponent,
     CustomerContactComponent,

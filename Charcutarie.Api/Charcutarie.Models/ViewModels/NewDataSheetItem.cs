@@ -10,5 +10,6 @@ namespace Charcutarie.Models.ViewModels
         public long RawMaterialId { get; set; }
         public double Percentage { get; set; }
         public string AdditionalInfo { get; set; }
+        public bool IsBaseItem { get; set; }
     }
 }

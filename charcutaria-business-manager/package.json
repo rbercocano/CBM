@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~9.1.4",
     "@angular/router": "~9.1.4",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
+    "angular-froala-wysiwyg": "^3.1.1-1",
     "bootstrap": "^4.4.1",
     "font-awesome-scss": "^1.0.0",
     "install": "^0.13.0",
