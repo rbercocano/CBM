@@ -8,6 +8,7 @@ namespace Charcutarie.Models.ViewModels
     {
         public double Quantity { get; set; }
         public double Cost { get; set; }
+        public MeasureUnit MeasureUnit { get; set; }
 
     }
 }

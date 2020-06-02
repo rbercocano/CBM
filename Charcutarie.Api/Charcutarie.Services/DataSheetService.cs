@@ -17,12 +17,14 @@ namespace Charcutarie.Services
         private readonly IDataSheetApp dataSheetApp;
         private readonly IDataSheetItemApp dataSheetItemApp;
         private readonly IPricingApp pricingApp;
+        private readonly IMeasureUnitApp measureUnitApp;
 
-        public DataSheetService(IDataSheetApp dataSheetApp, IDataSheetItemApp dataSheetItemApp, IPricingApp pricingApp)
+        public DataSheetService(IDataSheetApp dataSheetApp, IDataSheetItemApp dataSheetItemApp, IPricingApp pricingApp, IMeasureUnitApp measureUnitApp)
         {
             this.dataSheetApp = dataSheetApp;
             this.dataSheetItemApp = dataSheetItemApp;
             this.pricingApp = pricingApp;
+            this.measureUnitApp = measureUnitApp;
         }
         public async Task<long> Create(DataSheet dataSheet, int corpClientId)
         {
@@ -68,6 +70,8 @@ namespace Charcutarie.Services
         {
             var items = new List<ProductionItem>();
             var dataSheet = await dataSheetApp.Get(productId, corpClientId);
+            var units = await measureUnitApp.GetAll();
+            var sourceUnit = units.FirstOrDefault(u => u.MeasureUnitId == measureId);
             foreach (var di in dataSheet.DataSheetItems)
             {
                 var item = new ProductionItem
@@ -80,8 +84,21 @@ namespace Charcutarie.Services
                     Percentage = di.Percentage,
                     RawMaterialId = di.RawMaterialId
                 };
-                quantity = UnitConverter.ToBaseUnit(measureId, quantity);
+                quantity = UnitConverter.ToBaseUnit(measureId, quantity, sourceUnit.MeasureUnitTypeId);
                 item.Quantity = quantity * item.Percentage / 100;
+                switch (sourceUnit.MeasureUnitTypeId)
+                {
+                    case MeasureUnitTypeEnum.Mass:
+                        item.MeasureUnit = units.FirstOrDefault(u => u.MeasureUnitId == MeasureUnitEnum.Grama);
+                        break;
+                    case MeasureUnitTypeEnum.Volume:
+                        item.MeasureUnit = units.FirstOrDefault(u => u.MeasureUnitId == MeasureUnitEnum.Mililitro);
+                        break;
+                    case MeasureUnitTypeEnum.Lenght:
+                        break;
+                    default:
+                        break;
+                }
                 items.Add(item);
             }
             return items;

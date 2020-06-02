@@ -68,6 +68,9 @@ export class DataSheetDetailsComponent implements OnInit {
   back() {
     this.router.navigate(['/product']);
   }
+  datasheet() {
+    this.router.navigate(['/product', this.product.productId, 'datasheet']);
+  }
   public get baseItems(): DataSheetItem[] {
     return this.items.filter(i => i.isBaseItem);
   }

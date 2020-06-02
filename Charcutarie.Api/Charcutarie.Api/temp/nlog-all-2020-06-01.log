@@ -1,0 +1,108 @@
+2020-06-01 19:54:36.3170|50|WARN|Microsoft.AspNetCore.DataProtection.Repositories.EphemeralXmlRepository|Using an in-memory repository. Keys will not be persisted to storage. 
+2020-06-01 19:54:36.4885|59|WARN|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|Neither user profile nor HKLM registry available. Using an ephemeral key repository. Protected data will be unavailable when application exits. 
+2020-06-01 19:54:36.6558|35|WARN|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|No XML encryptor configured. Key {cc407f1b-753f-4e02-a659-599993530345} may be persisted to storage in unencrypted form. 
+2020-06-01 19:54:37.3480||INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down. 
+2020-06-01 19:54:37.3612||INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development 
+2020-06-01 19:54:37.3612||INFO|Microsoft.Hosting.Lifetime|Content root path: E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api 
+2020-06-01 19:55:25.9419||ERROR|Charcutarie.Api.Infra.Middlewares.ErrorLoggingMiddleware|Microsoft.Data.SqlClient.SqlException (0x80131904): The multi-part identifier "I.OrderItemId" could not be bound.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.InitializeReader(DbContext _, Boolean result)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.Single[TSource](IEnumerable`1 source)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at System.Linq.Queryable.Count[TSource](IQueryable`1 source)
+   at Charcutarie.Repository.OrderRepository.GetOrderSummary(Int32 corpClientId, String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Repository\OrderRepository.cs:line 179
+   at Charcutarie.Application.OrderApp.GetOrderSummary(Int32 corpClientId, String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Application\OrderApp.cs:line 53
+   at Charcutarie.Services.OrderService.GetOrderSummary(Int32 corpClientId, String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Services\OrderService.cs:line 156
+   at Charcutarie.Api.Controllers.v1.OrderController.GetOrderSummary(String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\Controllers\v1\OrderController.cs:line 94
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Charcutarie.Api.Infra.Middlewares.ErrorLoggingMiddleware.InvokeAsync(HttpContext context) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\Infra\Middlewares\ErrorLoggingMiddleware.cs:line 25
+ClientConnectionId:3353d7f1-cbc6-4fe0-b801-c4f3d9249bbb
+Error Number:4104,State:1,Class:16 
+2020-06-01 19:55:25.9791|1|ERROR|Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware|An unhandled exception has occurred while executing the request. Microsoft.Data.SqlClient.SqlException (0x80131904): The multi-part identifier "I.OrderItemId" could not be bound.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.InitializeReader(DbContext _, Boolean result)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.Single[TSource](IEnumerable`1 source)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.Execute[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.Execute[TResult](Expression expression)
+   at System.Linq.Queryable.Count[TSource](IQueryable`1 source)
+   at Charcutarie.Repository.OrderRepository.GetOrderSummary(Int32 corpClientId, String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Repository\OrderRepository.cs:line 179
+   at Charcutarie.Application.OrderApp.GetOrderSummary(Int32 corpClientId, String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Application\OrderApp.cs:line 53
+   at Charcutarie.Services.OrderService.GetOrderSummary(Int32 corpClientId, String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Services\OrderService.cs:line 156
+   at Charcutarie.Api.Controllers.v1.OrderController.GetOrderSummary(String customer, Nullable`1 createdOnFrom, Nullable`1 createdOnTo, Nullable`1 paidOnFrom, Nullable`1 paidOnTo, Nullable`1 completeByFrom, Nullable`1 completeByTo, Nullable`1 paymentStatus, List`1 orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, Nullable`1 page, Nullable`1 pageSize) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\Controllers\v1\OrderController.cs:line 94
+   at lambda_method(Closure , Object , Object[] )
+   at Microsoft.Extensions.Internal.ObjectMethodExecutor.Execute(Object target, Object[] parameters)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeNextActionFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Charcutarie.Api.Infra.Middlewares.ErrorLoggingMiddleware.InvokeAsync(HttpContext context) in E:\Projects\ET IT\CBM\Charcutarie.Api\Charcutarie.Api\Infra\Middlewares\ErrorLoggingMiddleware.cs:line 25
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+ClientConnectionId:3353d7f1-cbc6-4fe0-b801-c4f3d9249bbb
+Error Number:4104,State:1,Class:16
+2020-06-01 19:56:53.3555||INFO|Microsoft.Hosting.Lifetime|Application is shutting down... 

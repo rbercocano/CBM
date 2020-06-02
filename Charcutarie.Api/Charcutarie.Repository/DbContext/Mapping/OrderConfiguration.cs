@@ -25,7 +25,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.LastUpdated)
                 .HasColumnType("DATETIME");
             builder.Property(p => p.CompleteBy)
-                .HasColumnType("DATETIME")
+                .HasColumnType("DATE")
                 .IsRequired();
             builder.Property(p => p.OrderStatusId)
                 .HasColumnType("INT")
@@ -41,7 +41,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("DECIMAL(18,2)")
                 .IsRequired();
             builder.Property(p => p.PaidOn)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DATE");
             builder.HasMany(p => p.OrderItems)
                 .WithOne(p => p.Order);
             builder.HasOne(p => p.OrderStatus)

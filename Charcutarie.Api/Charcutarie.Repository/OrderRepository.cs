@@ -14,6 +14,7 @@ using System.Data;
 using Charcutarie.Models.Enums.OrderBy;
 using Charcutarie.Models;
 using Charcutarie.Models.Enums;
+using System.IO;
 
 namespace Charcutarie.Repository
 {
@@ -174,7 +175,6 @@ namespace Charcutarie.Repository
             }
             if (orderStatus != null && orderStatus.Any())
                 query.Append($" AND orderStatusId IN ({string.Join(',', orderStatus.ToArray())})");
-
             var count = context.OrderSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).Count();
             query.Append($" ORDER BY {orderBy} {direction}");
 
@@ -184,6 +184,94 @@ namespace Charcutarie.Repository
             var data = context.OrderSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToList();
             var result = mapper.Map<IEnumerable<OrderSummary>>(data);
             return new PagedResult<OrderSummary>
+            {
+                CurrentPage = page ?? 1,
+                Data = result,
+                RecordCount = count,
+                RecordsPerpage = pageSize ?? count
+            };
+        }
+        public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, OrderStatusEnum? orderStatus,
+                                                               OrderItemStatusEnum? itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
+                                                               string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction,
+                                                               int? page, int? pageSize)
+        {
+            var sqlParams = new List<SqlParameter>();
+            sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
+            var query = new StringBuilder(@"SELECT * FROM(SELECT 
+	                                        O.OrderId,
+                                            I.OrderItemId,
+	                                        O.OrderNumber,
+                                            C.customerTypeId,
+	                                        OS.OrderStatusId AS OrderStatusId,
+	                                        OS.Description AS OrderStatus,
+	                                        CASE C.CustomerTypeId WHEN 1 THEN RTRIM(c.Name + ' ' + ISNULL(c.LastName,'')) ELSE c.DBAName END AS Customer,
+	                                        CASE C.CustomerTypeId WHEN 1 THEN c.CPF ELSE c.CNPJ END AS SocialIdentifier,
+	                                        I.ItemNumber,
+	                                        P.Name as Product,
+	                                        I.Quantity,
+	                                        M.ShortName as MeasureUnit,
+	                                        OIS.Description as OrderItemStatus,
+	                                        OIS.OrderItemStatusId as OrderItemStatusId,
+	                                        I.PriceAfterDiscount as FinalPrice,
+	                                        I.LastStatusDate,
+	                                        O.CompleteBy
+                                        FROM [Order] O
+                                        JOIN OrderStatus OS ON O.OrderStatusId = OS.OrderStatusId
+                                        JOIN PaymentStatus PS ON O.PaymentStatusId = PS.PaymentStatusId
+                                        JOIN OrderItem I ON O.OrderId = I.OrderId
+                                        JOIN Customer C ON C.CustomerId = O.CustomerId
+                                        JOIN OrderItemStatus OIS ON I.OrderItemStatusId = OIS.OrderItemStatusId
+                                        JOIN MeasureUnit M ON I.MeasureUnitId = M.MeasureUnitId
+                                        JOIN Product P ON I.ProductId = P.ProductId
+                                        WHERE P.CorpClientId = @corpClientId AND C.CorpClientId = @corpClientId) X WHERE 1 = 1 ");
+
+            if (completeByFrom.HasValue)
+            {
+                query.Append(" AND CompleteBy >= @completeByFrom");
+                sqlParams.Add(new SqlParameter("@completeByFrom", completeByFrom) { SqlDbType = SqlDbType.Date });
+            }
+            if (completeByTo.HasValue)
+            {
+                query.Append(" AND CompleteBy <= @completeByTo");
+                sqlParams.Add(new SqlParameter("@completeByTo", completeByTo) { SqlDbType = SqlDbType.Date });
+            }
+            if (!string.IsNullOrEmpty(customer))
+            {
+                query.Append(" AND Customer LIKE '%'+ @customer +'%'");
+                sqlParams.Add(new SqlParameter("@customer", customer) { SqlDbType = SqlDbType.VarChar, Size = 500 });
+            }
+            if (itemStatus.HasValue)
+            {
+                query.Append($" AND OrderItemStatusId = @OrderItemStatusId");
+                sqlParams.Add(new SqlParameter("@OrderItemStatusId", (int)itemStatus) { SqlDbType = SqlDbType.Int });
+            }
+
+            if (orderNumber.HasValue)
+            {
+                query.Append($" AND OrderNumber = @OrderNumber");
+                sqlParams.Add(new SqlParameter("@OrderNumber", orderNumber.Value) { SqlDbType = SqlDbType.Int });
+            }
+            if (orderStatus.HasValue)
+            {
+                query.Append($" AND orderStatusId = @orderStatus");
+                sqlParams.Add(new SqlParameter("@orderStatus", (int)orderStatus) { SqlDbType = SqlDbType.Int });
+            }
+
+            var count = context.OrderItemReports.FromSqlRaw(query.ToString(), sqlParams.ToArray()).Count();
+            if (orderBy == OrderItemReportOrderBy.OrderItemStatus)
+                query.Append($" ORDER BY {orderBy} {direction}, Product ASC");
+            else if (orderBy == OrderItemReportOrderBy.Product)
+                query.Append($" ORDER BY {orderBy} {direction}, OrderItemStatus ASC");
+            else
+                query.Append($" ORDER BY {orderBy} {direction}, OrderItemStatus ASC, Product ASC");
+
+            if (page.HasValue && pageSize.HasValue)
+                query.Append($" OFFSET {(page > 0 ? page - 1 : 0) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY");
+            System.IO.File.WriteAllText(@"E:\query.sql", query.ToString());
+            var data = context.OrderItemReports.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToList();
+            var result = mapper.Map<IEnumerable<OrderItemReport>>(data);
+            return new PagedResult<OrderItemReport>
             {
                 CurrentPage = page ?? 1,
                 Data = result,

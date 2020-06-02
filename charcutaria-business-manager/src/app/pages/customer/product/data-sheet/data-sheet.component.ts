@@ -167,6 +167,9 @@ export class DataSheetComponent implements OnInit {
   public get otherItems(): DataSheetItem[] {
     return (this.dataSheet.dataSheetItems ?? []).filter(i => !i.isBaseItem);
   }
+  datasheetDetails() {
+    this.router.navigate(['/product', this.product.productId, 'datasheet','details']);
+  }
   remove(item) {
     this.spinner.show();
     this.productService.deleteDataSheetItem(item.dataSheetItemId).pipe(flatMap(r => {

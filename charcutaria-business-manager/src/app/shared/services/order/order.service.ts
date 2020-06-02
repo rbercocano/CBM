@@ -10,6 +10,8 @@ import { NewOrderItem } from '../../models/NewOrderItem';
 import { OrderSummary } from '../../models/orderSummary';
 import { orderSummaryFilter } from '../../models/orderSummaryFilter';
 import { PagedResult } from '../../models/pagedResult';
+import { OrderItemReportFilter } from '../../models/OrderItemReportFilter';
+import { OrderItemReport } from '../../models/orderItemReport';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +72,27 @@ export class OrderService {
     if (filter.direction != null)
       params = params.append('direction', String(filter.direction));
     return this.httpClient.get<PagedResult<OrderSummary>>(`${environment.apiUrl}/Order/${page}/${pageSize}`, { params: params });
+
+  }
+  public getOrderItemReport(filter: OrderItemReportFilter, page: number, pageSize: number): Observable<PagedResult<OrderItemReport>> {
+    let params = new HttpParams();
+    if (filter.orderNumber != null)
+      params = params.append('orderNumber', String(filter.orderNumber));
+    if (filter.orderStatus != null)
+      params = params.append('orderStatus', String(filter.orderStatus));
+    if (filter.itemStatus != null)
+      params = params.append('itemStatus', String(filter.itemStatus));
+    if (filter.completeByFrom != null)
+      params = params.append('completeByFrom', filter.completeByFrom);
+    if (filter.completeByTo != null)
+      params = params.append('completeByTo', filter.completeByTo);
+    if (filter.customer)
+      params = params.append('customer', filter.customer);
+    if (filter.orderBy != null)
+      params = params.append('orderBy', String(filter.orderBy));
+    if (filter.direction != null)
+      params = params.append('direction', String(filter.direction));
+    return this.httpClient.get<PagedResult<OrderItemReport>>(`${environment.apiUrl}/Order/Report/Item/${page}/${pageSize}`, { params: params });
 
   }
 }

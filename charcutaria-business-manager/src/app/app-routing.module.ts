@@ -39,6 +39,10 @@ const routes: Routes = [{
     {
       path: 'raw-material',
       loadChildren: () => import('./pages/customer/raw-material/raw-material.module').then(m => m.RawMaterialModule)
+    },
+    {
+      path: 'report',
+      loadChildren: () => import('./pages/customer/report/report.module').then(m => m.ReportModule)
     }]
 },
 {

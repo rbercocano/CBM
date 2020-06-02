@@ -104,6 +104,7 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.DataSheetItem, vm.UpdateDataSheetItem>().ReverseMap();
 
             CreateMap<ef.DataSheet, vm.SaveDataSheet>().ReverseMap();
+            CreateMap<ef.OrderItemReport, vm.OrderItemReport>().ReverseMap();
         }
     }
 }
