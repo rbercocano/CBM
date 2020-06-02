@@ -94,7 +94,7 @@ export class OrderItemComponent implements OnInit {
   }
   open(content) {
     this.resetFilter();
-    this.modal = this.modalService.open(content);
+    this.modal = this.modalService.open(content); 
   }
   resetFilter() {
     this.filter = new OrderItemReportFilter();
