@@ -19,14 +19,18 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
   public get tokenInfo(): TokenInfo {
-    return this.currentUserSubject.value;
+    // return this.currentUserSubject.value;
+    var token: TokenInfo = JSON.parse(sessionStorage.getItem('currentUser'));
+    return token;
   }
   public get userData(): JWTUserInfo {
-    return this.currentUserSubject.value.userData;
+    // return this.currentUserSubject.value.userData;
+    var token: TokenInfo = JSON.parse(sessionStorage.getItem('currentUser'));
+    return token.userData;
   }
   public get isAuthenticated(): boolean {
-    return (this.currentUserSubject.value != null &&
-      this.currentUserSubject.value.userData != null);
+    var token: TokenInfo = JSON.parse(sessionStorage.getItem('currentUser'));
+    return token != null;
   }
   refreshToken(): Observable<TokenInfo> {
     const url = `${environment.apiUrl}/Authentication/Token/Refresh`;
@@ -53,7 +57,8 @@ export class AuthService {
       if (jwt && jwt.authenticated) {
         sessionStorage.setItem('currentUser', JSON.stringify(jwt));
         this.currentUserSubject.next(jwt);
-      }
+      } else
+        sessionStorage.removeItem('currentUser');
       return jwt;
     }));
   }

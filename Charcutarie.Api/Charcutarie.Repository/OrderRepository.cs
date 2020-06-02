@@ -268,7 +268,6 @@ namespace Charcutarie.Repository
 
             if (page.HasValue && pageSize.HasValue)
                 query.Append($" OFFSET {(page > 0 ? page - 1 : 0) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY");
-            System.IO.File.WriteAllText(@"E:\query.sql", query.ToString());
             var data = context.OrderItemReports.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToList();
             var result = mapper.Map<IEnumerable<OrderItemReport>>(data);
             return new PagedResult<OrderItemReport>
