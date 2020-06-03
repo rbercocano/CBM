@@ -8,7 +8,6 @@ import { DomainService } from './services/domain/domain.service';
 import { ProductService } from './services/product/product.service';
 import { CorpClientService } from './services/corpclient/corp-client.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthService } from './services/auth/auth.service';
 import { RouterModule } from '@angular/router';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { HttpsRequestInterceptor } from './services/HttpsRequestInterceptor';
@@ -79,7 +78,6 @@ import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
     DomainService,
     ProductService,
     CorpClientService,
-    AuthService,
     NotificationService,
     DecimalPipe,
     PaginationService,

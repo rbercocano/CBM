@@ -2,3 +2,29 @@ table th:nth-child(2), td:nth-child(2),
 th:nth-child(3), td:nth-child(3){
     text-align: right;
 }
+.production-summary{
+    text-align: center;
+    font-weight: 600;
+    color:#fff;
+    padding-top:10px;
+    padding-bottom: 10px;
+    & div{
+        border:solid 1px silver;
+        padding:5px;
+    }
+    & div:nth-child(1){
+        border-radius: 15px 0 0 15px;
+        background-color: #73b4ff;
+        border-left: none;
+    }
+    & div:nth-child(2){
+        background-color: #ff8989;
+        border-left: none;
+        border-right: none;
+    }
+    & div:nth-child(3){
+        border-radius: 0 15px 15px 0;
+        background-color: #50c36b;
+        border-right: none;
+    }
+}

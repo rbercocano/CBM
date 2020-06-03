@@ -5586,7 +5586,7 @@ a[data-toggle="lightbox"] .img-fluid {
 table.order-items{
     & tbody{
         & td{
-            padding:10px;
+            padding: 0.3em;
             vertical-align: middle;
             & p{
                 font-size: 12px;
@@ -5610,6 +5610,6 @@ table.order-items{
     }
 }
 .table th, .table td {
-    padding: 0.5em;
+    padding: 0.3em;
     vertical-align: middle;
 }

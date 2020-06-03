@@ -15,5 +15,6 @@ namespace Charcutarie.Models.Entities
         public List<SystemModule> ChildModules { get; set; }
         public List<RoleModule> RoleModules { get; set; }
         public int Order { get; set; }
+        public bool IsMenu { get; set; }
     }
 }

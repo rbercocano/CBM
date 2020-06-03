@@ -9,8 +9,7 @@ import { AdminComponent } from './layout/admin/admin.component';
 import { CustomerComponent } from './layout/customer/customer.component';
 import { UserSearchComponent } from './pages/customer/user/user-search/user-search.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import 'froala-editor/js/plugins.pkgd.min.js';
-import { APP_BASE_HREF } from '@angular/common';
+import { AuthService } from './shared/services/auth/auth.service';
 
 
 @NgModule({
@@ -29,6 +28,7 @@ import { APP_BASE_HREF } from '@angular/common';
     BrowserAnimationsModule
   ],
   providers: [
+    AuthService,
     // { provide: APP_BASE_HREF, useValue: '/my/app' }
   ],
   bootstrap: [AppComponent],

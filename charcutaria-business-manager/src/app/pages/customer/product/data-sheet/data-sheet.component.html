@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of baseItems">
-                            <td>{{item.rawMaterial}}</td>
+                            <td>{{item.rawMaterial.name}}</td>
                             <td>
                                 {{item.percentage}} %
                             </td>
@@ -57,7 +57,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of otherItems">
-                            <td>{{item.rawMaterial}}</td>
+                            <td>{{item.rawMaterial.name}}</td>
                             <td>
                                 {{item.percentage}} %
                             </td>
@@ -79,12 +79,13 @@
         <div class="card">
             <div class="card-header p-b-0">
                 <h5>Procedimento</h5>
-                <button class="btn btn-mini btn-primary float-right" placement="top" ngbTooltip="Salvar" (click)="save()">
+                <button class="btn btn-mini btn-primary float-right" placement="top" ngbTooltip="Salvar"
+                    (click)="save()">
                     <i class="fa fa-save"></i>
                 </button>
             </div>
             <div class="card-body">
-                <div [froalaEditor]="options" [(froalaModel)]="dataSheet.procedureDescription"></div>
+                <ckeditor  [config]="config" [editor]="Editor" [(ngModel)]="dataSheet.procedureDescription"></ckeditor>
             </div>
         </div>
     </div>
@@ -101,10 +102,11 @@
     </div>
     <div class="modal-body ">
         <div class="row form-group">
-            <div class="col-12">{{currentItem.rawMaterialId}}
+            <div class="col-12">
                 <label class="m-b-0 col-12">Ingrediente</label>
                 <div class="col-12">
-                    <select class="form-control" [(ngModel)]="currentItem.rawMaterialId">
+                    <select class="form-control" [disabled]="currentItem.dataSheetItemId!=null"
+                        [(ngModel)]="currentItem.rawMaterialId">
                         <option *ngFor="let r of rawMaterials" [ngValue]="r.rawMaterialId">{{r.name}}</option>
                     </select>
                 </div>

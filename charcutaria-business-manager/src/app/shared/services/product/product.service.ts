@@ -10,6 +10,7 @@ import { SaveDataSheet } from '../../models/saveDataSheet';
 import { NewDataSheetItem } from '../../models/newDataSheetItem';
 import { UpdateDataSheetItem } from '../../models/updateDataSheetItem';
 import { ProductionItem } from '../../models/productionItem';
+import { ProductionSummary } from '../../models/productionSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +57,7 @@ export class ProductService {
   public deleteDataSheetItem(itemId: number): Observable<any> {
     return this.httpClient.delete<any>(`${environment.apiUrl}/DataSheet/Item/${itemId}`);
   }
-  public calculateProduction(productId: number, measureId: number, quantity: number): Observable<ProductionItem[]> {
-    return this.httpClient.get<ProductionItem[]>(`${environment.apiUrl}/DataSheet/Production/${productId}/${measureId}/${quantity}`);
+  public calculateProduction(productId: number, measureId: number, quantity: number): Observable<ProductionSummary> {
+    return this.httpClient.get<ProductionSummary>(`${environment.apiUrl}/DataSheet/Production/${productId}/${measureId}/${quantity}`);
   }
 }

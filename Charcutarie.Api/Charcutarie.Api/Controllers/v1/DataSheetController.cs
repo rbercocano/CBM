@@ -75,7 +75,7 @@ namespace Charcutarie.Api.Controllers.v1
             return Ok();
         }
         [HttpGet("Production/{productId:long}/{measureId:int}/{quantity:double}")]
-        public async Task<ActionResult<IEnumerable<ProductionItem>>> CalculateProduction(long productId, int measureId, double quantity)
+        public async Task<ActionResult<ProductionSummary>> CalculateProduction(long productId, int measureId, double quantity)
         {
             var data = await service.CalculateProduction(productId, (MeasureUnitEnum)measureId, quantity, UserData.CorpClientId.Value);
             if (data != null)

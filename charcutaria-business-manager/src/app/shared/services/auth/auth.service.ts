@@ -20,16 +20,15 @@ export class AuthService {
   }
   public get tokenInfo(): TokenInfo {
     // return this.currentUserSubject.value;
-    var token: TokenInfo = JSON.parse(sessionStorage.getItem('currentUser'));
-    return token;
+    return this.getUserSession();
   }
   public get userData(): JWTUserInfo {
     // return this.currentUserSubject.value.userData;
-    var token: TokenInfo = JSON.parse(sessionStorage.getItem('currentUser'));
+    let token: TokenInfo = this.getUserSession();
     return token.userData;
   }
   public get isAuthenticated(): boolean {
-    var token: TokenInfo = JSON.parse(sessionStorage.getItem('currentUser'));
+    let token: TokenInfo = this.getUserSession();
     return token != null;
   }
   refreshToken(): Observable<TokenInfo> {
@@ -55,11 +54,24 @@ export class AuthService {
       corpClientId: loginInfo.corpClientId
     }).pipe(map(jwt => {
       if (jwt && jwt.authenticated) {
-        sessionStorage.setItem('currentUser', JSON.stringify(jwt));
+        this.setUserSession(jwt);
         this.currentUserSubject.next(jwt);
       } else
-        sessionStorage.removeItem('currentUser');
+        this.removeUserSession();
       return jwt;
     }));
+  }
+  logout(){
+    this.removeUserSession();
+  }
+  private setUserSession(jwt: TokenInfo) {
+    localStorage.setItem('currentUser', JSON.stringify(jwt));
+  }
+  private removeUserSession() {
+    localStorage.removeItem('currentUser');
+  }
+  private getUserSession(): TokenInfo {
+    let user: TokenInfo = JSON.parse(localStorage.getItem('currentUser'));
+    return user;
   }
 }

@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy-prod": "ng build --prod --base-href /ui/ --output-hashing=all",
+    "deploy-local": "ng build --base-href /cbm/ --output-hashing=all"
   },
   "private": true,
   "dependencies": {
@@ -20,8 +22,10 @@
     "@angular/platform-browser": "~9.1.4",
     "@angular/platform-browser-dynamic": "~9.1.4",
     "@angular/router": "~9.1.4",
+    "@ckeditor/ckeditor5-alignment": "^19.0.1",
+    "@ckeditor/ckeditor5-angular": "^1.2.3",
+    "@ckeditor/ckeditor5-build-classic": "^19.0.2",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
-    "angular-froala-wysiwyg": "^3.1.1-1",
     "bootstrap": "^4.4.1",
     "font-awesome-scss": "^1.0.0",
     "install": "^0.13.0",

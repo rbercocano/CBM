@@ -12,6 +12,7 @@ import { MeasureUnit } from 'src/app/shared/models/measureUnit';
 import { of } from 'rxjs';
 import { ProductionItem } from 'src/app/shared/models/productionItem';
 import { flatMap } from 'rxjs/operators';
+import { ProductionSummary } from 'src/app/shared/models/productionSummary';
 
 @Component({
   selector: 'app-data-sheet-details',
@@ -25,8 +26,8 @@ export class DataSheetDetailsComponent implements OnInit {
   public dataSheet: DataSheet = {} as DataSheet;
   public currentItem: DataSheetItem = {} as DataSheetItem;
   public measures: MeasureUnit[] = [];
-  public items: ProductionItem[] = [];
-  public production = { quantity: 1000, measureUnit: 1 };
+  public summary: ProductionSummary = { productionCost: 0, productionItems: [], profit: 0, salePrice: 0 };
+  public production = { quantity: 1, measureUnit: 1 };
   constructor(private productService: ProductService,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -49,17 +50,17 @@ export class DataSheetDetailsComponent implements OnInit {
       this.measures = r[2] ?? [];
       this.spinner.hide();
       let result: ProductionItem[] = [];
+      this.production.measureUnit = this.product.measureUnitId;
       this.dataSheet.dataSheetItems.forEach(i => {
         let item = { ...i } as ProductionItem;
         item.quantity = 0;
         item.cost = 0;
         result.push(item);
       })
-      return this.dataSheet.dataSheetItems.length > 0 ?
-        this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity)
-        : of(result);
+      return this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity)
+
     })).subscribe(r => {
-      this.items = r ?? [];
+      this.summary = r;
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -72,15 +73,15 @@ export class DataSheetDetailsComponent implements OnInit {
     this.router.navigate(['/product', this.product.productId, 'datasheet']);
   }
   public get baseItems(): DataSheetItem[] {
-    return this.items.filter(i => i.isBaseItem);
+    return this.summary.productionItems.filter(i => i.isBaseItem);
   }
   public get otherItems(): DataSheetItem[] {
-    return this.items.filter(i => !i.isBaseItem);
+    return this.summary.productionItems.filter(i => !i.isBaseItem);
   }
   calculate() {
     this.spinner.show();
     this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity).subscribe(r => {
-      this.items = r ?? [];
+      this.summary = r;
       this.spinner.hide();
     }, (e) => {
       this.spinner.hide();

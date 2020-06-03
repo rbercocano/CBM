@@ -1,3 +1,6 @@
 table th:nth-child(2), td:nth-child(2){
     text-align: right;
 }
+.ck-editor__editable {
+    min-height: 400px;
+}

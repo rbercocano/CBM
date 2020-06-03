@@ -5,4 +5,6 @@ export interface ChildModule {
     name: string;
     route: string;
     moduleId: Number;
+    isMenu: boolean;
+    isActive: boolean;
 }

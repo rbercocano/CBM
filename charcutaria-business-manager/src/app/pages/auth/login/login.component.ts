@@ -16,6 +16,7 @@ import { UserService } from 'src/app/shared/services/user/user.service';
 })
 export class LoginComponent implements OnInit {
   @ViewChild('f', { static: true }) form: NgForm;
+  public loading = true;
   public authRes: string = "";
   public corpClients: CorpClient[] = [];
   public login: Login = { corpClientId: null, password: "", username: "" };
@@ -24,7 +25,10 @@ export class LoginComponent implements OnInit {
     private authService: AuthService, private route: Router) { }
 
   ngOnInit(): void {
-    this.corpClientService.GetActives().subscribe(c => this.corpClients = c);
+    this.corpClientService.GetActives().subscribe(c => {
+      this.corpClients = c;
+      this.loading = false;
+    });
   }
   signIn(): void {
     this.authRes = "";

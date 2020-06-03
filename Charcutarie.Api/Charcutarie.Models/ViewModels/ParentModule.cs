@@ -13,6 +13,7 @@ namespace Charcutarie.Models.ViewModels
         public string Name { get; set; }
         public int ModuleId { get; set; }
         public string Route { get; set; }
+        public bool IsMenu { get; set; }
         public List<ChildModule> ChildModules { get; set; }
     }
 }

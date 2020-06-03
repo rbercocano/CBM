@@ -18,13 +18,15 @@ namespace Charcutarie.Services
         private readonly IDataSheetItemApp dataSheetItemApp;
         private readonly IPricingApp pricingApp;
         private readonly IMeasureUnitApp measureUnitApp;
+        private readonly IProductApp productApp;
 
-        public DataSheetService(IDataSheetApp dataSheetApp, IDataSheetItemApp dataSheetItemApp, IPricingApp pricingApp, IMeasureUnitApp measureUnitApp)
+        public DataSheetService(IDataSheetApp dataSheetApp, IDataSheetItemApp dataSheetItemApp, IPricingApp pricingApp, IMeasureUnitApp measureUnitApp, IProductApp productApp)
         {
             this.dataSheetApp = dataSheetApp;
             this.dataSheetItemApp = dataSheetItemApp;
             this.pricingApp = pricingApp;
             this.measureUnitApp = measureUnitApp;
+            this.productApp = productApp;
         }
         public async Task<long> Create(DataSheet dataSheet, int corpClientId)
         {
@@ -66,12 +68,28 @@ namespace Charcutarie.Services
         {
             return await dataSheetApp.Get(productId, corpClientId);
         }
-        public async Task<IEnumerable<ProductionItem>> CalculateProduction(long productId, MeasureUnitEnum measureId, double quantity, int corpClientId)
+        public async Task<ProductionSummary> CalculateProduction(long productId, MeasureUnitEnum measureId, double quantity, int corpClientId)
         {
             var items = new List<ProductionItem>();
             var dataSheet = await dataSheetApp.Get(productId, corpClientId);
             var units = await measureUnitApp.GetAll();
             var sourceUnit = units.FirstOrDefault(u => u.MeasureUnitId == measureId);
+            var p = await productApp.Get(corpClientId, productId);
+            var price = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
+            {
+                ProductMeasureUnit = p.MeasureUnitId,
+                ProductPrice = p.Price,
+                Quantity = quantity,
+                QuantityMeasureUnit = measureId,
+                ResultPrecision = 2
+            });
+            if(dataSheet == null)
+                return new ProductionSummary
+                {
+                    SalePrice = price,
+                    ProductionItems = items
+                };
+            var q = UnitConverter.ToBaseUnit(measureId, quantity, sourceUnit.MeasureUnitTypeId);
             foreach (var di in dataSheet.DataSheetItems)
             {
                 var item = new ProductionItem
@@ -84,9 +102,14 @@ namespace Charcutarie.Services
                     Percentage = di.Percentage,
                     RawMaterialId = di.RawMaterialId
                 };
-                quantity = UnitConverter.ToBaseUnit(measureId, quantity, sourceUnit.MeasureUnitTypeId);
-                item.Quantity = quantity * item.Percentage / 100;
-                switch (sourceUnit.MeasureUnitTypeId)
+                item.Quantity = q * item.Percentage / 100;
+
+                var rmSourceUnit = units.FirstOrDefault(u => u.MeasureUnitId == di.RawMaterial.MeasureUnitId);
+                var rmQuantity = UnitConverter.ToBaseUnit(rmSourceUnit.MeasureUnitId, 1, rmSourceUnit.MeasureUnitTypeId);
+                var rmPrice = di.RawMaterial.Price / rmQuantity;
+                item.Cost = rmPrice * item.Quantity;
+
+                switch (rmSourceUnit.MeasureUnitTypeId)
                 {
                     case MeasureUnitTypeEnum.Mass:
                         item.MeasureUnit = units.FirstOrDefault(u => u.MeasureUnitId == MeasureUnitEnum.Grama);
@@ -101,7 +124,11 @@ namespace Charcutarie.Services
                 }
                 items.Add(item);
             }
-            return items;
+            return new ProductionSummary
+            {
+                SalePrice = price,
+                ProductionItems = items
+            };
         }
     }
 }

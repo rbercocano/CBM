@@ -10,13 +10,16 @@
   <div class="collapse navbar-collapse" id="cbm-navbar">
     <ul class="navbar-nav mr-auto">
       <ng-container *ngFor="let m of modules">
-        <li class="nav-item" *ngIf="m.childModules.length == 0">
+        <li class="nav-item" *ngIf="m.childModules.length == 0 && m.isMenu">
           <a class="nav-link" [routerLink]="[m.route]">{{m.name}}</a>
         </li>
-        <li class="nav-item dropdown" ngbDropdown *ngIf="m.childModules.length > 0">
-          <a class="nav-link dropdown-toggle" [id]="m.moduleId" ngbDropdownToggle>{{m.name}}</a>
-          <div class="dropdown-menu" [attr.aria-label]="m.moduleId" ngbDropdownMenu>
-            <a class="dropdown-item" [routerLink]="[c.route]" *ngFor="let c of m.childModules">{{c.name}}</a>
+        <li class="nav-item dropdown" ngbDropdown *ngIf="m.childModules.length > 0 &&  m.isMenu">
+          <a *ngIf="m.isMenu" class="nav-link dropdown-toggle" [id]="m.moduleId" ngbDropdownToggle>{{m.name}}</a>
+          <div *ngIf="m.isMenu" class="dropdown-menu" [attr.aria-label]="m.moduleId" ngbDropdownMenu>
+            <ng-container *ngFor="let c of m.childModules">
+              <a *ngIf="c.isMenu" class="dropdown-item" [routerLink]="[c.route]" >{{c.name}}</a>
+
+            </ng-container>
           </div>
         </li>
       </ng-container>

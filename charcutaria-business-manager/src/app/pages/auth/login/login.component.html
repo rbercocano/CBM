@@ -16,18 +16,19 @@
               </div>
               <hr />
               <div class="input-group">
-                <select class="form-control" [(ngModel)]="login.corpClientId" #corpClientId="ngModel"
+                <select class="form-control" [disabled]="loading" [(ngModel)]="login.corpClientId" #corpClientId="ngModel"
                   name="corpClientId" required>
-                  <option [ngValue]="null">Selecione sua Empresa</option>
+                  <option [ngValue]="null" *ngIf="loading">Carregando...</option>
+                  <option [ngValue]="null" *ngIf="!loading">Selecione sua Empresa</option>
                   <option [ngValue]="c.corpClientId" *ngFor="let c of corpClients">{{c.dbaName}}</option>
                 </select>
-                <div *ngIf="f.submitted && corpClientId.invalid" class="error">
+                <div *ngIf="f.submitted && corpClientId.invalid && !loading" class="error">
                   <div *ngIf="corpClientId.errors.required">Selecione sua Empresa</div>
                 </div>
                 <span class="md-line"></span>
               </div>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Login" [(ngModel)]="login.username"
+                <input  [disabled]="loading" type="text" class="form-control" placeholder="Login" [(ngModel)]="login.username"
                   #username="ngModel" required name="username">
                 <div *ngIf="f.submitted && username.invalid" class="error">
                   <div *ngIf="username.errors.required">Informe seu login</div>
@@ -35,7 +36,7 @@
                 <span class="md-line"></span>
               </div>
               <div class="input-group">
-                <input type="password" class="form-control" placeholder="Senha" [(ngModel)]="login.password"
+                <input type="password" [disabled]="loading"  class="form-control" placeholder="Senha" [(ngModel)]="login.password"
                   #password="ngModel" name="password" required>
                 <div *ngIf="f.submitted && password.invalid" class="error">
                   <div *ngIf="password.errors.required">Informe sua senha</div>
@@ -45,13 +46,13 @@
               <div class="row m-t-15 text-left">
                 <div class="col-12">
                   <div class="forgot-phone text-right f-right">
-                    <a [routerLink]="['/auth/forgot']" class="text-right f-w-600 text-inverse">Esquece a Senha?</a>
+                    <a   [routerLink]="['/auth/forgot']" class="text-right f-w-600 text-inverse">Esquece a Senha?</a>
                   </div>
                 </div>
               </div>
               <div class="row m-t-15">
                 <div class="col-md-12">
-                  <button type="button" type="submit"
+                  <button type="button" type="submit" [disabled]="loading" 
                     class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Sign in</button>
                   <div class="input-group" *ngIf="authRes.length">
                     <div class="error text-center">

@@ -15,6 +15,8 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { flatMap } from 'rxjs/operators';
 import { NewDataSheetItem } from 'src/app/shared/models/newDataSheetItem';
 import { UpdateDataSheetItem } from 'src/app/shared/models/updateDataSheetItem';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 
 @Component({
   selector: 'app-data-sheet',
@@ -23,29 +25,11 @@ import { UpdateDataSheetItem } from 'src/app/shared/models/updateDataSheetItem';
   encapsulation: ViewEncapsulation.None,
 })
 export class DataSheetComponent implements OnInit {
+  public Editor = ClassicEditor;
+  public config = {
+    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+  };
   public title = 'Ficha Técnica';
-  public options: Object = {
-    placeholderText: 'Digite as informações do procedimento aqui!',
-    charCounterCount: false,
-    quickInsertEnabled: false,
-    height: 400,
-    toolbarButtons: {
-      'moreText': {
-        'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
-      },
-      'moreParagraph': {
-        'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
-      },
-      'moreRich': {
-        'buttons': ['insertLink', 'insertTable', 'specialCharacters', 'insertHR']
-      },
-      'moreMisc': {
-        'buttons': ['undo', 'redo', 'fullscreen', 'print', 'selectAll'],
-        'align': 'right',
-        'buttonsVisible': 2
-      }
-    }
-  }
   private modal: NgbModalRef;
   public product: Product = {} as Product;
   public dataSheet: DataSheet = {} as DataSheet;
@@ -61,7 +45,6 @@ export class DataSheetComponent implements OnInit {
     this.currentItem.percentage = 0;
     this.dataSheet.dataSheetItems = [];
   }
-
   ngOnInit(): void {
     this.spinner.show();
     let id = this.route.snapshot.params.id;
@@ -84,14 +67,14 @@ export class DataSheetComponent implements OnInit {
   back() {
     this.router.navigate(['/product']);
   }
-  save(){
+  save() {
     this.spinner.show();
     this.productService.saveDataSheet(this.dataSheet).pipe(flatMap(r => {
       return this.productService.getDataSheet(this.product.productId);
     })).subscribe(r => {
       this.dataSheet = r;
       this.spinner.hide();
-      this.notificationService.showSuccess('Sucesso','Procedimento atualizado com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Procedimento atualizado com sucesso.');
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -118,7 +101,7 @@ export class DataSheetComponent implements OnInit {
     })).subscribe(r => {
       this.spinner.hide();
       this.dataSheet = r;
-      this.notificationService.showSuccess('Sucesso','Ingrediente adicionado com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Ingrediente adicionado com sucesso.');
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -140,7 +123,7 @@ export class DataSheetComponent implements OnInit {
     })).subscribe(r => {
       this.dataSheet = r;
       this.spinner.hide();
-      this.notificationService.showSuccess('Sucesso','Ingrediente atualizado com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Ingrediente atualizado com sucesso.');
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -168,7 +151,7 @@ export class DataSheetComponent implements OnInit {
     return (this.dataSheet.dataSheetItems ?? []).filter(i => !i.isBaseItem);
   }
   datasheetDetails() {
-    this.router.navigate(['/product', this.product.productId, 'datasheet','details']);
+    this.router.navigate(['/product', this.product.productId, 'datasheet', 'details']);
   }
   remove(item) {
     this.spinner.show();
@@ -177,7 +160,7 @@ export class DataSheetComponent implements OnInit {
     })).subscribe(r => {
       this.dataSheet = r;
       this.spinner.hide();
-      this.notificationService.showSuccess('Sucesso','Ingrediente removido com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Ingrediente removido com sucesso.');
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);

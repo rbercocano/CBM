@@ -44,10 +44,12 @@ namespace Charcutarie.Repository
                     ModuleId = parent.SystemModuleId,
                     Name = parent.Name,
                     Route = parent.Route,
+                    IsMenu = parent.IsMenu,
                     ChildModules = childModules.Where(c => c.ParentId == parent.SystemModuleId && c.Active).Select(c => new ChildModule
                     {
                         ModuleId = c.SystemModuleId,
                         Name = c.Name,
+                        IsMenu = c.IsMenu,
                         Route = c.Route
                     }).ToList()
                 });
