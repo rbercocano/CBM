@@ -4,12 +4,15 @@ import { AdminComponent } from './layout/admin/admin.component';
 import { AuthComponent } from './layout/auth/auth.component';
 import { CustomerComponent } from './layout/customer/customer.component';
 import { AuthGuard } from './shared/guards/AuthGuard';
+import { ChildAuthGuard } from './shared/guards/ChildAuthGuard';
+
 
 
 const routes: Routes = [{
   canActivate: [AuthGuard],
   path: '',
-  component: CustomerComponent,  
+  component: CustomerComponent,
+  canActivateChild: [ChildAuthGuard],
   children: [
     {
       path: '',

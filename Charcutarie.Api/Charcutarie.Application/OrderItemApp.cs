@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Application.Contracts;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Repository.Contracts;
 using System.Collections.Generic;
@@ -38,6 +39,11 @@ namespace Charcutarie.Application
         public async Task<int> GetLastItemNumber(int orderNumber, int corpClientId)
         {
             return await repository.GetLastItemNumber(orderNumber, corpClientId);
+        }
+
+        public async Task UpdateAllOrderItemStatus(int orderNumber, OrderItemStatusEnum status, int corpClientId)
+        {
+            await repository.UpdateAllOrderItemStatus(orderNumber, status, corpClientId);
         }
     }
 }

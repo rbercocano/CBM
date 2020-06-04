@@ -72,6 +72,8 @@ export class OrderItemComponent implements OnInit {
   search() {
     this.spinner.show();
     this.items = [];
+    if (this.modal)
+      this.modal.close();
     this.orderService
       .getOrderItemReport(
         this.lastFilter,
@@ -82,8 +84,6 @@ export class OrderItemComponent implements OnInit {
         this.items = info.data;
         this.paginationInfo = info;
         this.paginationService.updatePaging(info);
-        if (this.modal)
-          this.modal.close();
       }, (e) => {
         this.spinner.hide();
         this.notificationService.notifyHttpError(e);

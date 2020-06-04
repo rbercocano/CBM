@@ -165,7 +165,7 @@ export class EditOrderComponent implements OnInit {
 
   open(content, orderItem: OrderItemDetails) {
     this.canEditItem = orderItem == null ? true :
-      this.allowUpdateStatus && orderItem.orderItemStatus.orderItemStatusId != 2;
+      this.allowUpdateStatus && orderItem.orderItemStatus.orderItemStatusId != 5;
     if (orderItem == null)
       this.resetModal();
     else {

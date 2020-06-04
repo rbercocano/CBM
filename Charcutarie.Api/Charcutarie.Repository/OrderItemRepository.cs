@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Charcutarie.Models.Enums;
+using Microsoft.Data.SqlClient;
 
 namespace Charcutarie.Repository
 {
@@ -50,7 +52,7 @@ namespace Charcutarie.Repository
             var data = await context.OrderItems
                   .Where(i => i.OrderItemId == model.OrderItemId && i.Order.Customer.CorpClientId == corpClientId)
                   .FirstOrDefaultAsync();
-            if(model.OrderItemStatusId != data.OrderItemStatusId)
+            if (model.OrderItemStatusId != data.OrderItemStatusId)
                 data.LastStatusDate = DateTime.Now;
             data.MeasureUnitId = model.MeasureUnitId;
             data.Quantity = model.Quantity;
@@ -61,6 +63,23 @@ namespace Charcutarie.Repository
             data.PriceAfterDiscount = model.PriceAfterDiscount;
             context.OrderItems.Update(data);
             await context.SaveChangesAsync();
+        }
+        public async Task UpdateAllOrderItemStatus(int orderNumber, OrderItemStatusEnum status, int corpClientId)
+        {
+            var order = await context.OrderItems
+                     .Where(i => i.Order.OrderNumber == orderNumber && i.Order.Customer.CorpClientId == corpClientId).FirstOrDefaultAsync();
+            if (order ==null) return;
+            var query = @"UPDATE OrderItem 
+                        SET OrderItemStatusId = @status,
+                        LastUpdated = GETDATE(),
+                        LastStatusDate = CASE WHEN OrderItemStatusId = @status THEN LastStatusDate ELSE GETDATE() END
+                        WHERE OrderId = @order";
+            var sqlParams = new[]
+            {
+                new SqlParameter("@status", (int)status),
+                new SqlParameter("@order", order.OrderId)
+            };
+            context.Database.ExecuteSqlCommand(query, sqlParams);
         }
         public async Task<int> GetLastItemNumber(int orderNumber, int corpClientId)
         {

@@ -81,6 +81,8 @@ export class OrderSearchComponent implements OnInit {
   search() {
     this.spinner.show();
     this.orders = [];
+    if (this.modal)
+      this.modal.close();
     this.orderService
       .getOrderSummary(
         this.lastFilter,
@@ -91,8 +93,6 @@ export class OrderSearchComponent implements OnInit {
         this.orders = info.data;
         this.paginationInfo = info;
         this.paginationService.updatePaging(info);
-        if (this.modal)
-          this.modal.close();
       }, (e) => {
         this.spinner.hide();
         this.notificationService.notifyHttpError(e);

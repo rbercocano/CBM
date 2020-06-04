@@ -17,9 +17,11 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.companyName = this.authService.userData.companyName;
-    this.userService.GetUserModules(this.authService.userData.userId).subscribe(m => {
-      this.modules = m;
-    });
+    this.modules = this.userService.userModules;
+    if (this.modules == null || this.modules.length == 0)
+      this.userService.GetUserModules(this.authService.userData.userId).subscribe(m => {
+        this.modules = m;
+      });
   }
 
 }

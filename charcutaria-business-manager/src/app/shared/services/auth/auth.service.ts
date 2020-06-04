@@ -19,13 +19,13 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
   public get tokenInfo(): TokenInfo {
-    // return this.currentUserSubject.value;
-    return this.getUserSession();
+    return this.currentUserSubject.value;
+    // return this.getUserSession();
   }
   public get userData(): JWTUserInfo {
-    // return this.currentUserSubject.value.userData;
-    let token: TokenInfo = this.getUserSession();
-    return token.userData;
+    return this.currentUserSubject.value.userData;
+    // let token: TokenInfo = this.getUserSession();
+    // return token.userData;
   }
   public get isAuthenticated(): boolean {
     let token: TokenInfo = this.getUserSession();
@@ -40,7 +40,7 @@ export class AuthService {
     let userData = this.currentUserSubject.value.userData;
     return this.http.post<TokenInfo>(url, data).pipe(map(jwt => {
       jwt.userData = userData
-      sessionStorage.setItem('currentUser', JSON.stringify(jwt));
+      this.setUserSession(jwt);
       this.currentUserSubject.next(jwt);
       return jwt;
     }));

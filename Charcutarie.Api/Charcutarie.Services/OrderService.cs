@@ -85,11 +85,11 @@ namespace Charcutarie.Services
             if (!orderItems.Any()) return nextStatus;
             if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.AguardandoProducao))
                 nextStatus = OrderStatusEnum.Criado;
-            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Pronto))
+            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Entregue))
                 nextStatus = OrderStatusEnum.Finalizado;
             else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
                 nextStatus = OrderStatusEnum.Finalizado;
-            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento || i.OrderItemStatusId == OrderItemStatusEnum.Pronto))
+            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento || i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega))
                 nextStatus = OrderStatusEnum.EmAndamento;
             return nextStatus;
         }
@@ -159,6 +159,16 @@ namespace Charcutarie.Services
         public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, OrderStatusEnum? orderStatus, OrderItemStatusEnum? itemStatus, DateTime? completeByFrom, DateTime? completeByTo, string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
         {
             return orderApp.GetOrderItemReport(corpClientId, orderNumber, orderStatus, itemStatus, completeByFrom, completeByTo, customer, orderBy, direction, page, pageSize);
+        }
+        public async Task CloseOrder(int orderNumber, int corpClientId)
+        {
+            await orderItemApp.UpdateAllOrderItemStatus(orderNumber, OrderItemStatusEnum.Entregue, corpClientId);
+            var nextStatus = await GetNextOrderStatus(orderNumber, corpClientId);
+            await orderApp.ChangeStatus(new UpdateOrderStatus
+            {
+                OrderNumber = orderNumber,
+                OrderStatusId = nextStatus
+            }, corpClientId);
         }
     }
 }

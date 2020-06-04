@@ -44,6 +44,7 @@ export class CustomerContactComponent implements OnInit {
   }
   saveContact() {
     if (!this.contact.contact) return;
+    this.modal.close();
     this.spinner.show();
     this.contact.customerId = this.customer.customerId;
     this.contact.contactTypeId = this.selectedContactType.contactTypeId;
@@ -57,7 +58,6 @@ export class CustomerContactComponent implements OnInit {
       }, (e) => {
         this.notificationService.notifyHttpError(e);
       }, () => {
-        this.modal.close();
         this.spinner.hide();
       });
     }
@@ -67,7 +67,6 @@ export class CustomerContactComponent implements OnInit {
       }, (e) => {
         this.notificationService.notifyHttpError(e);
       }, () => {
-        this.modal.close();
         this.spinner.hide();
       });
     }

@@ -16,7 +16,6 @@ import { flatMap } from 'rxjs/operators';
 import { NewDataSheetItem } from 'src/app/shared/models/newDataSheetItem';
 import { UpdateDataSheetItem } from 'src/app/shared/models/updateDataSheetItem';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 
 @Component({
   selector: 'app-data-sheet',

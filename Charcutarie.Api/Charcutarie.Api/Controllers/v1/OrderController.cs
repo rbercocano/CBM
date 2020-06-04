@@ -104,5 +104,11 @@ namespace Charcutarie.Api.Controllers.v1
                 return Ok(data);
             return NoContent();
         }
+        [HttpPost("Close/{orderNumber:int}")]
+        public async Task<ActionResult> CloseOrder(int orderNumber)
+        {
+            await service.CloseOrder(orderNumber, UserData.CorpClientId.Value);
+            return Ok();
+        }
     }
 }
