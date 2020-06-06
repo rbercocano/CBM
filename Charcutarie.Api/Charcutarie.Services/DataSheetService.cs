@@ -75,6 +75,7 @@ namespace Charcutarie.Services
             var units = await measureUnitApp.GetAll();
             var sourceUnit = units.FirstOrDefault(u => u.MeasureUnitId == measureId);
             var p = await productApp.Get(corpClientId, productId);
+            var pType = units.FirstOrDefault(u => u.MeasureUnitId == p.MeasureUnitId).MeasureUnitTypeId;
             var price = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
             {
                 ProductMeasureUnit = p.MeasureUnitId,
@@ -82,8 +83,8 @@ namespace Charcutarie.Services
                 Quantity = quantity,
                 QuantityMeasureUnit = measureId,
                 ResultPrecision = 2
-            });
-            if(dataSheet == null)
+            }, pType, sourceUnit.MeasureUnitTypeId);
+            if (dataSheet == null)
                 return new ProductionSummary
                 {
                     SalePrice = price,

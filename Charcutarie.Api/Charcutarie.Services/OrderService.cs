@@ -17,22 +17,27 @@ namespace Charcutarie.Services
         private readonly IPricingApp pricingApp;
         private readonly IProductApp productApp;
         private readonly IOrderItemApp orderItemApp;
+        private readonly IMeasureUnitApp measureUnitApp;
 
-        public OrderService(IOrderApp orderApp, IPricingApp pricingApp, IProductApp productApp, IOrderItemApp orderItemApp)
+        public OrderService(IOrderApp orderApp, IPricingApp pricingApp, IProductApp productApp, IOrderItemApp orderItemApp, IMeasureUnitApp measureUnitApp)
         {
             this.orderApp = orderApp;
             this.pricingApp = pricingApp;
             this.productApp = productApp;
             this.orderItemApp = orderItemApp;
+            this.measureUnitApp = measureUnitApp;
         }
         public async Task<int> Add(NewOrder model, int corpClientId)
         {
             var ids = model.OrderItems.Select(i => i.ProductId).ToList();
             var prods = await productApp.GetRange(corpClientId, ids);
             int i = 1;
+            var units = await measureUnitApp.GetAll();
             foreach (var item in model.OrderItems)
             {
                 var prod = prods.FirstOrDefault(p => p.ProductId == item.ProductId);
+                var pType = units.FirstOrDefault(u => u.MeasureUnitId == prod.MeasureUnitId).MeasureUnitTypeId;
+                var qType = units.FirstOrDefault(u => u.MeasureUnitId == item.MeasureUnitId).MeasureUnitTypeId;
                 item.ProductPrice = prod.Price;
                 item.ItemNumber = i;
                 item.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
@@ -41,7 +46,7 @@ namespace Charcutarie.Services
                     ProductPrice = prod.Price,
                     Quantity = item.Quantity,
                     QuantityMeasureUnit = item.MeasureUnitId
-                });
+                }, pType, qType);
                 i++;
             }
             return await orderApp.Add(model, corpClientId);
@@ -85,11 +90,11 @@ namespace Charcutarie.Services
             if (!orderItems.Any()) return nextStatus;
             if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.AguardandoProducao))
                 nextStatus = OrderStatusEnum.Criado;
-            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Entregue))
+            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Entregue || i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
                 nextStatus = OrderStatusEnum.Finalizado;
-            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
-                nextStatus = OrderStatusEnum.Finalizado;
-            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento || i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega))
+            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento 
+            || i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega
+            || i.OrderItemStatusId == OrderItemStatusEnum.Entregue))
                 nextStatus = OrderStatusEnum.EmAndamento;
             return nextStatus;
         }
@@ -112,13 +117,16 @@ namespace Charcutarie.Services
             var prodPrice = order.OrderItems.FirstOrDefault(i => i.OrderItemId == model.OrderItemId).ProductPrice;
             var prod = await productApp.Get(corpClientId, model.ProductId);
             model.ProductPrice = prodPrice;
+            var units = await measureUnitApp.GetAll();
+            var pType = units.FirstOrDefault(u => u.MeasureUnitId == prod.MeasureUnitId).MeasureUnitTypeId;
+            var qType = units.FirstOrDefault(u => u.MeasureUnitId == model.MeasureUnitId).MeasureUnitTypeId;
             model.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
             {
                 ProductMeasureUnit = prod.MeasureUnitId,
                 ProductPrice = prodPrice,
                 Quantity = model.Quantity,
                 QuantityMeasureUnit = model.MeasureUnitId
-            });
+            }, pType, qType);
             await orderItemApp.Update(model, corpClientId);
             var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
             await orderApp.ChangeStatus(new UpdateOrderStatus
@@ -134,13 +142,16 @@ namespace Charcutarie.Services
             var prod = await productApp.Get(corpClientId, model.ProductId);
             model.ProductPrice = prod.Price;
             model.ItemNumber = await orderItemApp.GetLastItemNumber(order.OrderNumber, corpClientId) + 1;
+            var units = await measureUnitApp.GetAll();
+            var pType = units.FirstOrDefault(u => u.MeasureUnitId == prod.MeasureUnitId).MeasureUnitTypeId;
+            var qType = units.FirstOrDefault(u => u.MeasureUnitId == model.MeasureUnitId).MeasureUnitTypeId;
             model.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
             {
                 ProductMeasureUnit = prod.MeasureUnitId,
                 ProductPrice = prod.Price,
                 Quantity = model.Quantity,
                 QuantityMeasureUnit = model.MeasureUnitId
-            });
+            }, pType, qType);
             var result = await orderItemApp.AddOrderItem(model, corpClientId);
             var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
             await orderApp.ChangeStatus(new UpdateOrderStatus

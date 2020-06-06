@@ -23,7 +23,7 @@ namespace Charcutarie.Api.Controllers.v1
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public async Task<ActionResult<PagedResult<User>>> GetPaged(int page, int pageSize, [FromQuery]string filter = null, [FromQuery]bool? active = null)
+        public async Task<ActionResult<PagedResult<User>>> GetPaged(int page, int pageSize, [FromQuery] string filter = null, [FromQuery] bool? active = null)
         {
             var data = await service.GetPaged(page, pageSize, filter, active);
             if (data.Data.Any())
@@ -46,21 +46,28 @@ namespace Charcutarie.Api.Controllers.v1
                 return Ok(data);
             return new StatusCodeResult(304);
         }
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<User>> Get(int id)
+        [HttpGet("{id:long}")]
+        public async Task<ActionResult<User>> Get(long id)
         {
-            var data = await service.Get(id);
+            var data = await service.Get(id, UserData.CorpClientId.Value);
             if (data != null)
                 return Ok(data);
             return NoContent();
         }
         [HttpGet("Menus/{userId:int}")]
-        public async Task<ActionResult<IEnumerable<ParentModule>>> GetUserModules(int userId)
+        public async Task<ActionResult<IEnumerable<ParentModule>>> GetUserModules(long userId)
         {
             var data = await service.GetUserModules(userId);
             if (data != null)
                 return Ok(data);
             return NoContent();
+        }
+        [HttpPost("Password/Reset")]
+        [AllowAnonymous]
+        public async Task<ActionResult<long>> ResetPassword(PasswordReset data)
+        {
+            var email = await service.ResetPassword(data.UserName, data.CorpClientId);
+            return Ok(email);
         }
     }
 }

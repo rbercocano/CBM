@@ -30,6 +30,7 @@ import { OrderStatusLabelComponent } from './order-status-label/order-status-lab
 import { PaymentStatusLabelComponent } from './payment-status-label/payment-status-label.component';
 import { OrderItemStatusLabelComponent } from './order-item-status-label/order-item-status-label.component';
 import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 
 
@@ -47,7 +48,8 @@ import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
     OrderStatusLabelComponent,
     PaymentStatusLabelComponent,
     OrderItemStatusLabelComponent,
-    SafeHtmlPipe],
+    SafeHtmlPipe,
+    ConfirmModalComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -70,7 +72,8 @@ import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
     CustomerContactComponent,
     OrderStatusLabelComponent,
     PaymentStatusLabelComponent,
-    OrderItemStatusLabelComponent
+    OrderItemStatusLabelComponent,
+    ConfirmModalComponent
   ],
   providers: [
     UserService,

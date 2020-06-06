@@ -73,7 +73,7 @@ namespace Charcutarie.Repository
                         SET OrderItemStatusId = @status,
                         LastUpdated = GETDATE(),
                         LastStatusDate = CASE WHEN OrderItemStatusId = @status THEN LastStatusDate ELSE GETDATE() END
-                        WHERE OrderId = @order";
+                        WHERE OrderId = @order AND OrderItemStatusId != 3";
             var sqlParams = new[]
             {
                 new SqlParameter("@status", (int)status),

@@ -14,7 +14,6 @@ export class OrderStatusLabelComponent {
       case 2: return 'label-primary'; break;
       case 3: return 'label-success'; break;
       case 4: return 'label-danger'; break;
-      case 5: return 'label-warning'; break;
       default: return 'label-info'; break;
     }
   }

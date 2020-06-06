@@ -38,6 +38,9 @@ export class OrderService {
   public restore(orderNumber: number): Observable<number> {
     return this.httpClient.post<number>(`${environment.apiUrl}/Order/restore/${orderNumber}`, {});
   }
+  public close(orderNumber: number): Observable<number> {
+    return this.httpClient.post<number>(`${environment.apiUrl}/Order/Close/${orderNumber}`, {});
+  }
   public removeOrderItem(orderId: number, orderItemId: number): Observable<any> {
     return this.httpClient.delete(`${environment.apiUrl}/Order/${orderId}/Item/${orderItemId}`);
   }

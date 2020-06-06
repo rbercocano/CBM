@@ -9,12 +9,16 @@
             <i class="fa fa-save"></i>
         </button>
         <button class="btn btn-danger btn-mini" placement="top" ngbTooltip="Cancelar Pedido" type="button"
-            *ngIf="order != null && order.orderStatusId != 4" (click)="cancelOrder()">
+            *ngIf="order != null && order.orderStatusId != 4" (click)="confirmCancelOrder()">
             <i class="fa fa-times"></i>
         </button>
         <button class="btn btn-warning btn-mini" placement="top" ngbTooltip="Restaurar Pedido" type="button"
-            *ngIf="order != null &&  order.orderStatusId == 4" (click)="restoreOrder()">
+            *ngIf="order != null &&  order.orderStatusId == 4" (click)="confirmRestore()">
             <i class="fa fa-arrow-up"></i>
+        </button>
+        <button class="btn btn-success btn-mini" placement="top" ngbTooltip="Encerrar Pedido" type="button"
+            *ngIf="order != null &&  order.orderStatusId != 4 &&  order.orderStatusId != 3" (click)="confirmClose()">
+            <i class="fa fa-check"></i>
         </button>
     </app-toolbar>
     <div class="row" *ngIf="order!=null">
@@ -38,8 +42,7 @@
                                 {{order.customer.socialIdentifier}}
                             </p>
                             <p class="m-0 m-t-10" *ngFor="let c of order.customer.contacts">
-                                <img src="assets/images/contact/{{c.contactIcon}}"
-                                    style="width: 25px;" />
+                                <img src="assets/images/contact/{{c.contactIcon}}" style="width: 25px;" />
                                 {{c.contact}}
                             </p>
                         </div>
@@ -136,8 +139,8 @@
                                 <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
                                 <td>
                                     <button type="button" placement="top" ngbTooltip="Editar Item"
-                                        *ngIf="allowUpdateStatus"
-                                        (click)="open(content,oi)" class="btn btn-mini btn-primary " type="button">
+                                        *ngIf="allowUpdateStatus" (click)="open(content,oi)"
+                                        class="btn btn-mini btn-primary " type="button">
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                     <button type="button" placement="top" ngbTooltip="Remover Item" *ngIf="allowEdit"
@@ -196,24 +199,26 @@
             </div>
             <div class="col-6">
                 <label class="m-b-0">Status</label>
-                <select  class="form-control" [(ngModel)]="currentQuote.orderItemStatus" name="orderStatus">
+                <select class="form-control" [(ngModel)]="currentQuote.orderItemStatus" name="orderStatus">
                     <option [ngValue]="s" *ngFor="let s of orderItemStatus">{{s.description}}</option>
                 </select>
             </div>
             <div class="col-6">
                 <label class="m-b-0">Quantidade</label>
                 <div class="col-12 row p-r-0" [class.has-danger]="currentQuote.quantity == 0">
-                    <input class="form-control col-7 p-r-0" type="text" [(ngModel)]="currentQuote.quantity" currencyMask [readonly]="!canEditItem"
-                        (keyup)="onQtdKeyUp()" [options]="{ prefix: '', thousands: '.', decimal: ',' }">
+                    <input class="form-control col-7 p-r-0" type="text" [(ngModel)]="currentQuote.quantity" currencyMask
+                        [readonly]="!canEditItem" (keyup)="onQtdKeyUp()"
+                        [options]="{ prefix: '', thousands: '.', decimal: ',' }">
                     <div class="input-group col-5 p-1 p-t-0 p-b-0">
-                        <select class="form-control" [disabled]="!canEditItem" [(ngModel)]="currentQuote.measureUnit" name="measureUnit"
-                            (change)="calculatePrice()">
+                        <select class="form-control" [disabled]="!canEditItem" [(ngModel)]="currentQuote.measureUnit"
+                            name="measureUnit" (change)="calculatePrice()">
                             <option [ngValue]="m" *ngFor="let m of measures">{{m.shortName}}
                             </option>
                         </select>
                         <div class="input-group-append">
                             <button class="btn btn-primary btn-sm" (click)="calculatePrice()" type="button"
-                                placement="top" ngbTooltip="Calcular Preço" [class.btn-disabled]="!canEditItem" [disabled]="!canEditItem">
+                                placement="top" ngbTooltip="Calcular Preço" [class.btn-disabled]="!canEditItem"
+                                [disabled]="!canEditItem">
                                 <i class="fa fa-calculator"></i>
                             </button>
                         </div>
@@ -230,8 +235,8 @@
             </div>
             <div class="col-6" [class.has-danger]="currentQuote.discount > currentQuote.price">
                 <label class="m-b-0">Desconto</label>
-                <input class="form-control" type="text" [(ngModel)]="currentQuote.discount" currencyMask [readonly]="!canEditItem"
-                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7"
+                <input class="form-control" type="text" [(ngModel)]="currentQuote.discount" currencyMask
+                    [readonly]="!canEditItem" [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" maxlength="7"
                     (keyup)="applyDiscout($event)">
                 <div class="col-form-label" *ngIf="currentQuote.discount > currentQuote.price">
                     O desconto não pode ser maior que o valor total da venda
@@ -244,8 +249,8 @@
             </div>
             <div class="col-12">
                 <label class="m-b-0">Informações Adicionais</label>
-                <textarea class="form-control" type="text" [(ngModel)]="currentQuote.additionalInfo" rows="3" [readonly]="!canEditItem"
-                    maxlength="200"></textarea>
+                <textarea class="form-control" type="text" [(ngModel)]="currentQuote.additionalInfo" rows="3"
+                    [readonly]="!canEditItem" maxlength="200"></textarea>
             </div>
         </div>
     </div>
@@ -264,4 +269,15 @@
         </button>
     </div>
 </ng-template>
+
+<app-confirm-modal #close *ngIf="order != null" [data]="order.orderNumber" (confirm)="closeOrder($event)">
+    <h2>Deseja encerrar este pedido?</h2>
+    <p>Todos os itens do pedidos serão marcados como entrege.</p>
+</app-confirm-modal>
+<app-confirm-modal #restore *ngIf="order != null" [data]="order.orderNumber" (confirm)="restoreOrder($event)">
+    <h2>Deseja restaurar este pedido?</h2>
+</app-confirm-modal>
+<app-confirm-modal #cancelorder *ngIf="order != null" [data]="order.orderNumber" (confirm)="cancelOrder($event)">
+    <h2>Deseja cancelar este pedido?</h2>
+</app-confirm-modal>
 <app-toasts></app-toasts>

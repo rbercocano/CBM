@@ -42,7 +42,8 @@
                         Lucro: {{summary.profit|cbmCurrency}}
                     </div>
                 </div>
-                <div class="alert alert-info background-info text-center m-t-10" *ngIf="dataSheet.dataSheetItems.length == 0">
+                <div class="alert alert-info background-info text-center m-t-10"
+                    *ngIf="dataSheet.dataSheetItems.length == 0">
                     Nenhum ingrediente cadastrado
                 </div>
                 <table class="table order-items table-striped m-t-10" *ngIf="baseItems.length > 0">
@@ -63,7 +64,7 @@
                             <td>
                                 {{item.quantity | cbmNumber}}{{item.measureUnit?.shortName}}
                             </td>
-                            <td>{{item.cost | cbmCurrency}}</td>
+                            <td>{{item.cost | cbmCurrency:4}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -85,7 +86,7 @@
                             <td>
                                 {{item.quantity | cbmNumber}}{{item.measureUnit?.shortName}}
                             </td>
-                            <td>{{item.cost | cbmCurrency}}</td>
+                            <td>{{item.cost | cbmCurrency:4}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -97,6 +98,9 @@
             <div class="card-body">
                 <div *ngIf="dataSheet.procedureDescription != null"
                     [innerHtml]="dataSheet.procedureDescription | safeHtml"></div>
+                <div *ngIf="dataSheet.procedureDescription == null" class="text-center">
+                    <b>Procedimento não cadastrado</b>
+                </div>
             </div>
         </div>
     </div>

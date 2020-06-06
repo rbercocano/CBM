@@ -64,9 +64,19 @@ namespace Charcutarie.Repository
                 RecordsPerpage = pageSize
             };
         }
-        public async Task<User> Get(long id)
+        public async Task<User> Get(long id, int corpClientId)
         {
-            var entity = await context.Users.FirstOrDefaultAsync(p => p.UserId == id);
+            var entity = await context.Users.FirstOrDefaultAsync(p => p.UserId == id && p.CorpClientId == corpClientId);
+            var result = mapper.Map<User>(entity);
+            return result;
+        }
+        public async Task<User> GetByLogin(string username, int corpClientId)
+        {
+            var entity = await context.Users
+                .FirstOrDefaultAsync(p => p.Username == username
+                                                                  && p.CorpClientId == corpClientId
+                                                                  && p.Active
+                                                                  && p.CorpClient.Active);
             var result = mapper.Map<User>(entity);
             return result;
         }
@@ -78,7 +88,9 @@ namespace Charcutarie.Repository
                 .Include(c => c.Role)
                 .FirstOrDefaultAsync(p => p.Username == username
                                                                   && p.Password == password
-                                                                  && p.CorpClientId == corpClientId);
+                                                                  && p.CorpClientId == corpClientId
+                                                                  && p.Active
+                                                                  && p.CorpClient.Active);
             var result = mapper.Map<JWTUserInfo>(entity);
             return result;
         }
@@ -102,6 +114,13 @@ namespace Charcutarie.Repository
         {
             var existingToken = await context.UserTokens.FirstOrDefaultAsync(u => u.UserId == userId);
             return existingToken?.Token;
+        }
+        public async Task ChangePassword(long userId, string password, int corpClientId)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.UserId == userId && u.CorpClientId == corpClientId);
+            user.Password = password;
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
         }
     }
 }

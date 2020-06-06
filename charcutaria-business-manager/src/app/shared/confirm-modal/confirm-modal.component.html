@@ -1,0 +1,24 @@
+<ng-template #content let-modal>
+    <div class="modal-body ">
+        <div class="text-center">
+            <i class="fa fa-exclamation-circle" style="font-size: 100px;color:#f8bb86"></i>
+            <div class="confirm">
+                <ng-content>
+
+                </ng-content>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button type="button" class="btn btn-primary float-right" (click)="confirm()">
+                    Confirmar
+                </button>
+            </div>
+            <div class="col-6">
+                <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cancelado')">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

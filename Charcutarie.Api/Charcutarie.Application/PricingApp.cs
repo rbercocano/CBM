@@ -10,22 +10,22 @@ namespace Charcutarie.Application
 {
     public class PricingApp : IPricingApp
     {
-        public double CalculatePricePerTotalWeight(PriceRequest model)
+        public double CalculatePricePerTotalWeight(PriceRequest model, MeasureUnitTypeEnum pType, MeasureUnitTypeEnum qType)
         {
 
-            var weightInGrams = UnitConverter.ToBaseUnit(model.ProductMeasureUnit, 1, MeasureUnitTypeEnum.Mass);
-            var pricePerGram = model.ProductPrice / weightInGrams;
-            var orderedWeight = UnitConverter.ToBaseUnit(model.QuantityMeasureUnit, model.Quantity, MeasureUnitTypeEnum.Mass);
-            var totalPrice = orderedWeight * pricePerGram;
+            var weightInGrams = UnitConverter.ToBaseUnit(model.ProductMeasureUnit, 1, pType);
+            var pricePerUnit = model.ProductPrice / weightInGrams;
+            var orderedWeight = UnitConverter.ToBaseUnit(model.QuantityMeasureUnit, model.Quantity, qType);
+            var totalPrice = orderedWeight * pricePerUnit;
             return Math.Round(totalPrice, model.ResultPrecision);
         }
-        public double CalculatePricePerUnit(PriceRequest model)
+        public double CalculatePricePerUnit(PriceRequest model, MeasureUnitTypeEnum pType, MeasureUnitTypeEnum qType)
         {
 
-            var weightInGrams = UnitConverter.ToBaseUnit(model.ProductMeasureUnit, model.Quantity, MeasureUnitTypeEnum.Mass);
-            var pricePerGram = model.ProductPrice / weightInGrams;
-            var orderedWeight = UnitConverter.ToBaseUnit(model.QuantityMeasureUnit, 1, MeasureUnitTypeEnum.Mass);
-            var totalPrice = orderedWeight * pricePerGram;
+            var weightInGrams = UnitConverter.ToBaseUnit(model.ProductMeasureUnit, model.Quantity, pType);
+            var pricePerUnit = model.ProductPrice / weightInGrams;
+            var orderedWeight = UnitConverter.ToBaseUnit(model.QuantityMeasureUnit, 1, qType);
+            var totalPrice = orderedWeight * pricePerUnit;
             return Math.Round(totalPrice, model.ResultPrecision);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Charcutarie.Application;
 using Charcutarie.Application.Contracts;
+using Charcutarie.Core.SMTP;
 using Charcutarie.Repository;
 using Charcutarie.Repository.Contracts;
 using Charcutarie.Services;
@@ -15,6 +16,11 @@ namespace Charcutarie.Api.Infra
             AddServices(services);
             AddApps(services);
             AddReps(services);
+            AddOthers(services);
+        }
+        private static void AddOthers(IServiceCollection services)
+        {
+            services.AddSingleton<IEmailManager, EmailManager>();
         }
         private static void AddServices(IServiceCollection services)
         {
@@ -29,6 +35,7 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IRawMaterialService, RawMaterialService>();
             services.AddTransient<IDataSheetService, DataSheetService>();
+            services.AddSingleton<IEmailManager, EmailManager>();
         }
         private static void AddApps(IServiceCollection services)
         {

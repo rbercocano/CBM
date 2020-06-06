@@ -162,4 +162,9 @@ export class RawMaterialListComponent implements OnInit {
   public get quotedMeasureUnit(): string {
     return this.measures.filter(m => m.measureUnitId == this.quote.quantityMeasureUnit)[0].description;
   }
+  get measuresPerType(): MeasureUnit[] {
+    let selected = this.measures.filter(m => m.measureUnitId == this.quote.productMeasureUnit)[0];
+    let filteredMeasures = this.measures.filter(m => m.measureUnitTypeId == selected.measureUnitTypeId);
+    return filteredMeasures;
+  }
 }

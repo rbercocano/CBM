@@ -4,7 +4,20 @@
       <img class="img-fluid" src="assets/images/pig_small.png">
       <span class="title">CBM | {{companyName}}</span>
     </a>
-    <a class="mobile-options" href="javascript:"><i class="ti-more"></i></a></div>
+    <a class="mobile-options" href="javascript:"><i class="ti-more"></i></a>
+  </div>
+  <div class="navbar-collapse" style="float: right;padding-right:10px;margin-top:5px;" id="navbarContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item" ngbDropdown display="dynamic" placement="bottom-right">
+        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
+          <i class="fa fa-user fa-2x"></i>
+        </a>
+        <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+          <a ngbDropdownItem href="javascript:" (click)="logout()">Sair</a>
+        </div>
+      </li>
+    </ul>
+  </div>
 </nav>
 <nav class="navbar navbar-expand-md cbm-menu">
   <div class="collapse navbar-collapse" id="cbm-navbar">
@@ -17,7 +30,7 @@
           <a *ngIf="m.isMenu" class="nav-link dropdown-toggle" [id]="m.moduleId" ngbDropdownToggle>{{m.name}}</a>
           <div *ngIf="m.isMenu" class="dropdown-menu" [attr.aria-label]="m.moduleId" ngbDropdownMenu>
             <ng-container *ngFor="let c of m.childModules">
-              <a *ngIf="c.isMenu" class="dropdown-item" [routerLink]="[c.route]" >{{c.name}}</a>
+              <a *ngIf="c.isMenu" class="dropdown-item" [routerLink]="[c.route]">{{c.name}}</a>
 
             </ng-container>
           </div>

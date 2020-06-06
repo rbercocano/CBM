@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { OrderDetails } from 'src/app/shared/models/orderDetails';
 import { OrderService } from 'src/app/shared/services/order/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +20,8 @@ import { PricingService } from 'src/app/shared/services/pricing/pricing.service'
 import { OrderItemDetails } from 'src/app/shared/models/orderItemDetails';
 import { OrderItem } from 'src/app/shared/models/orderItem';
 import { NewOrderItem } from 'src/app/shared/models/NewOrderItem';
+import { IConfirmModal } from 'src/app/shared/confirm-modal/confirmModal';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-edit-order',
@@ -28,6 +30,9 @@ import { NewOrderItem } from 'src/app/shared/models/NewOrderItem';
 })
 export class EditOrderComponent implements OnInit {
   public title = 'Detalhes do Pedido';
+  @ViewChild("close", { static: false }) cClose: ConfirmModalComponent;
+  @ViewChild("restore", { static: false }) cRestore: ConfirmModalComponent;
+  @ViewChild("cancelorder", { static: false }) cCancelOrder: ConfirmModalComponent;
   public order: OrderDetails;
   public minDate: NgbDateStruct;
   public paymentStatus: PaymentStatus[] = [];
@@ -136,10 +141,11 @@ export class EditOrderComponent implements OnInit {
   public calculateOrderValue() {
     this.order.orderTotal = this.order.itemsTotalAfterDiscounts + this.order.freightPrice;
   }
-  cancelOrder() {
+  cancelOrder(orderNumber: any) {
+    this.cCancelOrder.close();
     this.spinner.show();
-    this.orderService.cancel(this.order.orderNumber).pipe(flatMap(r => {
-      return this.orderService.getByNumber(this.order.orderNumber)
+    this.orderService.cancel(orderNumber).pipe(flatMap(r => {
+      return this.orderService.getByNumber(orderNumber)
     })).subscribe(r => {
       this.setOrder(r);
       this.spinner.hide();
@@ -149,10 +155,34 @@ export class EditOrderComponent implements OnInit {
       this.notificationService.notifyHttpError(e);
     });
   }
-  restoreOrder() {
+  public confirmClose() {
+    this.cClose.open();
+  }
+  public confirmRestore() {
+    this.cRestore.open();
+  }
+  public confirmCancelOrder() {
+    this.cCancelOrder.open();
+  }
+  public closeOrder(orderNumber: any) {
+    this.cClose.close();
     this.spinner.show();
-    this.orderService.restore(this.order.orderNumber).pipe(flatMap(r => {
-      return this.orderService.getByNumber(this.order.orderNumber)
+    this.orderService.close(orderNumber).pipe(flatMap(r => {
+      return this.orderService.getByNumber(orderNumber)
+    })).subscribe(r => {
+      this.setOrder(r);
+      this.spinner.hide();
+      this.notificationService.showSuccess('Sucesso', 'Ordem restaurada com sucesso.');
+    }, e => {
+      this.spinner.hide();
+      this.notificationService.notifyHttpError(e);
+    });
+  }
+  restoreOrder(orderNumber: any) {
+    this.cRestore.close();
+    this.spinner.show();
+    this.orderService.restore(orderNumber).pipe(flatMap(r => {
+      return this.orderService.getByNumber(orderNumber)
     })).subscribe(r => {
       this.setOrder(r);
       this.spinner.hide();

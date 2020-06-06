@@ -15,5 +15,6 @@ namespace Charcutarie.Models.Entities
         public DateTime CreatedOn { get; set; }
         public DateTime? LastUpdated { get; set; }
         public CorpClient CorpClient { get; set; }
+        public string Email { get; set; }
     }
 }

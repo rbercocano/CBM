@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Application.Contracts;
+using Charcutarie.Core.Security;
 using Charcutarie.Models;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Repository.Contracts;
@@ -22,9 +23,13 @@ namespace Charcutarie.Application
             return await userRepository.DoLogin(corpClientId, username, password);
         }
 
-        public async Task<User> Get(int id)
+        public async Task<User> Get(long id, int corpClientId)
         {
-            return await userRepository.Get(id);
+            return await userRepository.Get(id, corpClientId);
+        }
+        public async Task<User> GetByLogin(string username, int corpClientId)
+        {
+            return await userRepository.GetByLogin(username, corpClientId);
         }
 
         public async Task<PagedResult<User>> GetPaged(int page, int pageSize, string filter, bool? active = null)
@@ -48,6 +53,12 @@ namespace Charcutarie.Application
         public async Task<string> GetRefreshToken(long userId)
         {
             return await userRepository.GetRefreshToken(userId);
+        }
+        public async Task<string> ResetPassword(long userId, int corpClientId)
+        {
+            var newPassword = Password.GenerateRandomPassword();
+            await userRepository.ChangePassword(userId, newPassword, corpClientId);
+            return newPassword;
         }
     }
 }

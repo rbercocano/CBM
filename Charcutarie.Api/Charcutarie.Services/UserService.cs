@@ -1,4 +1,6 @@
 ﻿using Charcutarie.Application.Contracts;
+using Charcutarie.Core.ExceptionHandling;
+using Charcutarie.Core.SMTP;
 using Charcutarie.Models;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Services.Contracts;
@@ -12,11 +14,13 @@ namespace Charcutarie.Services
     {
         private readonly IUserApp userApp;
         private readonly ISystemModuleApp systemModuleApp;
+        private readonly IEmailManager emailManager;
 
-        public UserService(IUserApp userApp, ISystemModuleApp systemModuleApp)
+        public UserService(IUserApp userApp, ISystemModuleApp systemModuleApp, IEmailManager emailManager)
         {
             this.userApp = userApp;
             this.systemModuleApp = systemModuleApp;
+            this.emailManager = emailManager;
         }
         public async Task<PagedResult<User>> GetPaged(int page, int pageSize, string filter, bool? active = null)
         {
@@ -31,14 +35,25 @@ namespace Charcutarie.Services
         {
             return await userApp.Update(model, corpClientId);
         }
-        public async Task<User> Get(int id)
+        public async Task<User> Get(long id, int corpClientId)
         {
-            return await userApp.Get(id);
+            return await userApp.Get(id, corpClientId);
         }
         public async Task<IEnumerable<ParentModule>> GetUserModules(long userId)
         {
             return await systemModuleApp.GetUserModules(userId);
         }
 
+        public async Task<string> ResetPassword(string userName, int corpClientId)
+        {
+            var user = await userApp.GetByLogin(userName, corpClientId);
+            if (user == null)
+                throw new BusinessException("Usuário não encontrado");
+            var newPassword = await userApp.ResetPassword(user.UserId, corpClientId);
+            var body = $"<p>Sua senha foi redefinida conforme solicitado.</p><p>Nova Senha: <b>{newPassword}</b></p>";
+            var subject = "Nova Senha";
+            emailManager.SendEmail(new List<string>() { user.Email }, body, subject, true);
+            return user.Email;
+        }
     }
 }

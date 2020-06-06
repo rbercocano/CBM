@@ -12,9 +12,16 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     constructor(private authService: AuthService) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (req.url == `${environment.apiUrl}/Authentication/Login` ||
-            req.url == `${environment.apiUrl}/Authentication/Token/Refresh`||
-            req.url == `${environment.apiUrl}/CorpClient/Actives`)
-            return next.handle(req);
+            req.url == `${environment.apiUrl}/Authentication/Token/Refresh` ||
+            req.url == `${environment.apiUrl}/CorpClient/Actives`) {
+            const dupReq = req.clone({
+                setHeaders: {
+                    'Cache-Control': 'no-cache',
+                    Pragma: 'no-cache'
+                }
+            });
+            return next.handle(dupReq);
+        }
         let now = new Date();
         let tokenObj: TokenInfo = this.authService.tokenInfo ?? { expiration: now, refreshToken: null, accessToken: null, authenticated: false, created: null, message: null, userData: null };
         let expired = tokenObj.expiration <= now;
@@ -26,7 +33,11 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     }
     private next(tokenInfo: TokenInfo, req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const dupReq = req.clone({
-            headers: req.headers.set('Authorization', `Bearer ${tokenInfo.accessToken}`)
+            setHeaders: {
+                'Cache-Control': 'no-cache',
+                Pragma: 'no-cache',
+                'Authorization': `Bearer ${tokenInfo.accessToken}`
+            }
         });
         return next.handle(dupReq).pipe(catchError((err, caught) => {
             var jsonToken: TokenInfo = this.authService.tokenInfo;

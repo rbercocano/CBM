@@ -10,10 +10,8 @@ using FluentValidation.AspNetCore;
 using Charcutarie.Api.Validators;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Charcutarie.Api.Infra.Middlewares;
+using Charcutarie.Core.SMTP;
 
 namespace Charcutarie.Api
 {
@@ -53,6 +51,8 @@ namespace Charcutarie.Api
             services.AddControllers();
             services.AddDIServices();
             services.AddSwagger();
+
+            services.AddOptions<SMTPSettings>().Bind(Configuration.GetSection("Smtp"));
 
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

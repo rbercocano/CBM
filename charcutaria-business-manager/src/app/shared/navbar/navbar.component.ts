@@ -10,6 +10,7 @@ import { ParentModule } from '../models/parentModule';
 })
 export class NavbarComponent implements OnInit {
 
+  collapsed = false;
   public companyName: string;
   public modules: ParentModule[] = [];
   constructor(private userService: UserService,
@@ -22,6 +23,9 @@ export class NavbarComponent implements OnInit {
       this.userService.GetUserModules(this.authService.userData.userId).subscribe(m => {
         this.modules = m;
       });
+  }
+  logout() {
+    this.authService.logout();
   }
 
 }

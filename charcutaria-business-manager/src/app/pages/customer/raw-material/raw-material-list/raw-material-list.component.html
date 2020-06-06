@@ -156,7 +156,7 @@
                         <input class="form-control col-8" readonly type="text" [(ngModel)]="pricePaid" currencyMask
                             [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',',precision :4 }" maxlength="7">
                         <select class="form-control col-4" [(ngModel)]="quote.quantityMeasureUnit">
-                            <option [ngValue]="u.measureUnitId" *ngFor="let u of measures">{{u.shortName}}
+                            <option [ngValue]="u.measureUnitId" *ngFor="let u of measuresPerType">{{u.shortName}}
                             </option>
                         </select>
                     </div>

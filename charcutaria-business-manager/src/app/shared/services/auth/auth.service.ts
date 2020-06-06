@@ -6,6 +6,7 @@ import { Login } from '../../models/login';
 import { map } from 'rxjs/operators';
 import { TokenInfo } from '../../models/tokenInfo';
 import { JWTUserInfo } from '../../models/jwtUserInfo';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthService {
 
   private currentUserSubject: BehaviorSubject<TokenInfo>;
   public currentUser: Observable<TokenInfo>;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private router: Router) {
     this.currentUserSubject = new BehaviorSubject<TokenInfo>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -61,8 +63,10 @@ export class AuthService {
       return jwt;
     }));
   }
-  logout(){
-    this.removeUserSession();
+  logout() {
+    sessionStorage.clear();
+    localStorage.clear();
+    this.router.navigate(['/auth/login']);
   }
   private setUserSession(jwt: TokenInfo) {
     localStorage.setItem('currentUser', JSON.stringify(jwt));
