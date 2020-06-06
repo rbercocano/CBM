@@ -99,7 +99,9 @@
                                     </p>
                                 </td>
                                 <td>
-                                    {{i.orderStatus}}
+                                    <app-order-status-label
+                                        [status]="{orderStatusId:i.orderStatusId, description: i.orderStatus}">
+                                    </app-order-status-label>
                                 </td>
                                 <td>
                                     {{i.product}}

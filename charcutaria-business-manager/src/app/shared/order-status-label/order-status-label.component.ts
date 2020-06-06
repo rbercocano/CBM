@@ -11,9 +11,10 @@ export class OrderStatusLabelComponent {
   public get labelClass() {
     switch (this.status.orderStatusId) {
       case 1: return 'label-info'; break;
-      case 2: return 'label-primary'; break;
+      case 2: return 'label-warning'; break;
       case 3: return 'label-success'; break;
       case 4: return 'label-danger'; break;
+      case 5: return 'label-primary'; break;
       default: return 'label-info'; break;
     }
   }
