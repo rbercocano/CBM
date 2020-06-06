@@ -82,7 +82,7 @@ export class NewOrderComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       switchMap((searchText) => {
-        if (searchText.length < 3) return of(new Array<MergedCustomer>());
+        if (searchText.length < 2) return of(new Array<MergedCustomer>());
         return this.customerService.FilterMerged(searchText);
       }),
       catchError((e, c) => {

@@ -92,7 +92,9 @@ namespace Charcutarie.Services
                 nextStatus = OrderStatusEnum.Criado;
             else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Entregue || i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
                 nextStatus = OrderStatusEnum.Finalizado;
-            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento 
+            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega || i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
+                nextStatus = OrderStatusEnum.AguardandoEntrega;
+            else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento
             || i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega
             || i.OrderItemStatusId == OrderItemStatusEnum.Entregue))
                 nextStatus = OrderStatusEnum.EmAndamento;

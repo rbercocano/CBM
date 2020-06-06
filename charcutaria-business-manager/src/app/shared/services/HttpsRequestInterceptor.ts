@@ -13,7 +13,8 @@ export class HttpsRequestInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (req.url == `${environment.apiUrl}/Authentication/Login` ||
             req.url == `${environment.apiUrl}/Authentication/Token/Refresh` ||
-            req.url == `${environment.apiUrl}/CorpClient/Actives`) {
+            req.url == `${environment.apiUrl}/CorpClient/Actives` ||
+            req.url == `${environment.apiUrl}/User/Password/Reset`) {
             const dupReq = req.clone({
                 setHeaders: {
                     'Cache-Control': 'no-cache',

@@ -12,7 +12,7 @@ namespace Charcutarie.Api.Validators
         {
             RuleFor(x => x.CustomerId).NotNull();
             RuleFor(x => x.CustomerId).GreaterThan(0);
-            RuleFor(x => x.CompleteBy).GreaterThan(DateTime.Now);
+            RuleFor(x => x.CompleteBy.Date).GreaterThanOrEqualTo(DateTime.Now.Date);
             RuleFor(x => x.OrderItems).NotEmpty();
 
         }
@@ -21,7 +21,7 @@ namespace Charcutarie.Api.Validators
     {
         public UpdateOrderValidator()
         {
-            RuleFor(x => x.CompleteBy).NotNull();
+            RuleFor(x => x.CompleteBy.Date).GreaterThanOrEqualTo(DateTime.Now.Date);
             RuleFor(x => x.PaymentStatusId).IsInEnum();
 
         }

@@ -41,4 +41,8 @@ export class UserService {
     let modules: ParentModule[] = JSON.parse(sessionStorage.getItem('user-modules'));
     return modules;
   }
+
+  public resetPassword(data: { corpClientId: number, username: string }): Observable<any> {
+    return this.httpClient.post<any>(`${environment.apiUrl}/User/Password/Reset`, data);
+  }
 }

@@ -9,6 +9,7 @@ namespace Charcutarie.Models.Enums
         Criado = 1,
         EmAndamento = 2,
         Finalizado = 3,
-        Cancelado = 4
+        Cancelado = 4,
+        AguardandoEntrega = 5
     }
 }

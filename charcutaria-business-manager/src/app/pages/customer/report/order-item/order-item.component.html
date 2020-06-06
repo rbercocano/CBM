@@ -39,8 +39,8 @@
                                 </a>
                             </th>
                             <th>
-                                <a href="javascript:" (click)="sort(6)"># Item
-                                    <ng-container *ngIf="sortColumn == 6; then sorting;else nosorting">
+                                <a href="javascript:" (click)="sort(3)">Status do Pedido
+                                    <ng-container *ngIf="sortColumn == 3; then sorting;else nosorting">
                                     </ng-container>
                                 </a>
                             </th>
@@ -51,7 +51,7 @@
                                 </a>
                             </th>
                             <th>
-                                <a href="javascript:" (click)="sort(8)">Quantidade
+                                <a href="javascript:" (click)="sort(8)">Qtd.
                                     <ng-container *ngIf="sortColumn == 8; then sorting;else nosorting">
                                     </ng-container>
                                 </a>
@@ -99,7 +99,7 @@
                                     </p>
                                 </td>
                                 <td>
-                                    {{i.itemNumber}}
+                                    {{i.orderStatus}}
                                 </td>
                                 <td>
                                     {{i.product}}

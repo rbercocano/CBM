@@ -46,11 +46,11 @@ export class NotificationService {
   notifyHttpError(err: any) {
     if (err.status == 400) {
       if (err.error instanceof Array) {
-        let errors = <Array<Error>>err.error;
+        let errors = <Array<string>>err.error;
         for (let e of errors) {
-          let msg = `${e.ErrorCode}-${e.Description}`;
+          let msg = `${e}`;
           console.log(msg);
-          this.showError("Erro", err.message);
+          this.showError("Atenção", e, 2000);
         }
       }
     }
