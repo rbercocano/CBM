@@ -10,6 +10,7 @@ namespace Charcutarie.Models.ViewModels
         public int OrderNumber { get; set; }
         public int CustomerTypeId { get; set; }
         public string OrderStatus { get; set; }
+        public int OrderStatusId { get; set; }
         public string Customer { get; set; }
         public string SocialIdentifier { get; set; }
         public int ItemNumber { get; set; }

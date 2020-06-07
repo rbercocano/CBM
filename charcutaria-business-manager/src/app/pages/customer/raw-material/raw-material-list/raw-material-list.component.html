@@ -142,7 +142,7 @@
                 <div class="col-12 row">
                     <input class="form-control col-7" type="text" [(ngModel)]="quote.quantity" currencyMask
                         [options]="{ prefix: '', thousands: '.', decimal: ',',precision :2 }" maxlength="7">
-                    <select class="form-control col-5" [(ngModel)]="quote.productMeasureUnit">
+                    <select class="form-control col-5" [(ngModel)]="quote.productMeasureUnit" (change)="filterMeasures()"> 
                         <option [ngValue]="u.measureUnitId" *ngFor="let u of measures">{{u.shortName}}
                         </option>
                     </select>

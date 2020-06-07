@@ -18,6 +18,8 @@ namespace Charcutarie.Models.ViewModels
         public double OriginalPrice { get; set; }
         public double PriceAfterDiscount { get; set; }
         public double ProductPrice { get; set; }
+        public double? Cost { get; set; }
+        public double? Profit { get; set; }
         public int ItemNumber { get; set; }
         public int OrderItemId { get; set; }
         public Order Order { get; set; }

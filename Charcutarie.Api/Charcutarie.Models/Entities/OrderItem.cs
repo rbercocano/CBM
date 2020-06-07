@@ -24,6 +24,8 @@ namespace Charcutarie.Models.Entities
         public double Discount { get; set; }
         public double PriceAfterDiscount { get; set; }
         public double ProductPrice { get; set; }
+        public double? Cost { get; set; }
+        public double? Profit { get; set; }
         public Order Order { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
         public MeasureUnit MeasureUnit { get; set; }

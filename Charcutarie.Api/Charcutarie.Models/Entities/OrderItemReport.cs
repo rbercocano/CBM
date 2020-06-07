@@ -11,6 +11,7 @@ namespace Charcutarie.Models.Entities
         public int CustomerTypeId { get; set; }
         public int OrderNumber { get; set; }
         public string OrderStatus { get; set; }
+        public int OrderStatusId { get; set; }
         public string Customer { get; set; }
         public string SocialIdentifier { get; set; }
         public int ItemNumber { get; set; }

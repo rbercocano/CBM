@@ -61,6 +61,8 @@ namespace Charcutarie.Repository
             data.OrderItemStatusId = model.OrderItemStatusId;
             data.OriginalPrice = model.OriginalPrice;
             data.PriceAfterDiscount = model.PriceAfterDiscount;
+            data.Cost = model.Cost;
+            data.Profit = model.Profit;
             context.OrderItems.Update(data);
             await context.SaveChangesAsync();
         }

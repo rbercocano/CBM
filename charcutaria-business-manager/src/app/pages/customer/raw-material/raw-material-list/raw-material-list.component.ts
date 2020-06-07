@@ -52,6 +52,7 @@ export class RawMaterialListComponent implements OnInit {
 
     forkJoin(oRawMaterial, oMeasureUnit).subscribe(r => {
       this.measures = r[1] ?? [];
+      this.filterMeasures();
       this.currentRawMaterial.measureUnitId = this.measures[0].measureUnitId;
       let info: PagedResult<RawMaterial> = r[0] ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
       this.rawMaterials = info.data;
@@ -118,9 +119,11 @@ export class RawMaterialListComponent implements OnInit {
         this.paginationInfo.currentPage = 1;
         this.sortDirection = 1;
         this.filter = null;
-        this.form.resetForm();
-        this.currentRawMaterial = {} as RawMaterial;
-        this.currentRawMaterial.measureUnitId = this.measures[0].measureUnitId;
+        this.currentRawMaterial = {
+          measureUnitId: 1, name: null,
+          measureUnit: null, price: null, rawMaterialId: null
+        };
+        this.form.resetForm(this.currentRawMaterial);
         this.notificationService.showSuccess('Sucesso', 'Matéria Prima adicionada com sucesso');
         return this.rawMaterialService.GetPaged(this.paginationInfo.currentPage, this.paginationInfo.recordsPerpage, this.filter, this.sortDirection);
       })).subscribe(r => {
@@ -140,9 +143,11 @@ export class RawMaterialListComponent implements OnInit {
         this.paginationInfo.currentPage = 1;
         this.filter = null;
         this.sortDirection = 1;
-        this.form.resetForm();
-        this.currentRawMaterial = {} as RawMaterial;
-        this.currentRawMaterial.measureUnitId = this.measures[0].measureUnitId;
+        this.currentRawMaterial = {
+          measureUnitId: 1, name: null,
+          measureUnit: null, price: null, rawMaterialId: null
+        };
+        this.form.resetForm(this.currentRawMaterial);
         this.notificationService.showSuccess('Sucesso', 'Matéria Prima atualizada com sucesso');
         return this.rawMaterialService.GetPaged(this.paginationInfo.currentPage, this.paginationInfo.recordsPerpage, this.filter, this.sortDirection);
       })).subscribe(r => {
@@ -162,9 +167,16 @@ export class RawMaterialListComponent implements OnInit {
   public get quotedMeasureUnit(): string {
     return this.measures.filter(m => m.measureUnitId == this.quote.quantityMeasureUnit)[0].description;
   }
-  get measuresPerType(): MeasureUnit[] {
+  filterMeasures() {
     let selected = this.measures.filter(m => m.measureUnitId == this.quote.productMeasureUnit)[0];
     let filteredMeasures = this.measures.filter(m => m.measureUnitTypeId == selected.measureUnitTypeId);
-    return filteredMeasures;
+    if (this.measuresPerType.length == 0)
+      this.measuresPerType = filteredMeasures;
+    else if (
+      this.measuresPerType[0].measureUnitId != filteredMeasures[0].measureUnitTypeId) {
+      this.measuresPerType = filteredMeasures;
+      this.quote.quantityMeasureUnit = filteredMeasures[0].measureUnitId;
+    }
   }
+  public measuresPerType: MeasureUnit[] = [];
 }

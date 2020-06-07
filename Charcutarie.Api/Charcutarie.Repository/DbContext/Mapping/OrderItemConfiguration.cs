@@ -54,6 +54,11 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.ItemNumber)
                 .HasColumnType("INT")
                 .IsRequired();
+
+            builder.Property(p => p.Cost)
+                .HasColumnType("DECIMAL(18,2)");
+            builder.Property(p => p.Profit)
+                .HasColumnType("DECIMAL(18,2)");
         }
     }
 }

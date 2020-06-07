@@ -13,6 +13,8 @@ namespace Charcutarie.Models.ViewModels
         public OrderItemStatusEnum OrderItemStatusId { get; set; }
         public string AdditionalInfo { get; set; }
         public double Discount { get; set; }
+        public double? Cost { get; set; }
+        public double? Profit { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
         public long OrderId { get; set; }
 

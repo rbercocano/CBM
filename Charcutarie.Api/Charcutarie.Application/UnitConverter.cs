@@ -23,7 +23,7 @@ namespace Charcutarie.Application
                 return from switch
                 {
                     MeasureUnitEnum.Litro => UnitsNet.Volume.FromLiters(quantity).Milliliters,
-                    MeasureUnitEnum.Mililitro => UnitsNet.Volume.FromLiters(quantity).Milliliters,
+                    MeasureUnitEnum.Mililitro => UnitsNet.Volume.FromMilliliters(quantity).Milliliters,
                     _ => 0,
                 };
             return 0;
