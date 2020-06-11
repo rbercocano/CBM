@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Application.Contracts;
+using Charcutarie.Core.ExceptionHandling;
 using Charcutarie.Core.Security;
 using Charcutarie.Models;
 using Charcutarie.Models.ViewModels;
@@ -59,6 +60,14 @@ namespace Charcutarie.Application
             var newPassword = Password.GenerateRandomPassword();
             await userRepository.ChangePassword(userId, newPassword, corpClientId);
             return newPassword;
+        }
+
+        public async Task ChangePassword(ChangePassword model, int corpClientId)
+        {
+            if (model.NewPassword != model.NewPasswordConfirmation)
+                throw new BusinessException("As senhas informadas não coincidem");
+
+            await userRepository.ChangePassword(model.UserId, model.NewPassword, corpClientId);
         }
     }
 }

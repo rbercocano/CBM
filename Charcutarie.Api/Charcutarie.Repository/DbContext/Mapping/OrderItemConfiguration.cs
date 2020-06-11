@@ -59,6 +59,8 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("DECIMAL(18,2)");
             builder.Property(p => p.Profit)
                 .HasColumnType("DECIMAL(18,2)");
+            builder.Property(p => p.ProfitPercentage)
+                .HasColumnType("DECIMAL(18,2)");
         }
     }
 }

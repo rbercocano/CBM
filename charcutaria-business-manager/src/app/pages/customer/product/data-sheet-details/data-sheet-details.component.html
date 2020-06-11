@@ -32,14 +32,14 @@
                     </div>
                 </div>
                 <div class="col-12 row production-summary p-r-0">
-                    <div class="col-4">
+                    <div>
                         Preço: {{summary.salePrice|cbmCurrency}}
                     </div>
-                    <div class="col-4">
+                    <div>
                         Custo: {{summary.productionCost|cbmCurrency}}
                     </div>
-                    <div class="col-4">
-                        Lucro: {{summary.profit|cbmCurrency}}
+                    <div>
+                        Lucro: {{summary.profit|cbmCurrency}} | {{summary.profitPercentage}} %
                     </div>
                 </div>
                 <div class="alert alert-info background-info text-center m-t-10"

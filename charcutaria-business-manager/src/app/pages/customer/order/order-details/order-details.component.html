@@ -10,7 +10,7 @@
                 <div class="row invoive-info ">
                     <div class="col-3">
                         <h6>Dados do Cliente:</h6>
-                        <h6 class="m-0">{{order.customer.name}}</h6>                        
+                        <h6 class="m-0">{{order.customer.name}}</h6>
                         <p *ngIf="order.customer.socialIdentifier" style="font-size: 12px;font-style: italic;">
                             <span *ngIf="order.customer.customerTypeId==1">CPF: </span>
                             <span *ngIf="order.customer.customerTypeId==2">CNPJ: </span>
@@ -89,10 +89,13 @@
                                     <th>#</th>
                                     <th>Produto</th>
                                     <th>Status</th>
+                                    <th>Data Status</th>
                                     <th>Quantidade</th>
                                     <th>Preço</th>
                                     <th>Desconto</th>
                                     <th>Preço Final</th>
+                                    <th>Custo</th>
+                                    <th>Lucro</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,11 +108,20 @@
                                         <app-order-item-status-label [status]="oi.orderItemStatus">
                                         </app-order-item-status-label>
                                     </td>
+                                    <td>{{oi.lastStatusDate | date: 'dd/MM/yyyy'}}</td>
                                     <td>{{oi.quantity | cbmNumber}} {{oi.measureUnit.shortName}} x
                                         {{oi.productPrice | cbmCurrency}}</td>
                                     <td>{{oi.originalPrice | cbmCurrency}}</td>
                                     <td>-{{oi.discount | cbmCurrency}}</td>
                                     <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
+                                    <td>
+                                        <span *ngIf="oi.cost!=null">{{oi.cost | cbmCurrency}}</span>
+                                        <span *ngIf="oi.cost==null">N/D</span>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="oi.profit!=null">{{oi.profit | cbmCurrency}}</span>
+                                        <span *ngIf="oi.profit==null">N/D</span>
+                                    </td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -118,6 +130,8 @@
                                     <th>{{order.itemsTotal | cbmCurrency}}</th>
                                     <th>-{{order.discountTotal | cbmCurrency}}</th>
                                     <th>{{order.itemsTotalAfterDiscounts | cbmCurrency}}</th>
+                                    <th>{{order.itemsTotalCost | cbmCurrency}}</th>
+                                    <th>{{order.itemsTotalProfit | cbmCurrency}}</th>
                                 </tr>
                             </tfoot>
                         </table>

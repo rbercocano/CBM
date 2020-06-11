@@ -14,4 +14,6 @@ export interface OrderItemDetails {
     originalPrice: number;
     productPrice: number;
     orderItemId: number;
+    profit: number;
+    cost: number;
 }

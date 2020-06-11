@@ -4,27 +4,31 @@ th:nth-child(3), td:nth-child(3){
 }
 .production-summary{
     text-align: center;
-    font-weight: 600;
+    font-weight: 500;
     color:#fff;
     padding-top:10px;
     padding-bottom: 10px;
     & div{
         border:solid 1px silver;
         padding:5px;
+        font-size: 13.5px;
     }
     & div:nth-child(1){
         border-radius: 15px 0 0 15px;
-        background-color: #73b4ff;
+        background-color: #3582db;
         border-left: none;
+        width: 32%;
     }
     & div:nth-child(2){
-        background-color: #ff8989;
+        background-color: #f75757;
         border-left: none;
         border-right: none;
+        width: 32%;
     }
     & div:nth-child(3){
         border-radius: 0 15px 15px 0;
-        background-color: #50c36b;
+        background-color: #42a259;
         border-right: none;
+        width: 36%;
     }
 }

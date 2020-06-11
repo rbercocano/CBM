@@ -23,6 +23,15 @@ namespace Charcutarie.Repository
             this.context = context;
             this.mapper = mapper;
         }
+        public async Task<OrderItem> Get(long orderItemId, int corpClientId)
+        {
+            var data = await context.OrderItems
+                .Where(i => i.OrderItemId == orderItemId && i.Order.Customer.CorpClientId == corpClientId)
+                .Include(o => o.Order)
+                .FirstOrDefaultAsync();
+            var result = mapper.Map<OrderItem>(data);
+            return result;
+        }
         public async Task<IEnumerable<OrderItem>> GetAll(int orderNumber, int corpClientId)
         {
             var data = await context.OrderItems
@@ -63,6 +72,7 @@ namespace Charcutarie.Repository
             data.PriceAfterDiscount = model.PriceAfterDiscount;
             data.Cost = model.Cost;
             data.Profit = model.Profit;
+            data.ProfitPercentage = model.ProfitPercentage;
             context.OrderItems.Update(data);
             await context.SaveChangesAsync();
         }
@@ -70,7 +80,7 @@ namespace Charcutarie.Repository
         {
             var order = await context.OrderItems
                      .Where(i => i.Order.OrderNumber == orderNumber && i.Order.Customer.CorpClientId == corpClientId).FirstOrDefaultAsync();
-            if (order ==null) return;
+            if (order == null) return;
             var query = @"UPDATE OrderItem 
                         SET OrderItemStatusId = @status,
                         LastUpdated = GETDATE(),

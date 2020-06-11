@@ -15,6 +15,15 @@ namespace Charcutarie.Models.ViewModels
         public double Discount { get; set; }
         public double? Cost { get; set; }
         public double? Profit { get; set; }
+        public double? ProfitPercentage
+        {
+            get
+            {
+                if (Profit.HasValue)
+                    return Profit.Value / Cost.Value * 100;
+                return null;
+            }
+        }
         public MeasureUnitEnum MeasureUnitId { get; set; }
         public long OrderId { get; set; }
 

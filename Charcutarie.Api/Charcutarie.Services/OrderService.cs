@@ -39,20 +39,20 @@ namespace Charcutarie.Services
             {
                 item.ItemNumber = i;
                 var prod = prods.FirstOrDefault(p => p.ProductId == item.ProductId);
+                item.ProductPrice = prod.Price;
                 var pType = units.FirstOrDefault(u => u.MeasureUnitId == prod.MeasureUnitId).MeasureUnitTypeId;
                 var qType = units.FirstOrDefault(u => u.MeasureUnitId == item.MeasureUnitId).MeasureUnitTypeId;
-                await CalculateItem(item, prod, pType, qType, corpClientId);
+                await CalculateItem(item, prod.MeasureUnitId, pType, qType, corpClientId);
                 i++;
             }
             return await orderApp.Add(model, corpClientId);
         }
-        private async Task CalculateItem(NewOrderItem item, Product prod, MeasureUnitTypeEnum pType, MeasureUnitTypeEnum qType, int corpClientId)
+        private async Task CalculateItem(NewOrderItem item, MeasureUnitEnum prodMeasureUnit, MeasureUnitTypeEnum pType, MeasureUnitTypeEnum qType, int corpClientId)
         {
-            item.ProductPrice = prod.Price;
             item.OriginalPrice = pricingApp.CalculatePricePerTotalWeight(new PriceRequest
             {
-                ProductMeasureUnit = prod.MeasureUnitId,
-                ProductPrice = prod.Price,
+                ProductMeasureUnit = prodMeasureUnit,
+                ProductPrice = item.ProductPrice,
                 Quantity = item.Quantity,
                 QuantityMeasureUnit = item.MeasureUnitId
             }, pType, qType);
@@ -100,7 +100,7 @@ namespace Charcutarie.Services
                 nextStatus = OrderStatusEnum.Criado;
             else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.Entregue || i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
                 nextStatus = OrderStatusEnum.Finalizado;
-            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega || i.OrderItemStatusId == OrderItemStatusEnum.Cancelado))
+            else if (orderItems.All(i => i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega || i.OrderItemStatusId == OrderItemStatusEnum.Cancelado || i.OrderItemStatusId == OrderItemStatusEnum.Entregue))
                 nextStatus = OrderStatusEnum.AguardandoEntrega;
             else if (orderItems.Any(i => i.OrderItemStatusId == OrderItemStatusEnum.EmAndamento
             || i.OrderItemStatusId == OrderItemStatusEnum.ProntoParaEntrega
@@ -123,19 +123,25 @@ namespace Charcutarie.Services
 
         public async Task UpdateOrderItem(UpdateOrderItem model, int corpClientId)
         {
-            var order = await orderApp.Get(model.OrderId, corpClientId);
-            var prodPrice = order.OrderItems.FirstOrDefault(i => i.OrderItemId == model.OrderItemId).ProductPrice;
+            var item = await orderItemApp.Get(model.OrderItemId, corpClientId);
             var prod = await productApp.Get(corpClientId, model.ProductId);
-            model.ProductPrice = prodPrice;
+            model.ProductPrice = item.ProductPrice;
             var units = await measureUnitApp.GetAll();
             var pType = units.FirstOrDefault(u => u.MeasureUnitId == prod.MeasureUnitId).MeasureUnitTypeId;
             var qType = units.FirstOrDefault(u => u.MeasureUnitId == model.MeasureUnitId).MeasureUnitTypeId;
-            await CalculateItem(model, prod, pType, qType, corpClientId);
+            if (model.OrderItemStatusId == OrderItemStatusEnum.Cancelado)
+            {
+                model.Cost = null;
+                model.Profit = null;
+            }
+            else
+                await CalculateItem(model as NewOrderItem, prod.MeasureUnitId, pType, qType, corpClientId);
+
             await orderItemApp.Update(model, corpClientId);
-            var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
+            var nextStatus = await GetNextOrderStatus(item.Order.OrderNumber, corpClientId);
             await orderApp.ChangeStatus(new UpdateOrderStatus
             {
-                OrderNumber = order.OrderNumber,
+                OrderNumber = item.Order.OrderNumber,
                 OrderStatusId = nextStatus
             }, corpClientId);
         }
@@ -149,7 +155,7 @@ namespace Charcutarie.Services
             var units = await measureUnitApp.GetAll();
             var pType = units.FirstOrDefault(u => u.MeasureUnitId == prod.MeasureUnitId).MeasureUnitTypeId;
             var qType = units.FirstOrDefault(u => u.MeasureUnitId == model.MeasureUnitId).MeasureUnitTypeId;
-            await CalculateItem(model, prod, pType, qType, corpClientId);
+            await CalculateItem(model, prod.MeasureUnitId, pType, qType, corpClientId);
             var result = await orderItemApp.AddOrderItem(model, corpClientId);
             var nextStatus = await GetNextOrderStatus(order.OrderNumber, corpClientId);
             await orderApp.ChangeStatus(new UpdateOrderStatus

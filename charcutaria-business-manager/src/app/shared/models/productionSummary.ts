@@ -5,4 +5,5 @@ export interface ProductionSummary {
     productionCost: number;
     salePrice: number;
     profit: number;
+    profitPercentage:number;
 }

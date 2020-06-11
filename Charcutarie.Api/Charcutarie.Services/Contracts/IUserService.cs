@@ -13,5 +13,6 @@ namespace Charcutarie.Services.Contracts
         Task<User> Get(long id, int corpClientId);
         Task<IEnumerable<ParentModule>> GetUserModules(long userId);
         Task<string> ResetPassword(string userName, int corpClientId);
+        Task ChangePassword(ChangePassword model, int corpClientId);
     }
 }

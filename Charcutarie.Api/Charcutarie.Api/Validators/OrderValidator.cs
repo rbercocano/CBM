@@ -21,7 +21,7 @@ namespace Charcutarie.Api.Validators
     {
         public UpdateOrderValidator()
         {
-            RuleFor(x => x.CompleteBy.Date).GreaterThanOrEqualTo(DateTime.Now.Date);
+            RuleFor(x => x.CompleteBy.Date).NotNull();
             RuleFor(x => x.PaymentStatusId).IsInEnum();
 
         }

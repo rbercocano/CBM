@@ -86,7 +86,7 @@
                         <ng-container *ngIf="items.length > 0">
                             <tr *ngFor="let i of items">
                                 <td>
-                                    <a [routerLink]="['/order/details',i.orderNumber]">
+                                    <a [routerLink]="['/order/details',i.orderNumber]" target="_blank">
                                         #{{i.orderNumber}}
                                     </a>
                                 </td>

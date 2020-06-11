@@ -192,7 +192,7 @@
             <div class="col-6">
                 <label class="m-b-0">Produto</label>
                 <select class="form-control" [(ngModel)]="currentQuote.product" name="product"
-                    (change)="changeProduct()" [disabled]="!canEditItem">
+                    (change)="changeProduct()" [disabled]="currentQuote.orderItemId != null">
                     <option [ngValue]="p" *ngFor="let p of products">{{p.name}} ({{p.price | cbmCurrency}} /
                         {{p.measureUnit}})</option>
                 </select>

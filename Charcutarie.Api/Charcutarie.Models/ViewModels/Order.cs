@@ -30,5 +30,8 @@ namespace Charcutarie.Models.ViewModels
         public double ItemsTotal { get { return OrderItems.Where(i => i.OrderItemStatusId != OrderItemStatusEnum.Cancelado).Sum(i => i.OriginalPrice); } }
         public double ItemsTotalAfterDiscounts { get { return OrderItems.Where(i => i.OrderItemStatusId != OrderItemStatusEnum.Cancelado).Sum(i => i.PriceAfterDiscount); } }
         public double OrderTotal { get { return ItemsTotalAfterDiscounts + FreightPrice; } }
+
+        public double ItemsTotalCost { get { return OrderItems.Where(i => i.Cost.HasValue && i.OrderItemStatusId != OrderItemStatusEnum.Cancelado).Sum(i => i.Cost.Value); } }
+        public double ItemsTotalProfit { get { return OrderItems.Where(i => i.Profit.HasValue && i.OrderItemStatusId != OrderItemStatusEnum.Cancelado).Sum(i => i.Profit.Value); } }
     }
 }

@@ -21,4 +21,6 @@ export interface OrderDetails {
     itemsTotal: number;
     itemsTotalAfterDiscounts: number;
     orderTotal: number;
+    itemsTotalCost: number;
+    itemsTotalProfit: number;
 }

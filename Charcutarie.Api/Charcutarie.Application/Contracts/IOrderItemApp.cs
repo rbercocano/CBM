@@ -13,5 +13,6 @@ namespace Charcutarie.Application.Contracts
         Task<long> AddOrderItem(NewOrderItem model, int corpClientId);
         Task<int> GetLastItemNumber(int orderNumber, int corpClientId);
         Task UpdateAllOrderItemStatus(int orderNumber, OrderItemStatusEnum status, int corpClientId);
+        Task<OrderItem> Get(long orderItemId, int corpClientId);
     }
 }

@@ -36,6 +36,7 @@ export class OrderItemComponent implements OnInit {
     private notificationService: NotificationService,
     private domainService: DomainService) {
     this.resetFilter();
+    this.lastFilter = { ...this.filter };
     this.paginationInfo.currentPage = 1;
     this.paginationInfo.recordsPerpage = 10;
     this.paginationService.onChangePage.subscribe(r => {
@@ -45,7 +46,6 @@ export class OrderItemComponent implements OnInit {
   }
   ngOnInit(): void {
     this.spinner.show();
-    this.lastFilter = { ...this.filter };
     let oOrderItemStatus = this.domainService.GetOrderItemStatus();
     let oStatusOrder = this.domainService.GetOrderStatus();
     let oOrder = this.orderService.getOrderItemReport(this.lastFilter, this.paginationInfo.currentPage, this.paginationInfo.recordsPerpage);

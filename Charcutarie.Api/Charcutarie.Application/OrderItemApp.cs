@@ -45,5 +45,11 @@ namespace Charcutarie.Application
         {
             await repository.UpdateAllOrderItemStatus(orderNumber, status, corpClientId);
         }
+
+        public async Task<OrderItem> Get(long orderItemId, int corpClientId)
+        {
+            return await repository.Get(orderItemId, corpClientId);
+
+        }
     }
 }

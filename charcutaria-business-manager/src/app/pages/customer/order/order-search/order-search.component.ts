@@ -36,6 +36,7 @@ export class OrderSearchComponent implements OnInit {
     private notificationService: NotificationService,
     private domainService: DomainService) {
     this.resetFilter();
+    this.lastFilter = { ...this.filter };
     this.paginationInfo.currentPage = 1;
     this.paginationInfo.recordsPerpage = 10;
     this.paginationService.onChangePage.subscribe(r => {

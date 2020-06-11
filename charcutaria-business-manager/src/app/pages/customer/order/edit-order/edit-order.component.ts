@@ -20,7 +20,6 @@ import { PricingService } from 'src/app/shared/services/pricing/pricing.service'
 import { OrderItemDetails } from 'src/app/shared/models/orderItemDetails';
 import { OrderItem } from 'src/app/shared/models/orderItem';
 import { NewOrderItem } from 'src/app/shared/models/NewOrderItem';
-import { IConfirmModal } from 'src/app/shared/confirm-modal/confirmModal';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 
 @Component({

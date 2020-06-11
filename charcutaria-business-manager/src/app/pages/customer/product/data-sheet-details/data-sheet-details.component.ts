@@ -26,7 +26,7 @@ export class DataSheetDetailsComponent implements OnInit {
   public dataSheet: DataSheet = {} as DataSheet;
   public currentItem: DataSheetItem = {} as DataSheetItem;
   public measures: MeasureUnit[] = [];
-  public summary: ProductionSummary = { productionCost: 0, productionItems: [], profit: 0, salePrice: 0 };
+  public summary: ProductionSummary = { profitPercentage: 0, productionCost: 0, productionItems: [], profit: 0, salePrice: 0 };
   public production = { quantity: 1, measureUnit: 1 };
   constructor(private productService: ProductService,
     private spinner: NgxSpinnerService,

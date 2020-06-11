@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost/Charcutarie.Api/api/v1',
+  apiUrl: 'http://localhost:7326/api/v1',
   clientSecret: 'CBM_1234$',
 };
 
