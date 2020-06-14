@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ReportRoutingModule } from './report-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
@@ -18,6 +18,7 @@ const maskConfig: Partial<IConfig> = {
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ReportRoutingModule,
     SharedModule,
     NgbModule,

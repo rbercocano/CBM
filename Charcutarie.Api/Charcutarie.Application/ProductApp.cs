@@ -44,5 +44,10 @@ namespace Charcutarie.Application
         {
             return await productRepository.Update(model);
         }
+
+        public async Task<IEnumerable<ProductionCostProfit>> GetProductionCostProfit(int corpClientId)
+        {
+            return await productRepository.GetProductionCostProfit(corpClientId);
+        }
     }
 }

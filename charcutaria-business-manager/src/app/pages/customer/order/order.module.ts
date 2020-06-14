@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrderRoutingModule } from './order-routing.module';
 import { NewOrderComponent } from './new-order/new-order.component';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxCurrencyModule } from 'ngx-currency';
@@ -21,6 +21,7 @@ const maskConfig: Partial<IConfig> = {
     CommonModule,
     OrderRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     NgbModule,
     NgxMaskModule.forRoot(maskConfig),

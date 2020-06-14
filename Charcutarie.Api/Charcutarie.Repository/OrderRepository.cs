@@ -279,5 +279,116 @@ namespace Charcutarie.Repository
                 RecordsPerpage = pageSize ?? count
             };
         }
+        public async Task<PendingPaymentsSummary> GetPendingPaymentsSummary(int corpClientId)
+        {
+            var sqlParams = new List<SqlParameter>();
+            sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
+            var query = new StringBuilder(@"SELECT
+	                                        NEWID() as RowId,
+                                            (SELECT 
+	                                            SUM(I.PriceAfterDiscount)
+                                            FROM OrderItem I 
+                                            JOIN Product P ON I.ProductId = P.ProductId 
+                                            JOIN [Order] O ON I.OrderId = O.OrderId
+                                            WHere P.CorpClientId = @corpClientId
+                                            AND O.PaymentStatusId = 1
+                                            AND OrderStatusId <> 4)  as TotalPendingPayments,
+                                            (SELECT 
+	                                            SUM(I.PriceAfterDiscount) 
+                                            FROM OrderItem I 
+                                            JOIN Product P ON I.ProductId = P.ProductId 
+                                            JOIN [Order] O ON I.OrderId = O.OrderId
+                                            WHere P.CorpClientId = @corpClientId
+                                            AND O.PaymentStatusId = 1
+                                            AND O.OrderStatusId IN (3,5)) as FinishedOrdersPendingPayment");
+            var data = await context.PendingPaymentsSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
+            return mapper.Map<PendingPaymentsSummary>(data);
+        }
+        public async Task<SalesSummary> GetSalesSummary(int corpClientId)
+        {
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId),
+                new SqlParameter("@start", new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date) { SqlDbType = SqlDbType.Date },
+                new SqlParameter("@end", new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Date)
+                { SqlDbType = SqlDbType.Date }
+            };
+            var query = new StringBuilder(@"SELECT 
+	                                            NEWID() AS RowId,
+                                            (SELECT 
+	                                            SUM(I.PriceAfterDiscount)
+                                            FROM OrderItem I 
+                                            JOIN [Order] O On O.OrderId = I.OrderId
+                                            JOIN OrderItemStatus S ON I.OrderItemStatusId = S.OrderItemStatusId
+                                            JOIN Product P ON I.ProductId = P.ProductId 
+                                            WHere P.CorpClientId = @corpClientId
+                                            AND OrderStatusId <> 4) AS TotalSales,
+
+                                            (SELECT 
+	                                            SUM(I.PriceAfterDiscount) 
+                                            FROM OrderItem I 
+                                            JOIN [Order] O On O.OrderId = I.OrderId
+                                            JOIN Product P ON I.ProductId = P.ProductId 
+                                            WHere P.CorpClientId = @corpClientId
+                                            AND CAST(O.CreatedOn AS DATE) Between @start AND  @end
+                                            AND OrderStatusId <> 4) AS CurrentMonthSales
+                                            ");
+            var data = await context.SalesSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
+            return mapper.Map<SalesSummary>(data);
+        }
+
+        public async Task<ProfitSummary> GetProfitSummary(int corpClientId)
+        {
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId),
+                new SqlParameter("@start", new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date) { SqlDbType = SqlDbType.Date },
+                new SqlParameter("@end", new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Date)
+                { SqlDbType = SqlDbType.Date }
+            };
+            var query = new StringBuilder(@"SELECT 
+	                                            NEWID() AS RowId,
+                                            (SELECT 
+	                                            SUM(I.Profit) 
+                                            FROM OrderItem I 
+                                            JOIN [Order] O On O.OrderId = I.OrderId
+                                            JOIN OrderItemStatus S ON I.OrderItemStatusId = S.OrderItemStatusId
+                                            JOIN Product P ON I.ProductId = P.ProductId 
+                                            WHere P.CorpClientId = @corpClientId
+                                            AND OrderStatusId <> 4) AS TotalProfit,
+
+                                            (SELECT 
+	                                            SUM(I.Profit) 
+                                            FROM OrderItem I 
+                                            JOIN [Order] O On O.OrderId = I.OrderId
+                                            JOIN Product P ON I.ProductId = P.ProductId 
+                                            WHere P.CorpClientId = @corpClientId
+                                            AND CAST(O.CreatedOn AS DATE) Between @start AND  @end
+                                            AND OrderStatusId <> 4) AS CurrentMonthProfit
+                                            ");
+            var data = await context.ProfitSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
+            return mapper.Map<ProfitSummary>(data);
+        }
+
+        public async Task<OrderCountSummary> GetOrderCountSummary(int corpClientId)
+        {
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId)
+            };
+            var query = new StringBuilder(@"SELECT 
+	                                            NEWID() AS RowId,
+	                                            (SELECT COUNT(*)
+                                            FROM [Order] O
+                                            JOIN Customer C ON O.CustomerId = C.CustomerId
+                                            WHERE C.CorpClientId = @corpClientId)  AS TotalOrders,
+
+                                            (SELECT COUNT(*) 
+                                            FROM [Order] O
+                                            JOIN Customer C ON O.CustomerId = C.CustomerId
+                                            WHERE C.CorpClientId = @corpClientId AND OrderStatusId = 3) AS TotalCompletedOrders");
+            var data = await context.OrderCountSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
+            return mapper.Map<OrderCountSummary>(data);
+        }
     }
 }

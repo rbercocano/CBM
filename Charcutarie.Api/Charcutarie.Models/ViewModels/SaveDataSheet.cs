@@ -8,5 +8,6 @@ namespace Charcutarie.Models.ViewModels
     {
         public long ProductId { get; set; }
         public string ProcedureDescription { get; set; }
+        public double WeightLossPercentage { get; set; }
     }
 }

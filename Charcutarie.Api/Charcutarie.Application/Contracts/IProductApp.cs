@@ -14,5 +14,6 @@ namespace Charcutarie.Application.Contracts
         Task<Product> Get(int corpClientId, long id);
         Task<IEnumerable<Product>> GetAll(int corpClientId);
         Task<IEnumerable<Product>> GetRange(int corpClientId, List<long> ids);
+        Task<IEnumerable<ProductionCostProfit>> GetProductionCostProfit(int corpClientId);
     }
 }

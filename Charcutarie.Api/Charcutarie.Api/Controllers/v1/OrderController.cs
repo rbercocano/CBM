@@ -110,5 +110,39 @@ namespace Charcutarie.Api.Controllers.v1
             await service.CloseOrder(orderNumber, UserData.CorpClientId.Value);
             return Ok();
         }
+
+        [HttpGet("Report/OrderCountSummary")]
+        public async Task<ActionResult<PagedResult<OrderCountSummary>>> GetOrderCountSummary()
+        {
+            var data = await service.GetOrderCountSummary(UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
+        }
+
+        [HttpGet("Report/ProfitSummary")]
+        public async Task<ActionResult<PagedResult<ProfitSummary>>> GetProfitSummary()
+        {
+            var data = await service.GetProfitSummary(UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
+        }
+        [HttpGet("Report/SalesSummary")]
+        public async Task<ActionResult<PagedResult<SalesSummary>>> GetSalesSummary()
+        {
+            var data = await service.GetSalesSummary(UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
+        }
+        [HttpGet("Report/PendingPaymentsSummary")]
+        public async Task<ActionResult<PagedResult<PendingPaymentsSummary>>> GetPendingPaymentsSummary()
+        {
+            var data = await service.GetPendingPaymentsSummary(UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
+        }
     }
 }

@@ -14,6 +14,11 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.ProductId)
                 .HasColumnType("BIGINT")
                 .IsRequired();
+
+            builder.Property(p => p.WeightLossPercentage)
+                .HasColumnType("DECIMAL(4,2)")
+                .IsRequired();
+
             builder.Property(p => p.ProcedureDescription)
                 .HasColumnType("VARCHAR(MAX)");
 

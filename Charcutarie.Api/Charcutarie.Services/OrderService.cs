@@ -185,5 +185,25 @@ namespace Charcutarie.Services
                 OrderStatusId = nextStatus
             }, corpClientId);
         }
+
+        public async Task<OrderCountSummary> GetOrderCountSummary(int corpClientId)
+        {
+            return await orderApp.GetOrderCountSummary(corpClientId);
+        }
+
+        public async Task<ProfitSummary> GetProfitSummary(int corpClientId)
+        {
+            return await orderApp.GetProfitSummary(corpClientId);
+        }
+
+        public async Task<SalesSummary> GetSalesSummary(int corpClientId)
+        {
+            return await orderApp.GetSalesSummary(corpClientId);
+        }
+
+        public async Task<PendingPaymentsSummary> GetPendingPaymentsSummary(int corpClientId)
+        {
+            return await orderApp.GetPendingPaymentsSummary(corpClientId);
+        }
     }
 }

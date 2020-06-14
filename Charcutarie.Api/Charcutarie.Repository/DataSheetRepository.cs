@@ -42,6 +42,7 @@ namespace Charcutarie.Repository
             else
             {
                 data.ProcedureDescription = dataSheet.ProcedureDescription;
+                data.WeightLossPercentage = dataSheet.WeightLossPercentage;
                 context.DataSheets.Update(data);
                 await context.SaveChangesAsync();
             }

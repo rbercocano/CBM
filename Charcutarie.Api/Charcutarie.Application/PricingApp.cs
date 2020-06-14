@@ -12,7 +12,8 @@ namespace Charcutarie.Application
     {
         public double CalculatePricePerTotalWeight(PriceRequest model, MeasureUnitTypeEnum pType, MeasureUnitTypeEnum qType)
         {
-
+            if (model.ResultPrecision == 0)
+                model.ResultPrecision = 2;
             var weightInGrams = UnitConverter.ToBaseUnit(model.ProductMeasureUnit, 1, pType);
             var pricePerUnit = model.ProductPrice / weightInGrams;
             var orderedWeight = UnitConverter.ToBaseUnit(model.QuantityMeasureUnit, model.Quantity, qType);
@@ -21,7 +22,8 @@ namespace Charcutarie.Application
         }
         public double CalculatePricePerUnit(PriceRequest model, MeasureUnitTypeEnum pType, MeasureUnitTypeEnum qType)
         {
-
+            if (model.ResultPrecision == 0)
+                model.ResultPrecision = 2;
             var weightInGrams = UnitConverter.ToBaseUnit(model.ProductMeasureUnit, model.Quantity, pType);
             var pricePerUnit = model.ProductPrice / weightInGrams;
             var orderedWeight = UnitConverter.ToBaseUnit(model.QuantityMeasureUnit, 1, qType);

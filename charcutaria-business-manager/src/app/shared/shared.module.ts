@@ -95,4 +95,11 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     { provide: NgbDateParserFormatter, useClass: BRDateFormatter }
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+  static forRoot() {
+    return {
+      ngModule: SharedModule,
+      providers: [],
+    };
+  }
+}

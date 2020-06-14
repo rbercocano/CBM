@@ -66,6 +66,12 @@ namespace Charcutarie.Repository.DbContext
         //Custom Queries
         public DbSet<OrderSummary> OrderSummaries { get; set; }
         public DbSet<OrderItemReport> OrderItemReports { get; set; }
+        public DbSet<PendingPaymentsSummary> PendingPaymentsSummaries { get; set; }
+        public DbSet<SalesSummary> SalesSummaries { get; set; }
+        public DbSet<ProfitSummary> ProfitSummaries { get; set; }
+        public DbSet<OrderCountSummary> OrderCountSummaries { get; set; }
+        public DbSet<ProductionCostProfit> ProductionCostProfits { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
@@ -91,7 +97,12 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new RawMaterialConfiguration());
             modelBuilder.ApplyConfiguration(new DataSheetItemConfiguration());
             modelBuilder.ApplyConfiguration(new DataSheetConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderItemReportConfiguration());            
+            modelBuilder.ApplyConfiguration(new OrderItemReportConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderCountSummaryConfiguration());
+            modelBuilder.ApplyConfiguration(new SalesSummaryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProfitSummaryConfiguration());
+            modelBuilder.ApplyConfiguration(new PendingPaymentsSummaryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductionCostProfitConfiguration());
         }
         public async Task<int> ExecuteScalar(string command)
         {

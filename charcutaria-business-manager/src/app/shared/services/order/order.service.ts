@@ -12,6 +12,10 @@ import { orderSummaryFilter } from '../../models/orderSummaryFilter';
 import { PagedResult } from '../../models/pagedResult';
 import { OrderItemReportFilter } from '../../models/OrderItemReportFilter';
 import { OrderItemReport } from '../../models/orderItemReport';
+import { OrderCountSummary } from '../../models/orderCountSummary';
+import { ProfitSummary } from '../../models/profitSummary';
+import { SalesSummary } from '../../models/salesSummary';
+import { PendingPaymentsSummary } from '../../models/pendingPaymentSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -98,4 +102,17 @@ export class OrderService {
     return this.httpClient.get<PagedResult<OrderItemReport>>(`${environment.apiUrl}/Order/Report/Item/${page}/${pageSize}`, { params: params });
 
   }
+  public getOrderCountSummary(): Observable<OrderCountSummary> {
+    return this.httpClient.get<OrderCountSummary>(`${environment.apiUrl}/Order/Report/OrderCountSummary`);
+  }
+  public getProfitSummary(): Observable<ProfitSummary> {
+    return this.httpClient.get<ProfitSummary>(`${environment.apiUrl}/Order/Report/ProfitSummary`);
+  }
+  public getSalesSummary(): Observable<SalesSummary> {
+    return this.httpClient.get<SalesSummary>(`${environment.apiUrl}/Order/Report/SalesSummary`);
+  }
+  public getPendingPaymentsSummary(): Observable<PendingPaymentsSummary> {
+    return this.httpClient.get<PendingPaymentsSummary>(`${environment.apiUrl}/Order/Report/PendingPaymentsSummary`);
+  }
+
 }

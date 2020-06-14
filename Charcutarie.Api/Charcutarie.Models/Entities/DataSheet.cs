@@ -11,5 +11,7 @@ namespace Charcutarie.Models.Entities
         public string ProcedureDescription { get; set; }
         public List<DataSheetItem> DataSheetItems { get; set; }
         public Product Product { get; set; }
+        public double WeightLossPercentage { get; set; }
+        
     }
 }

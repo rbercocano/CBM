@@ -23,7 +23,7 @@ namespace Charcutarie.Api.Controllers.v1
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public async Task<ActionResult<PagedResult<Product>>> GetPaged(int page, int pageSize, [FromQuery]string? filter = "", [FromQuery]bool? active = null)
+        public async Task<ActionResult<PagedResult<Product>>> GetPaged(int page, int pageSize, [FromQuery] string? filter = "", [FromQuery] bool? active = null)
         {
             var data = await service.GetPaged(UserData.CorpClientId.Value, page, pageSize, filter, active);
             if (data.Data.Any())
@@ -33,7 +33,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpPost]
         public async Task<ActionResult<long>> Add(NewProduct model)
         {
-             model.CorpClientId = UserData.CorpClientId.Value;
+            model.CorpClientId = UserData.CorpClientId.Value;
             var id = await service.Add(model);
             if (id > 0)
                 return Ok(id);
@@ -60,7 +60,15 @@ namespace Charcutarie.Api.Controllers.v1
         public async Task<ActionResult<IEnumerable<Product>>> GetAll()
         {
             var data = await service.GetAll(UserData.CorpClientId.Value);
-            if (data != null)
+            if (data.Any())
+                return Ok(data);
+            return NoContent();
+        }
+        [HttpGet("CostAndProfit")]
+        public async Task<ActionResult<IEnumerable<ProductionCostProfit>>> GetProductionCostProfit()
+        {
+            var data = await service.GetProductionCostProfit(UserData.CorpClientId.Value);
+            if (data.Any())
                 return Ok(data);
             return NoContent();
         }

@@ -12,5 +12,6 @@ namespace Charcutarie.Services.Contracts
         Task<Product> Update(UpdateProduct model);
         Task<Product> Get(int corpClientId, int id);
         Task<IEnumerable<Product>> GetAll(int corpClientId);
+        Task<IEnumerable<ProductionCostProfit>> GetProductionCostProfit(int corpClientId);
     }
 }

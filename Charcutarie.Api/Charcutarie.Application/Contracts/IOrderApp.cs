@@ -26,5 +26,10 @@ namespace Charcutarie.Application.Contracts
                                                                OrderItemStatusEnum? itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
                                                                string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction,
                                                                int? page, int? pageSize);
+
+        Task<OrderCountSummary> GetOrderCountSummary(int corpClientId);
+        Task<ProfitSummary> GetProfitSummary(int corpClientId);
+        Task<SalesSummary> GetSalesSummary(int corpClientId);
+        Task<PendingPaymentsSummary> GetPendingPaymentsSummary(int corpClientId);
     }
 }

@@ -103,7 +103,7 @@ namespace Charcutarie.Services
                     Percentage = di.Percentage,
                     RawMaterialId = di.RawMaterialId
                 };
-                item.Quantity = q * item.Percentage / 100;
+                item.Quantity = q / (1 - (dataSheet.WeightLossPercentage / 100)) * item.Percentage / 100;
 
                 var rmSourceUnit = units.FirstOrDefault(u => u.MeasureUnitId == di.RawMaterial.MeasureUnitId);
                 var rmQuantity = UnitConverter.ToBaseUnit(rmSourceUnit.MeasureUnitId, 1, rmSourceUnit.MeasureUnitTypeId);
