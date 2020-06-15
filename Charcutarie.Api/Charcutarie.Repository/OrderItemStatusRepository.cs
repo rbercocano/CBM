@@ -4,6 +4,7 @@ using Charcutarie.Repository.Contracts;
 using Charcutarie.Repository.DbContext;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Charcutarie.Repository
@@ -20,7 +21,7 @@ namespace Charcutarie.Repository
         }
         public async Task<IEnumerable<OrderItemStatus>> GetAll()
         {
-            var data = await context.OrderItemStatus.ToListAsync();
+            var data = await context.OrderItemStatus.OrderBy(o => o.Description).ToListAsync();
             var result = mapper.Map<IEnumerable<OrderItemStatus>>(data);
             return result;
         }

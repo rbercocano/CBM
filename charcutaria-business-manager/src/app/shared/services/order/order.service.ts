@@ -93,6 +93,7 @@ export class OrderService {
     (filter.orderStatus ?? []).forEach(s => {
       params = params.append('orderStatus', String(s.orderStatusId));
     });
+    if (filter.completeByFrom != null)
     params = params.append('completeByFrom', filter.completeByFrom);
     if (filter.completeByTo != null)
       params = params.append('completeByTo', filter.completeByTo);

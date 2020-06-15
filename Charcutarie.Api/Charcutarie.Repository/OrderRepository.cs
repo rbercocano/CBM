@@ -280,7 +280,7 @@ namespace Charcutarie.Repository
             var query = new StringBuilder(@"SELECT
 	                                        NEWID() as RowId,
                                             (SELECT 
-	                                            SUM(I.PriceAfterDiscount)
+	                                            ISNULL( SUM(I.PriceAfterDiscount),0)
                                             FROM OrderItem I 
                                             JOIN Product P ON I.ProductId = P.ProductId 
                                             JOIN [Order] O ON I.OrderId = O.OrderId
@@ -288,7 +288,7 @@ namespace Charcutarie.Repository
                                             AND O.PaymentStatusId = 1
                                             AND OrderStatusId <> 4)  as TotalPendingPayments,
                                             (SELECT 
-	                                            SUM(I.PriceAfterDiscount) 
+	                                           ISNULL(  SUM(I.PriceAfterDiscount) ,0)
                                             FROM OrderItem I 
                                             JOIN Product P ON I.ProductId = P.ProductId 
                                             JOIN [Order] O ON I.OrderId = O.OrderId
@@ -310,7 +310,7 @@ namespace Charcutarie.Repository
             var query = new StringBuilder(@"SELECT 
 	                                            NEWID() AS RowId,
                                             (SELECT 
-	                                            SUM(I.PriceAfterDiscount)
+	                                           ISNULL( SUM(I.PriceAfterDiscount),0)
                                             FROM OrderItem I 
                                             JOIN [Order] O On O.OrderId = I.OrderId
                                             JOIN OrderItemStatus S ON I.OrderItemStatusId = S.OrderItemStatusId
@@ -319,7 +319,7 @@ namespace Charcutarie.Repository
                                             AND OrderStatusId <> 4) AS TotalSales,
 
                                             (SELECT 
-	                                            SUM(I.PriceAfterDiscount) 
+	                                            ISNULL(SUM(I.PriceAfterDiscount) ,0)
                                             FROM OrderItem I 
                                             JOIN [Order] O On O.OrderId = I.OrderId
                                             JOIN Product P ON I.ProductId = P.ProductId 
@@ -343,7 +343,7 @@ namespace Charcutarie.Repository
             var query = new StringBuilder(@"SELECT 
 	                                            NEWID() AS RowId,
                                             (SELECT 
-	                                            SUM(I.Profit) 
+	                                            ISNULL(SUM(I.Profit) ,0)
                                             FROM OrderItem I 
                                             JOIN [Order] O On O.OrderId = I.OrderId
                                             JOIN OrderItemStatus S ON I.OrderItemStatusId = S.OrderItemStatusId
@@ -352,7 +352,7 @@ namespace Charcutarie.Repository
                                             AND OrderStatusId <> 4) AS TotalProfit,
 
                                             (SELECT 
-	                                            SUM(I.Profit) 
+	                                             ISNULL(SUM(I.Profit) ,0)
                                             FROM OrderItem I 
                                             JOIN [Order] O On O.OrderId = I.OrderId
                                             JOIN Product P ON I.ProductId = P.ProductId 

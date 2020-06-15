@@ -29,7 +29,7 @@ export class OrderItemComponent implements OnInit {
   public filter: OrderItemReportFilter = new OrderItemReportFilter();
   private lastFilter: OrderItemReportFilter;
   private modal: NgbModalRef;
-  
+
   public orderStatusSettings: IDropdownSettings = {
     singleSelection: false,
     idField: 'orderStatusId',
@@ -121,7 +121,7 @@ export class OrderItemComponent implements OnInit {
   }
   open(content) {
     this.resetFilter();
-    this.modal = this.modalService.open(content); 
+    this.modal = this.modalService.open(content, { size: 'lg' });
   }
   resetFilter() {
     this.filter = new OrderItemReportFilter();
