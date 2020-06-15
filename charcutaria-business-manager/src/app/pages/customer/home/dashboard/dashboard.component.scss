@@ -1,0 +1,15 @@
+.card{
+    &.bg-dark-green{
+        background: linear-gradient(45deg, #1ec95d, #3bf47f);
+    }
+}
+table{
+    &.numeric{
+        & td{
+            color:#fff;
+        }
+        & td:nth-child(2){
+            text-align: right;
+        }
+    }
+}

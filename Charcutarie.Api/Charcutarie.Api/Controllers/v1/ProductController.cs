@@ -72,6 +72,14 @@ namespace Charcutarie.Api.Controllers.v1
                 return Ok(data);
             return NoContent();
         }
+        [HttpGet("Production")]
+        public async Task<ActionResult<IEnumerable<Production>>> GetProduction()
+        {
+            var data = await service.GetProduction(UserData.CorpClientId.Value);
+            if (data.Any())
+                return Ok(data);
+            return NoContent();
+        }
     }
 
 }

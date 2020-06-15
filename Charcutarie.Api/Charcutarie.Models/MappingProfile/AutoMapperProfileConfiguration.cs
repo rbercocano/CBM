@@ -110,6 +110,7 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.ProfitSummary, vm.ProfitSummary>().ReverseMap();
             CreateMap<ef.SalesSummary, vm.SalesSummary>().ReverseMap();
             CreateMap<ef.ProductionCostProfit, vm.ProductionCostProfit>().ReverseMap();
+            CreateMap<ef.Production, vm.Production>().ReverseMap();
         }
     }
 }

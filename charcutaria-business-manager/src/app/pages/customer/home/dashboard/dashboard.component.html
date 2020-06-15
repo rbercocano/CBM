@@ -1,46 +1,73 @@
 <div class="row">
-    <div class="col-md-6 col-xl-3">
-      <div class="card bg-c-blue order-card">
-        <div class="card-block">
-          <h6 class="m-b-20">Pedidos Recebidos</h6>
-          <h2 class="text-right"><i class="fa fa-shopping-cart f-left"></i>
-            <span>{{orderCountSummary.totalOrders}}</span>
-          </h2>
-          <p class="m-b-0">Pedidos Finalizados<span class="f-right">{{orderCountSummary.totalCompletedOrders}}</span></p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-xl-3">
-      <div class="card bg-c-green order-card">
-        <div class="card-block">
-          <h6 class="m-b-20">Total em Vendas</h6>
-          <h2 class="text-right"><i class="fa fa-tag f-left"></i>
-            <span>{{salesSummary.totalSales  |cbmCurrency}}</span>
-          </h2>
-          <p class="m-b-0">Este Mês<span class="f-right">{{salesSummary.currentMonthSales  |cbmCurrency}}</span></p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-xl-3">
-      <div class="card bg-c-yellow order-card">
-        <div class="card-block">
-          <h6 class="m-b-20">Lucro</h6>
-          <h2 class="text-right"><i class="fa fa-dollar f-left"></i>
-            <span>{{profitSummary.totalProfit  |cbmCurrency}}</span>
-          </h2>
-          <p class="m-b-0">Este Mês<span class="f-right">{{profitSummary.currentMonthProfit  |cbmCurrency }}</span></p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-xl-3">
-      <div class="card bg-c-pink order-card">
-        <div class="card-block">
-          <h6 class="m-b-20">Pagamentos Pendentes</h6>
-          <h2 class="text-right"><i class="fa fa-wallet f-left"></i>
-            <span>{{pendingPaymentsSummary.totalPendingPayments |cbmCurrency }}</span>
-          </h2>
-          <p class="m-b-0">Finalizados Sem Pagamento<span class="f-right">{{pendingPaymentsSummary.finishedOrdersPendingPayment  |cbmCurrency}}</span></p>
-        </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card bg-c-blue order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">Pedidos Recebidos</h6>
+        <h2 class="text-right"><i class="fa fa-shopping-cart f-left"></i>
+          <span>{{orderCountSummary.totalOrders}}</span>
+        </h2>
+        <p class="m-b-0">Pedidos Finalizados<span class="f-right">{{orderCountSummary.totalCompletedOrders}}</span></p>
       </div>
     </div>
   </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card bg-c-green order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">Total em Vendas</h6>
+        <h2 class="text-right"><i class="fa fa-tag f-left"></i>
+          <span>{{salesSummary.totalSales  |cbmCurrency}}</span>
+        </h2>
+        <p class="m-b-0">Este Mês<span class="f-right">{{salesSummary.currentMonthSales  |cbmCurrency}}</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card bg-c-yellow order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">Lucro</h6>
+        <h2 class="text-right"><i class="fa fa-dollar f-left"></i>
+          <span>{{profitSummary.totalProfit  |cbmCurrency}}</span>
+        </h2>
+        <p class="m-b-0">Este Mês<span class="f-right">{{profitSummary.currentMonthProfit  |cbmCurrency }}</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card bg-c-pink order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">Pagamentos Pendentes</h6>
+        <h2 class="text-right"><i class="fa fa-wallet f-left"></i>
+          <span>{{pendingPaymentsSummary.totalPendingPayments |cbmCurrency }}</span>
+        </h2>
+        <p class="m-b-0">Finalizados Sem Pagamento<span
+            class="f-right">{{pendingPaymentsSummary.finishedOrdersPendingPayment  |cbmCurrency}}</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card bg-c-green order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">Top 5 mais lucrativos</h6>
+        <table class="table numeric">
+          <tr *ngFor="let p of profitAndCost">
+            <td>{{p.product}}</td>
+            <td>{{p.profitPercentage}}%</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3">
+    <div class="card bg-c-blue order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">Top 5 mais vendidos</h6>
+        <table class="table numeric">
+          <tr *ngFor="let p of production">
+            <td>{{p.product}}</td>
+            <td>{{p.quantity}} {{p.measureUnit}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

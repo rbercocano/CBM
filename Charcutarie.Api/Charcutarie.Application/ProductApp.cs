@@ -1,7 +1,9 @@
 ﻿using Charcutarie.Application.Contracts;
 using Charcutarie.Models;
+using Charcutarie.Models.Enums;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Repository.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,7 +24,7 @@ namespace Charcutarie.Application
         }
 
         public async Task<Product> Get(int corpClientId, long id)
-        {            
+        {
             return await productRepository.Get(corpClientId, id);
         }
         public async Task<IEnumerable<Product>> GetRange(int corpClientId, List<long> ids)
@@ -48,6 +50,27 @@ namespace Charcutarie.Application
         public async Task<IEnumerable<ProductionCostProfit>> GetProductionCostProfit(int corpClientId)
         {
             return await productRepository.GetProductionCostProfit(corpClientId);
+        }
+
+        public async Task<IEnumerable<Production>> GetProduction(int corpClientId)
+        {
+            var data = await productRepository.GetProduction(corpClientId);
+            foreach (var item in data)
+            {
+                if (item.Quantity > 1000)
+                {
+                    item.Quantity = Math.Round(item.Quantity / 1000, 2);
+                    item.MeasureUnitId = item.MeasureUnitTypeId == MeasureUnitTypeEnum.Mass ?
+                        MeasureUnitEnum.Kilo : MeasureUnitEnum.Litro;
+                    item.MeasureUnit = item.MeasureUnitTypeId == MeasureUnitTypeEnum.Mass ? "kg" : "l";
+                }
+                else
+                {
+                    item.Quantity = Math.Round(item.Quantity, 2);
+                    item.MeasureUnit = item.MeasureUnitTypeId == MeasureUnitTypeEnum.Mass ? "g" : "ml";
+                }
+            }
+            return data;
         }
     }
 }

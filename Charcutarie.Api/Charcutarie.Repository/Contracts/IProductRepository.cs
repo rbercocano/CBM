@@ -14,5 +14,6 @@ namespace Charcutarie.Repository.Contracts
         Task<IEnumerable<Product>> GetRange(int corpClientId, List<long> ids);
         Task<IEnumerable<Product>> GetAll(int corpClientId);
         Task<IEnumerable<ProductionCostProfit>> GetProductionCostProfit(int corpClientId);
+        Task<IEnumerable<Production>> GetProduction(int corpClientId);
     }
 }

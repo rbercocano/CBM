@@ -11,6 +11,8 @@ import { NewDataSheetItem } from '../../models/newDataSheetItem';
 import { UpdateDataSheetItem } from '../../models/updateDataSheetItem';
 import { ProductionItem } from '../../models/productionItem';
 import { ProductionSummary } from '../../models/productionSummary';
+import { ProductCostProfit } from '../../models/productCostProfit';
+import { Production } from '../../models/production';
 
 @Injectable({
   providedIn: 'root'
@@ -59,5 +61,11 @@ export class ProductService {
   }
   public calculateProduction(productId: number, measureId: number, quantity: number): Observable<ProductionSummary> {
     return this.httpClient.get<ProductionSummary>(`${environment.apiUrl}/DataSheet/Production/${productId}/${measureId}/${quantity}`);
+  }
+  public getCostProfit(): Observable<ProductCostProfit[]> {
+    return this.httpClient.get<ProductCostProfit[]>(`${environment.apiUrl}/Product/CostAndProfit`);
+  }
+  public getProduction(): Observable<Production[]> {
+    return this.httpClient.get<Production[]>(`${environment.apiUrl}/Product/Production`);
   }
 }

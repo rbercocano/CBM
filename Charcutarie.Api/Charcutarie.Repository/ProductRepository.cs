@@ -111,9 +111,52 @@ namespace Charcutarie.Repository
 	                                            WHERE P.CorpClientId = @corpClientId
 	                                            ) X GROUP BY X.ProductId)
 	                                             X2 
-                                            JOIN Product P2 ON X2.ProductId = P2.ProductId");
-            var data = await context.ProductionCostProfits.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
+                                            JOIN Product P2 ON X2.ProductId = P2.ProductId ORDER BY 5 DESC");
+            var data = await context.ProductionCostProfits.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToListAsync();
             return mapper.Map<IEnumerable<ProductionCostProfit>>(data);
+        }
+
+        public async Task<IEnumerable<Production>> GetProduction(int corpClientId)
+        {
+            var sqlParams = new List<SqlParameter>();
+            sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
+            var query = new StringBuilder(@"SELECT 
+	                                        ProductId, 
+	                                        Product,
+	                                        ISNULL(SUM(Quantity),0) as Quantity,
+	                                        MeasureUnitId,
+	                                        MeasureUnitTypeId
+                                        FROM 
+	                                        (SELECT	
+		                                        P.ProductId,
+		                                        P.Name as Product,
+		                                        CASE 
+			                                        WHEN U.MeasureUnitTypeId = 1 THEN
+				                                        dbo.ConvertMeasure(ISNULL(I.MeasureUnitId,0),I.Quantity,1) 
+			                                        ELSE
+				                                        dbo.ConvertMeasure(ISNULL(I.MeasureUnitId,0),I.Quantity,5) 
+		                                        END as Quantity,
+		                                        CASE 
+			                                        WHEN U.MeasureUnitId IS NULL AND U2.MeasureUnitTypeId = 1 THEN 4
+			                                        WHEN U2.MeasureUnitId IS NULL AND U2.MeasureUnitTypeId = 2 THEN 6
+			                                        WHEN U.MeasureUnitTypeId = 1 THEN 1
+			                                        ELSE 5
+		                                        END as MeasureUnitId,
+		                                        ISNULL(U.MeasureUnitTypeId,U2.MeasureUnitTypeId) as MeasureUnitTypeId
+	                                        FROM  Product P 
+	                                        JOIN MeasureUnit U2 ON P.MeasureUnitId = U2.MeasureUnitId
+	                                        LEFT JOIN OrderItem I ON I.ProductId  = P.ProductId
+	                                        LEFT JOIN OrderItemStatus S ON I.OrderItemStatusId = S.OrderItemStatusId
+	                                        LEFT JOIN MeasureUnit U ON I.MeasureUnitId = U.MeasureUnitId
+	                                        WHERE P.CorpClientId = @corpClientId) X
+                                        GROUP BY	
+	                                        ProductId, 
+	                                        Product,
+	                                        MeasureUnitTypeId,
+	                                        MeasureUnitId
+                                        ORDER BY 3 DESC");
+            var data = await context.Production.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToListAsync();
+            return mapper.Map<IEnumerable<Production>>(data);
         }
     }
 }
