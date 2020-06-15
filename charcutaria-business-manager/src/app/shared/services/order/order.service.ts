@@ -70,10 +70,12 @@ export class OrderService {
       params = params.append('completeByFrom', filter.completeByFrom);
     if (filter.completeByTo != null)
       params = params.append('completeByTo', filter.completeByTo);
-    if (filter.paymentStatus != null)
-      params = params.append('paymentStatus', String(filter.paymentStatus));
-    if (filter.orderStatus != null)
-      params = params.append('orderStatus', String(filter.orderStatus));
+    (filter.paymentStatus ?? []).forEach(s => {
+      params = params.append('paymentStatus', String(s.paymentStatusId));
+    });
+    (filter.orderStatus ?? []).forEach(s => {
+      params = params.append('orderStatus', String(s.orderStatusId));
+    });
     if (filter.orderBy != null)
       params = params.append('orderBy', String(filter.orderBy));
     if (filter.direction != null)
@@ -85,12 +87,13 @@ export class OrderService {
     let params = new HttpParams();
     if (filter.orderNumber != null)
       params = params.append('orderNumber', String(filter.orderNumber));
-    if (filter.orderStatus != null)
-      params = params.append('orderStatus', String(filter.orderStatus));
-    if (filter.itemStatus != null)
-      params = params.append('itemStatus', String(filter.itemStatus));
-    if (filter.completeByFrom != null)
-      params = params.append('completeByFrom', filter.completeByFrom);
+    (filter.itemStatus ?? []).forEach(s => {
+      params = params.append('itemStatus', String(s.orderItemStatusId));
+    });
+    (filter.orderStatus ?? []).forEach(s => {
+      params = params.append('orderStatus', String(s.orderStatusId));
+    });
+    params = params.append('completeByFrom', filter.completeByFrom);
     if (filter.completeByTo != null)
       params = params.append('completeByTo', filter.completeByTo);
     if (filter.customer)

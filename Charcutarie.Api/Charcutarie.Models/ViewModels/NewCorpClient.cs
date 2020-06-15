@@ -9,5 +9,6 @@ namespace Charcutarie.Models.ViewModels
         public string Name { get; set; }
         public string DBAName { get; set; }
         public bool Active { get; set; }
+        public string Currency { get; set; }
     }
 }

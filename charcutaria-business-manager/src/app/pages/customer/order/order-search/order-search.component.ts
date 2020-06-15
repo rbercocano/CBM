@@ -13,6 +13,7 @@ import { OrderStatus } from 'src/app/shared/models/orderStatus';
 import { PaymentStatus } from 'src/app/shared/models/paymentStatus';
 import { DomainService } from 'src/app/shared/services/domain/domain.service';
 import { forkJoin } from 'rxjs';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-order-search',
@@ -28,6 +29,29 @@ export class OrderSearchComponent implements OnInit {
   public filter: orderSummaryFilter = new orderSummaryFilter();
   private lastFilter: orderSummaryFilter;
   private modal: NgbModalRef;
+
+  public orderStatusSettings: IDropdownSettings = {
+    singleSelection: false,
+    idField: 'orderStatusId',
+    textField: 'description',
+    selectAllText: 'Selecionar Todos',
+    unSelectAllText: 'Deselecionar Todos',
+    searchPlaceholderText: 'Pesquisar',
+    noDataAvailablePlaceholderText: 'Nenhuma opção disponível',
+    itemsShowLimit: 2,
+    allowSearchFilter: true
+  };
+  public paymentStatusSettings: IDropdownSettings = {
+    singleSelection: false,
+    idField: 'paymentStatusId',
+    textField: 'description',
+    selectAllText: 'Selecionar Todos',
+    unSelectAllText: 'Deselecionar Todos',
+    searchPlaceholderText: 'Pesquisar',
+    noDataAvailablePlaceholderText: 'Nenhuma opção disponível',
+    itemsShowLimit: 2,
+    allowSearchFilter: true
+  };
   constructor(private orderService: OrderService,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -43,6 +67,9 @@ export class OrderSearchComponent implements OnInit {
       if (r != null)
         this.search();
     });
+  }
+  onSelect(e: any) {
+    console.log(e);
   }
   ngOnInit(): void {
     this.spinner.show();
@@ -104,7 +131,7 @@ export class OrderSearchComponent implements OnInit {
   }
   open(content) {
     this.resetFilter();
-    this.modal = this.modalService.open(content);
+    this.modal = this.modalService.open(content,{size:'lg'});
   }
   resetFilter() {
     this.filter = new orderSummaryFilter();

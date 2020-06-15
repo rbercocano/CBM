@@ -15,6 +15,9 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.Name)
                 .HasColumnType("VARCHAR(100)")
                 .IsRequired();
+            builder.Property(p => p.Currency)
+                .HasColumnType("VARCHAR(4)")
+                .IsRequired();
 
             builder.Property(p => p.DBAName)
                 .HasColumnType("VARCHAR(100)")

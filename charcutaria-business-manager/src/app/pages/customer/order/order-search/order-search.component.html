@@ -152,17 +152,17 @@
             </div>
             <div class="col-6">
                 <label class="m-b-0">Status do Pedido</label>
-                <select class="form-control" [(ngModel)]="filter.orderStatus" name="orderStatus">
-                    <option [ngValue]="null">Todos</option>
-                    <option [ngValue]="s.orderStatusId" *ngFor="let s of orderStatus">{{s.description}}</option>
-                </select>
+                <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="orderStatusSettings"
+                    [data]="orderStatus" [(ngModel)]="filter.orderStatus" (onSelect)="onSelect($event)"
+                    (onSelectAll)="onSelect($event)">
+                </ng-multiselect-dropdown>
             </div>
             <div class="col-6">
                 <label class="m-b-0">Status do Pagamento</label>
-                <select class="form-control" [(ngModel)]="filter.paymentStatus" name="paymentStatus">
-                    <option [ngValue]="null">Todos</option>
-                    <option [ngValue]="s.paymentStatusId" *ngFor="let s of paymentStatus">{{s.description}}</option>
-                </select>
+                <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="paymentStatusSettings"
+                    [data]="paymentStatus" [(ngModel)]="filter.paymentStatus" (onSelect)="onSelect($event)"
+                    (onSelectAll)="onSelect($event)">
+                </ng-multiselect-dropdown>
             </div>
             <div class="col-12  p-r-0">
                 <label class="m-b-0">Data do Pedido</label>

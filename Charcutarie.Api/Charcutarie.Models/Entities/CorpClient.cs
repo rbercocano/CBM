@@ -10,6 +10,7 @@ namespace Charcutarie.Models.Entities
         public string Name { get; set; }
         public string DBAName { get; set; }
         public bool Active { get; set; }
+        public string Currency { get; set; }
         public DateTime CreatedOn { get; set; }
         public List<Customer> Customers { get; set; }
     }

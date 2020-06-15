@@ -110,7 +110,7 @@ namespace Charcutarie.Repository
         public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo,
                                                          DateTime? paidOnFrom, DateTime? paidOnTo,
                                                          DateTime? completeByFrom, DateTime? completeByTo,
-                                                         int? paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
+                                                          List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
                                                          int? page, int? pageSize)
         {
             var sqlParams = new List<SqlParameter>();
@@ -169,11 +169,9 @@ namespace Charcutarie.Repository
                 query.Append(" AND CompleteBy <= @completeByTo");
                 sqlParams.Add(new SqlParameter("@completeByTo", completeByTo) { SqlDbType = SqlDbType.Date });
             }
-            if (paymentStatus.HasValue)
-            {
-                query.Append(" AND paymentStatusId = @paymentStatus");
-                sqlParams.Add(new SqlParameter("@paymentStatus", paymentStatus) { SqlDbType = SqlDbType.Int });
-            }
+            if (paymentStatus != null && paymentStatus.Any())
+                query.Append($" AND paymentStatusId IN ({string.Join(',', paymentStatus.ToArray())})");
+
             if (orderStatus != null && orderStatus.Any())
                 query.Append($" AND orderStatusId IN ({string.Join(',', orderStatus.ToArray())})");
             var count = context.OrderSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).Count();
@@ -192,8 +190,7 @@ namespace Charcutarie.Repository
                 RecordsPerpage = pageSize ?? count
             };
         }
-        public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, OrderStatusEnum? orderStatus,
-                                                               OrderItemStatusEnum? itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
+        public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
                                                                string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction,
                                                                int? page, int? pageSize)
         {
@@ -242,22 +239,19 @@ namespace Charcutarie.Repository
                 query.Append(" AND Customer LIKE '%'+ @customer +'%'");
                 sqlParams.Add(new SqlParameter("@customer", customer) { SqlDbType = SqlDbType.VarChar, Size = 500 });
             }
-            if (itemStatus.HasValue)
-            {
-                query.Append($" AND OrderItemStatusId = @OrderItemStatusId");
-                sqlParams.Add(new SqlParameter("@OrderItemStatusId", (int)itemStatus) { SqlDbType = SqlDbType.Int });
-            }
+            if (itemStatus != null && itemStatus.Any())
+                query.Append($" AND OrderItemStatusId IN ({string.Join(',', itemStatus.Select(i => (int)i).ToArray())})");
+
 
             if (orderNumber.HasValue)
             {
                 query.Append($" AND OrderNumber = @OrderNumber");
                 sqlParams.Add(new SqlParameter("@OrderNumber", orderNumber.Value) { SqlDbType = SqlDbType.Int });
             }
-            if (orderStatus.HasValue)
-            {
-                query.Append($" AND orderStatusId = @orderStatus");
-                sqlParams.Add(new SqlParameter("@orderStatus", (int)orderStatus) { SqlDbType = SqlDbType.Int });
-            }
+
+            if (orderStatus != null && orderStatus.Any())
+                query.Append($" AND orderStatusId IN ({string.Join(',', orderStatus.Select(i => (int)i).ToArray())})");
+
 
             var count = context.OrderItemReports.FromSqlRaw(query.ToString(), sqlParams.ToArray()).Count();
             if (orderBy == OrderItemReportOrderBy.OrderItemStatus)

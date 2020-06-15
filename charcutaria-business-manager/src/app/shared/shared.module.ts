@@ -31,7 +31,7 @@ import { PaymentStatusLabelComponent } from './payment-status-label/payment-stat
 import { OrderItemStatusLabelComponent } from './order-item-status-label/order-item-status-label.component';
 import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 
@@ -55,7 +55,8 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     FormsModule,
     NgbModule,
     HttpClientModule,
-    NgxMaskModule.forRoot(),
+    NgxMaskModule.forRoot(),    
+    NgMultiSelectDropDownModule.forRoot(),
     RouterModule
   ],
   exports: [
@@ -73,7 +74,8 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     OrderStatusLabelComponent,
     PaymentStatusLabelComponent,
     OrderItemStatusLabelComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    NgMultiSelectDropDownModule
   ],
   providers: [
     UserService,

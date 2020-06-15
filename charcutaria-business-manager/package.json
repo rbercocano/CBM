@@ -31,6 +31,7 @@
     "install": "^0.13.0",
     "moment": "^2.26.0",
     "ng-click-outside": "^6.0.0",
+    "ng-multiselect-dropdown": "^0.2.10",
     "ngx-currency": "^2.3.3",
     "ngx-mask": "^9.0.2",
     "ngx-spinner": "^9.0.2",

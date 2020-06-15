@@ -3,6 +3,7 @@ export interface JWTUserInfo {
     corpClientId: number | null;
     username: string;
     name: string;
+    currency: string;
     active: boolean;
     roleId: Number;
     createdOn: Date;

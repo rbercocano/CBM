@@ -41,7 +41,8 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.User, vm.JWTUserInfo>()
                 .ForMember(m => m.CompanyName, opt => opt.MapFrom(m => m.CorpClient == null ? "" : m.CorpClient.Name))
                 .ForMember(m => m.Role, opt => opt.MapFrom(m => m.Role.Name))
-                .ForMember(m => m.DBAName, opt => opt.MapFrom(m => m.CorpClient == null ? "" : m.CorpClient.DBAName));
+                .ForMember(m => m.DBAName, opt => opt.MapFrom(m => m.CorpClient == null ? "" : m.CorpClient.DBAName))
+                .ForMember(m => m.Currency, opt => opt.MapFrom(m => m.CorpClient == null ? "" : m.CorpClient.Currency));
 
 
             CreateMap<ef.ContactType, vm.ContactType>().ReverseMap();

@@ -1,3 +1,6 @@
+import { PaymentStatus } from './paymentStatus';
+import { OrderStatus } from './orderStatus';
+
 export class orderSummaryFilter {
     public customer: string;
     public createdOnFrom: string;
@@ -6,8 +9,8 @@ export class orderSummaryFilter {
     public paidOnTo: string;
     public completeByFrom: string;
     public completeByTo: string;
-    public paymentStatus: number;
-    public orderStatus: number;
+    public paymentStatus: PaymentStatus[];
+    public orderStatus: OrderStatus[];
     public orderBy: number;
     public direction: number;
 }

@@ -13,6 +13,7 @@ import { NotificationService } from 'src/app/shared/services/notification/notifi
 import { DomainService } from 'src/app/shared/services/domain/domain.service';
 import { forkJoin } from 'rxjs';
 import { PagedResult } from 'src/app/shared/models/pagedResult';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
   selector: 'app-order-item',
@@ -28,6 +29,29 @@ export class OrderItemComponent implements OnInit {
   public filter: OrderItemReportFilter = new OrderItemReportFilter();
   private lastFilter: OrderItemReportFilter;
   private modal: NgbModalRef;
+  
+  public orderStatusSettings: IDropdownSettings = {
+    singleSelection: false,
+    idField: 'orderStatusId',
+    textField: 'description',
+    selectAllText: 'Selecionar Todos',
+    unSelectAllText: 'Deselecionar Todos',
+    searchPlaceholderText: 'Pesquisar',
+    noDataAvailablePlaceholderText: 'Nenhuma opção disponível',
+    itemsShowLimit: 2,
+    allowSearchFilter: true
+  };
+  public orderItemStatusSettings: IDropdownSettings = {
+    singleSelection: false,
+    idField: 'orderItemStatusId',
+    textField: 'description',
+    selectAllText: 'Selecionar Todos',
+    unSelectAllText: 'Deselecionar Todos',
+    searchPlaceholderText: 'Pesquisar',
+    noDataAvailablePlaceholderText: 'Nenhuma opção disponível',
+    itemsShowLimit: 2,
+    allowSearchFilter: true
+  };
   constructor(private orderService: OrderService,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -43,6 +67,9 @@ export class OrderItemComponent implements OnInit {
       if (r != null)
         this.search();
     });
+  }
+  onSelect(e: any) {
+    console.log(e);
   }
   ngOnInit(): void {
     this.spinner.show();

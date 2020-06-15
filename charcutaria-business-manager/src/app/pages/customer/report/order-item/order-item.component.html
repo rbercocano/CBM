@@ -154,11 +154,18 @@
                 <input type="text" class="form-control" [(ngModel)]="filter.customer" maxlength="100">
             </div>
             <div class="col-6">
+                <label class="m-b-0">Status do Pedido</label>
+                <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="orderStatusSettings"
+                    [data]="orderStatus" [(ngModel)]="filter.orderStatus" (onSelect)="onSelect($event)"
+                    (onSelectAll)="onSelect($event)">
+                </ng-multiselect-dropdown>
+            </div>
+            <div class="col-6">
                 <label class="m-b-0">Status do Item</label>
-                <select class="form-control" [(ngModel)]="filter.itemStatus" name="itemStatus">
-                    <option [ngValue]="null">Todos</option>
-                    <option [ngValue]="s.orderItemStatusId" *ngFor="let s of orderItemStatus">{{s.description}}</option>
-                </select>
+                <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="orderItemStatusSettings"
+                    [data]="orderItemStatus" [(ngModel)]="filter.itemStatus" (onSelect)="onSelect($event)"
+                    (onSelectAll)="onSelect($event)">
+                </ng-multiselect-dropdown>
             </div>
             <div class="col-12  p-r-0">
                 <label class="m-b-0">Data para Finalizar Pedido</label>
