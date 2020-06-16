@@ -144,5 +144,13 @@ namespace Charcutarie.Api.Controllers.v1
                 return Ok(data);
             return NoContent();
         }
+        [HttpGet("Report/SalesPerMonth")]
+        public async Task<ActionResult<IEnumerable<SalesPerMonth>>> GetSalesPerMonth()
+        {
+            var data = await service.GetSalesPerMonth(UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
+        }
     }
 }

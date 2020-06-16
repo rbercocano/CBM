@@ -205,5 +205,10 @@ namespace Charcutarie.Services
         {
             return await orderApp.GetPendingPaymentsSummary(corpClientId);
         }
+
+        public async Task<IEnumerable<SalesPerMonth>> GetSalesPerMonth(int corpClientId)
+        {
+            return await orderApp.GetSalesPerMonth(corpClientId);
+        }
     }
 }

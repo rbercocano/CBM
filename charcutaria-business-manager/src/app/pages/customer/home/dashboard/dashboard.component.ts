@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { OrderCountSummary } from 'src/app/shared/models/orderCountSummary';
 import { PendingPaymentsSummary } from 'src/app/shared/models/pendingPaymentSummary';
 import { SalesSummary } from 'src/app/shared/models/salesSummary';
@@ -12,12 +12,14 @@ import * as c3 from 'c3';
 import { ProductService } from 'src/app/shared/services/product/product.service';
 import { ProductCostProfit } from 'src/app/shared/models/productCostProfit';
 import { Production } from 'src/app/shared/models/production';
-
+import { SalesPerMonth } from 'src/app/shared/models/salesPerMonth';
+import * as moment from 'moment';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss',
-    '../../../../../../node_modules/c3/c3.min.css']
+    '../../../../../../node_modules/c3/c3.min.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
   public orderCountSummary: OrderCountSummary = { rowId: '', totalCompletedOrders: 0, totalOrders: 0 };
@@ -26,10 +28,11 @@ export class DashboardComponent implements OnInit {
   public profitSummary: ProfitSummary = { rowId: '', totalProfit: 0, currentMonthProfit: 0 };
   public profitAndCost: ProductCostProfit[] = [];
   public production: Production[] = [];
+  public monthlySales: SalesPerMonth[] = [];
   constructor(private orderService: OrderService,
     private productService: ProductService,
     private spinner: NgxSpinnerService,
-    private notificationService: NotificationService, ) { }
+    private notificationService: NotificationService,) { }
 
   ngOnInit(): void {
 
@@ -40,7 +43,8 @@ export class DashboardComponent implements OnInit {
       this.orderService.getSalesSummary(),
       this.orderService.getProfitSummary(),
       this.productService.getCostProfit(),
-      this.productService.getProduction()
+      this.productService.getProduction(),
+      this.orderService.getSalesPerMonth()
     ).subscribe(r => {
       this.orderCountSummary = r[0];
       this.pendingPaymentsSummary = r[1];
@@ -48,6 +52,8 @@ export class DashboardComponent implements OnInit {
       this.profitSummary = r[3];
       this.profitAndCost = (r[4] ?? []).slice(0, 5);
       this.production = (r[5] ?? []).slice(0, 5);
+      this.monthlySales = r[6];
+      this.renderMonthlySales();
     }, e => {
       this.notificationService.notifyHttpError(e);
       this.spinner.hide();
@@ -85,25 +91,32 @@ export class DashboardComponent implements OnInit {
     }
     return result;
   }
-  private generateProfitAndCostChart() {
+  private renderMonthlySales() {
     setTimeout(() => {
-      let cols = [];
-      this.profitAndCost.forEach(v => {
-        cols.push([v.product, v.profit]);
+      let profits: Array<any> = ['Lucro'];
+      let sales: Array<any> = ['Vendas'];
+      let months: Array<any> = [];
+      this.monthlySales.forEach(v => {
+        sales.push(v.totalSales);
+        profits.push(v.totalProfit);
+        let date = moment(v.date);
+        months.push(`${date.format('MM')}/${date.format('YYYY')}`);
       });
-      const chart = c3.generate({
-        bindto: '#profitAndCost',
+      var chart = c3.generate({
+        bindto: '#monthlysales', size: {
+          height: 240
+        },
         data: {
-          json: this.profitAndCost,
-          type: 'bar',
-          keys: {
-            value: ['profitPercentage']
-          }
+          type: 'spline',
+          columns: [
+            sales,
+            profits
+          ]
         },
         axis: {
           x: {
             type: 'category',
-            categories: this.profitAndCost.map(v => v.product)
+            categories: months
           }
         }
       });

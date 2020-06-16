@@ -68,6 +68,11 @@ namespace Charcutarie.Application
             return await repository.GetProfitSummary(corpClientId);
         }
 
+        public async Task<IEnumerable<SalesPerMonth>> GetSalesPerMonth(int corpClientId)
+        {
+            return await repository.GetSalesPerMonth(corpClientId);
+        }
+
         public async Task<SalesSummary> GetSalesSummary(int corpClientId)
         {
             return await repository.GetSalesSummary(corpClientId);

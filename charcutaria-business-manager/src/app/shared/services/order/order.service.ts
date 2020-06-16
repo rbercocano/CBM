@@ -16,6 +16,7 @@ import { OrderCountSummary } from '../../models/orderCountSummary';
 import { ProfitSummary } from '../../models/profitSummary';
 import { SalesSummary } from '../../models/salesSummary';
 import { PendingPaymentsSummary } from '../../models/pendingPaymentSummary';
+import { SalesPerMonth } from '../../models/salesPerMonth';
 
 @Injectable({
   providedIn: 'root'
@@ -119,4 +120,7 @@ export class OrderService {
     return this.httpClient.get<PendingPaymentsSummary>(`${environment.apiUrl}/Order/Report/PendingPaymentsSummary`);
   }
 
+  public getSalesPerMonth(): Observable<SalesPerMonth[]> {
+    return this.httpClient.get<SalesPerMonth[]>(`${environment.apiUrl}/Order/Report/SalesPerMonth`);
+  }
 }

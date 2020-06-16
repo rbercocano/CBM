@@ -15,8 +15,12 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("BIGINT")
                 .IsRequired();
 
-            builder.Property(p => p.WeightLossPercentage)
+            builder.Property(p => p.WeightVariationPercentage)
                 .HasColumnType("DECIMAL(4,2)")
+                .IsRequired();
+
+            builder.Property(p => p.IncreaseWeight)
+                .HasColumnType("BIT")
                 .IsRequired();
 
             builder.Property(p => p.ProcedureDescription)

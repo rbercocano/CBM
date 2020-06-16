@@ -68,6 +68,7 @@ namespace Charcutarie.Repository.DbContext
         public DbSet<OrderItemReport> OrderItemReports { get; set; }
         public DbSet<PendingPaymentsSummary> PendingPaymentsSummaries { get; set; }
         public DbSet<SalesSummary> SalesSummaries { get; set; }
+        public DbSet<SalesPerMonth> SalesPerMonths { get; set; }
         public DbSet<ProfitSummary> ProfitSummaries { get; set; }
         public DbSet<OrderCountSummary> OrderCountSummaries { get; set; }
         public DbSet<ProductionCostProfit> ProductionCostProfits { get; set; }
@@ -105,6 +106,8 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new PendingPaymentsSummaryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductionCostProfitConfiguration());
             modelBuilder.ApplyConfiguration(new ProductionConfiguration());
+            modelBuilder.ApplyConfiguration(new SalesPerMonthConfiguration());
+            
         }
         public async Task<int> ExecuteScalar(string command)
         {

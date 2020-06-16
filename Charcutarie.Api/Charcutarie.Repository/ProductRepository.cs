@@ -103,7 +103,13 @@ namespace Charcutarie.Repository
 		                                            WHEN (R.MeasureUnitId = 5 OR  R.MeasureUnitId = 6)
 			                                            THEN R.Price / dbo.ConvertMeasure(R.MeasureUnitId,1,5) 
 		                                            ELSE R.Price / dbo.ConvertMeasure(R.MeasureUnitId,1,1)
-	                                            END * (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1-(CAST(D.WeightLossPercentage as DECIMAL(4,2))/100))) * I.Percentage/100 AS Cost
+	                                            END * 
+	                                            CASE 
+		                                            WHEN D.IncreaseWeight = 1 THEN
+		                                            (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1+(CAST(D.WeightVariationPercentage as DECIMAL(4,2))/100))) * I.Percentage/100
+		                                            ELSE
+		                                            (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1-(CAST(D.WeightVariationPercentage as DECIMAL(4,2))/100))) * I.Percentage/100
+		                                            END AS Cost
 	                                            FROM Product P
 	                                            JOIN DataSheet D ON P.ProductId = D.ProductId
 	                                            JOIN DataSheetItem I ON D.DataSheetId = I.DataSheetId

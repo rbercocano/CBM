@@ -384,5 +384,30 @@ namespace Charcutarie.Repository
             var data = await context.OrderCountSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
             return mapper.Map<OrderCountSummary>(data);
         }
+
+
+        public async Task<IEnumerable<SalesPerMonth>> GetSalesPerMonth(int corpClientId)
+        {
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId)
+            };
+            var query = new StringBuilder(@"SELECT TOP 6
+	                                            CAST(CAST(YEAR(O.CreatedOn) AS VARCHAR(4)) + '-'+CAST(MONTH(O.CreatedOn) AS VARCHAR(2))+'-01' AS DATE) AS [Date],
+	                                            SUM(I.PriceAfterDiscount) AS TotalSales,
+	                                            SUM(I.Profit) AS TotalProfit
+                                            FROM OrderItem I 
+                                            JOIN Product P ON I.ProductId = P.ProductId
+                                            JOIN [ORDER] O ON O.OrderId = I.OrderId
+                                            WHERE 
+	                                            P.CorpClientId = @corpClientId 
+	                                            AND I.OrderItemStatusId <> 3
+                                            GROUP BY 
+	                                            CAST(CAST(YEAR(O.CreatedOn) AS VARCHAR(4)) + '-'+CAST(MONTH(O.CreatedOn) AS VARCHAR(2))+'-01' AS DATE)
+                                            ORDER BY 1 DESC");
+            var data = await context.SalesPerMonths.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToListAsync();
+            var result = mapper.Map<IEnumerable<SalesPerMonth>>(data);
+            return result.OrderBy(o => o.Date);
+        }
     }
 }

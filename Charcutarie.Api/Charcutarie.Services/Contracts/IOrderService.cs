@@ -25,6 +25,7 @@ namespace Charcutarie.Services.Contracts
         Task<OrderCountSummary> GetOrderCountSummary(int corpClientId);
         Task<ProfitSummary> GetProfitSummary(int corpClientId);
         Task<SalesSummary> GetSalesSummary(int corpClientId);
+        Task<IEnumerable<SalesPerMonth>> GetSalesPerMonth(int corpClientId);
         Task<PendingPaymentsSummary> GetPendingPaymentsSummary(int corpClientId);
     }
 }
