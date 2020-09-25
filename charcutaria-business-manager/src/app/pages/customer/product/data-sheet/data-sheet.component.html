@@ -11,6 +11,27 @@
     <div class="col-5">
         <div class="card">
             <div class="card-header p-b-0">
+                <div class="row m-b-10">
+                    <label class="m-b-0 col-12">Variação de Peso</label>
+                    <div class="col-8">
+                        <select class="form-control" [(ngModel)]="dataSheet.increaseWeight">
+                            <option [ngValue]="true">Aumento de Peso</option>
+                            <option [ngValue]="false">Perda de Peso</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" currencyMask
+                                [options]="{ prefix: '', suffix:' %', thousands: '.', decimal: ',',allowNegative:false,precision:2 }"
+                                maxlength="4" [(ngModel)]="dataSheet.weightVariationPercentage" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-sm" (click)="save()" type="button">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <h5>Ingredientes</h5>
                 <button class="btn btn-mini btn-primary float-right" placement="top" ngbTooltip="Adicionar"
                     (click)="open(content,null)">
@@ -85,7 +106,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <ckeditor  [config]="config" [editor]="Editor" [(ngModel)]="dataSheet.procedureDescription"></ckeditor>
+                <ckeditor [config]="config" [editor]="Editor" [(ngModel)]="dataSheet.procedureDescription"></ckeditor>
             </div>
         </div>
     </div>

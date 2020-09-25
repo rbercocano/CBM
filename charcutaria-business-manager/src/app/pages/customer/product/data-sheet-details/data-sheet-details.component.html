@@ -31,6 +31,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="alert alert-info background-info text-center"
+                    *ngIf="dataSheet.weightVariationPercentage == 0">
+                    Este produto não varia o peso</div>
+                <div class="alert alert-info background-info text-center"
+                    *ngIf="dataSheet.weightVariationPercentage > 0 && dataSheet.increaseWeight">Este tem um aumento de
+                    peso de <b>{{dataSheet.weightVariationPercentage }}%</b></div>
+                <div class="alert alert-info background-info text-center"
+                    *ngIf="dataSheet.weightVariationPercentage > 0 && !dataSheet.increaseWeight">Este tem uma perda de
+                    peso de <b>{{dataSheet.weightVariationPercentage }}%</b></div>
                 <div class="col-12 row production-summary p-r-0">
                     <div>
                         Preço: {{summary.salePrice|cbmCurrency}}

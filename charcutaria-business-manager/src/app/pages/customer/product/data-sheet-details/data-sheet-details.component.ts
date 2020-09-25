@@ -46,7 +46,7 @@ export class DataSheetDetailsComponent implements OnInit {
     forkJoin(oProduct, oDataSheet, oMeasures).pipe(flatMap(r => {
       this.product = r[0];
       this.title = `${this.product.name} / Ficha Técnica`;
-      this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId };
+      this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, weightVariationPercentage: 0, increaseWeight: true };
       this.measures = r[2] ?? [];
       this.spinner.hide();
       let result: ProductionItem[] = [];

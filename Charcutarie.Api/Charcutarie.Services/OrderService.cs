@@ -63,6 +63,7 @@ namespace Charcutarie.Services
         public async Task ChangeStatus(UpdateOrderStatus model, int corpClientId)
         {
             await orderApp.ChangeStatus(model, corpClientId);
+            await orderItemApp.UpdateAllOrderItemStatus(model.OrderNumber, OrderItemStatusEnum.Cancelado, corpClientId);
         }
 
         public async Task<Order> Get(long orderId, int corpClientId)
@@ -209,6 +210,10 @@ namespace Charcutarie.Services
         public async Task<IEnumerable<SalesPerMonth>> GetSalesPerMonth(int corpClientId)
         {
             return await orderApp.GetSalesPerMonth(corpClientId);
+        }
+        public PagedResult<SummarizedOrderReport> GetSummarizedReport(int corpClientId, int volumeUnitId, int massUnitId, List<OrderItemStatusEnum> itemStatus, List<long> productIds, SummarizedOrderOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
+        {
+            return orderApp.GetSummarizedReport(corpClientId, volumeUnitId, massUnitId, itemStatus, productIds, orderBy, direction, page, pageSize);
         }
     }
 }

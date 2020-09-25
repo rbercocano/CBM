@@ -13,6 +13,7 @@
           <i class="fa fa-user fa-2x"></i>
         </a>
         <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+          <a ngbDropdownItem [routerLink]="['/user/change-password']">Alterar Senha</a>
           <a ngbDropdownItem href="javascript:" (click)="logout()">Sair</a>
         </div>
       </li>

@@ -5,6 +5,7 @@ import { User } from '../../models/user';
 import { environment } from 'src/environments/environment';
 import { ParentModule } from '../../models/parentModule';
 import { map } from 'rxjs/operators';
+import { ChangePassword } from '../../models/ChangePassword';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,8 @@ export class UserService {
 
   public resetPassword(data: { corpClientId: number, username: string }): Observable<any> {
     return this.httpClient.post<any>(`${environment.apiUrl}/User/Password/Reset`, data);
+  }
+  public changePassword(data: ChangePassword): Observable<any> {
+    return this.httpClient.put<any>(`${environment.apiUrl}/User/Password/Change`, data);
   }
 }

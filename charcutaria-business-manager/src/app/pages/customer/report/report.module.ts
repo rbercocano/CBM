@@ -8,13 +8,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { OrderItemComponent } from './order-item/order-item.component';
+import { SummarizedProductionComponent } from './summarized-production/summarized-production.component';
 
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
 @NgModule({
-  declarations: [OrderItemComponent],
+  declarations: [OrderItemComponent, SummarizedProductionComponent],
   imports: [
     CommonModule,
     FormsModule,

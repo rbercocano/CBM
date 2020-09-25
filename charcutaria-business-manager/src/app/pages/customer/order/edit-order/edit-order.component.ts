@@ -32,6 +32,7 @@ export class EditOrderComponent implements OnInit {
   @ViewChild("close", { static: false }) cClose: ConfirmModalComponent;
   @ViewChild("restore", { static: false }) cRestore: ConfirmModalComponent;
   @ViewChild("cancelorder", { static: false }) cCancelOrder: ConfirmModalComponent;
+  @ViewChild("removeitem", { static: false }) cRemoveItem: ConfirmModalComponent;
   public order: OrderDetails;
   public minDate: NgbDateStruct;
   public paymentStatus: PaymentStatus[] = [];
@@ -44,6 +45,7 @@ export class EditOrderComponent implements OnInit {
   public currentQuote: ProductQuote = { orderItemId: null, orderItemStatus: null, quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: null, additionalInfo: '' };
   private qtdSubject: Subject<number> = new Subject();
   public canEditItem = true;
+  private itemToRemove: OrderItem;
   constructor(private orderService: OrderService,
     private route: ActivatedRoute,
     private router: Router,
@@ -163,6 +165,10 @@ export class EditOrderComponent implements OnInit {
   public confirmCancelOrder() {
     this.cCancelOrder.open();
   }
+  public confirmRemoval(item: OrderItem) {
+    this.itemToRemove = item;
+    this.cRemoveItem.open();
+  }
   public closeOrder(orderNumber: any) {
     this.cClose.close();
     this.spinner.show();
@@ -171,7 +177,7 @@ export class EditOrderComponent implements OnInit {
     })).subscribe(r => {
       this.setOrder(r);
       this.spinner.hide();
-      this.notificationService.showSuccess('Sucesso', 'Ordem restaurada com sucesso.');
+      this.notificationService.showSuccess('Sucesso', 'Ordem encerrada com sucesso.');
     }, e => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -284,9 +290,10 @@ export class EditOrderComponent implements OnInit {
     });
 
   }
-  public removeItem(item: OrderItem) {
+  public removeItem() {
+    this.cRemoveItem.close();
     this.spinner.show();
-    this.orderService.removeOrderItem(this.order.orderId, item.orderItemId).pipe(flatMap(r => {
+    this.orderService.removeOrderItem(this.order.orderId, this.itemToRemove.orderItemId).pipe(flatMap(r => {
       return this.orderService.getByNumber(this.order.orderNumber)
     })).subscribe(r => {
       this.setOrder(r);

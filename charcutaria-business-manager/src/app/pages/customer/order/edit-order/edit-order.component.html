@@ -144,7 +144,7 @@
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                     <button type="button" placement="top" ngbTooltip="Remover Item" *ngIf="allowEdit"
-                                        (click)="removeItem(oi)" class="btn btn-mini btn-danger m-l-5" type="button">
+                                        (click)="confirmRemoval(oi)" class="btn btn-mini btn-danger m-l-5" type="button">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>
@@ -272,12 +272,15 @@
 
 <app-confirm-modal #close *ngIf="order != null" [data]="order.orderNumber" (confirm)="closeOrder($event)">
     <h2>Deseja encerrar este pedido?</h2>
-    <p>Todos os itens do pedidos serão marcados como entrege.</p>
+    <p>Todos os itens do pedidos serão marcados como entregue.</p>
 </app-confirm-modal>
 <app-confirm-modal #restore *ngIf="order != null" [data]="order.orderNumber" (confirm)="restoreOrder($event)">
     <h2>Deseja restaurar este pedido?</h2>
 </app-confirm-modal>
 <app-confirm-modal #cancelorder *ngIf="order != null" [data]="order.orderNumber" (confirm)="cancelOrder($event)">
     <h2>Deseja cancelar este pedido?</h2>
+</app-confirm-modal>
+<app-confirm-modal #removeitem *ngIf="order != null" (confirm)="removeItem()">
+    <h2>Deseja remover este item do pedido?</h2>
 </app-confirm-modal>
 <app-toasts></app-toasts>

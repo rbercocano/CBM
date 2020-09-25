@@ -55,9 +55,9 @@ namespace Charcutarie.Services
             emailManager.SendEmail(new List<string>() { user.Email }, body, subject, true);
             return user.Email;
         }
-        public async Task ChangePassword(ChangePassword model, int corpClientId)
+        public async Task ChangePassword(ChangePassword model, int corpClientId, long userId)
         {
-            await userApp.ChangePassword(model, corpClientId);
+            await userApp.ChangePassword(model, corpClientId, userId);
         }
     }
 }

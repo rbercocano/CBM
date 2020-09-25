@@ -97,7 +97,7 @@ namespace Charcutarie.Api.Controllers.v1
             return NoContent();
         }
         [HttpGet("Report/Item/{page:int}/{pageSize:int}")]
-        public ActionResult<PagedResult<OrderItemReport>> GetOrderItemReport([FromQuery] int corpClientId, [FromQuery] int? orderNumber, [FromQuery] List<OrderStatusEnum> orderStatus, [FromQuery] List<OrderItemStatusEnum> itemStatus, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] string? customer, [FromQuery] OrderItemReportOrderBy orderBy = OrderItemReportOrderBy.OrderItemStatus, [FromQuery] OrderByDirection direction = OrderByDirection.Asc, int? page = 1, int? pageSize = 10)
+        public ActionResult<PagedResult<OrderItemReport>> GetOrderItemReport([FromQuery] int? orderNumber, [FromQuery] List<OrderStatusEnum> orderStatus, [FromQuery] List<OrderItemStatusEnum> itemStatus, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] string? customer, [FromQuery] OrderItemReportOrderBy orderBy = OrderItemReportOrderBy.OrderItemStatus, [FromQuery] OrderByDirection direction = OrderByDirection.Asc, int? page = 1, int? pageSize = 10)
         {
             var data = service.GetOrderItemReport(UserData.CorpClientId.Value, orderNumber, orderStatus, itemStatus, completeByFrom, completeByTo, customer, orderBy, direction, page, pageSize);
             if (data.Data.Any())
@@ -148,6 +148,18 @@ namespace Charcutarie.Api.Controllers.v1
         public async Task<ActionResult<IEnumerable<SalesPerMonth>>> GetSalesPerMonth()
         {
             var data = await service.GetSalesPerMonth(UserData.CorpClientId.Value);
+            if (data != null)
+                return Ok(data);
+            return NoContent();
+        }
+        [HttpGet("Report/SummarizedProduction/{page:int}/{pageSize:int}")]
+        public ActionResult<IEnumerable<SummarizedOrderReport>> GetSummarizedReport([FromQuery] List<OrderItemStatusEnum> itemStatus,
+                                                                                        [FromQuery] List<long> products,
+                                                                                        [FromQuery] int volumeUnitId = 5, [FromQuery] int massUnitId = 1,
+                                                                                        [FromQuery] SummarizedOrderOrderBy orderBy = SummarizedOrderOrderBy.OrderItemStatus,
+                                                                                        [FromQuery] OrderByDirection direction = OrderByDirection.Asc, int? page = 1, int? pageSize = 10)
+        {
+            var data = service.GetSummarizedReport(UserData.CorpClientId.Value, volumeUnitId, massUnitId, itemStatus, products, orderBy, direction, page, pageSize);
             if (data != null)
                 return Ok(data);
             return NoContent();

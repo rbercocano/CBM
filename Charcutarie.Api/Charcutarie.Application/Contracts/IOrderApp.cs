@@ -31,5 +31,12 @@ namespace Charcutarie.Application.Contracts
         Task<SalesSummary> GetSalesSummary(int corpClientId);
         Task<PendingPaymentsSummary> GetPendingPaymentsSummary(int corpClientId);
         Task<IEnumerable<SalesPerMonth>> GetSalesPerMonth(int corpClientId);
+        PagedResult<SummarizedOrderReport> GetSummarizedReport(int corpClientId,
+                                                               int volumeUnitId, int massUnitId,
+                                                               List<OrderItemStatusEnum> itemStatus,
+                                                               List<long> productIds,
+                                                               SummarizedOrderOrderBy orderBy, OrderByDirection direction,
+                                                               int? page, int? pageSize);
+
     }
 }

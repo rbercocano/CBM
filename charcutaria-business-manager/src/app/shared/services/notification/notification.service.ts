@@ -21,6 +21,7 @@ export class NotificationService {
   showSuccess(header: string, msg: string, delay: number = null) {
     this.show(msg, {
       classname: 'bg-success text-light',
+      horizontalPosition: 'center',
       delay: delay ?? this.defaultTimeout,
       autohide: true,
       headertext: header
@@ -29,6 +30,16 @@ export class NotificationService {
   showError(header: string, msg: string, delay: number = null) {
     this.show(msg, {
       classname: 'bg-danger text-light',
+      horizontalPosition: 'center',
+      delay: delay ?? this.defaultTimeout,
+      autohide: true,
+      headertext: header
+    });
+  }
+  showWarning(header: string, msg: string, delay: number = null) {
+    this.show(msg, {
+      classname: 'bg-warning text-light',
+      horizontalPosition: 'center',
       delay: delay ?? this.defaultTimeout,
       autohide: true,
       headertext: header

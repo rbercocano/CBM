@@ -5,4 +5,6 @@ export interface DataSheet {
     productId: number;
     procedureDescription: string;
     dataSheetItems: DataSheetItem[];
+    increaseWeight: boolean;
+    weightVariationPercentage: number;
 }

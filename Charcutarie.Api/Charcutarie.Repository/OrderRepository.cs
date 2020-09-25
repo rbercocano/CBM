@@ -175,7 +175,12 @@ namespace Charcutarie.Repository
             if (orderStatus != null && orderStatus.Any())
                 query.Append($" AND orderStatusId IN ({string.Join(',', orderStatus.ToArray())})");
             var count = context.OrderSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).Count();
-            query.Append($" ORDER BY {orderBy} {direction}");
+            if (orderBy == OrderSummaryOrderBy.OrderStatus)
+                query.Append($" ORDER BY {orderBy} {direction}, CompleteBy");
+            else if (orderBy == OrderSummaryOrderBy.CompleteBy)
+                query.Append($" ORDER BY {orderBy} {direction}, OrderStatus");
+            else
+                query.Append($" ORDER BY {orderBy} {direction},CompleteBy, OrderStatus");
 
             if (page.HasValue && pageSize.HasValue)
                 query.Append($" OFFSET {(page > 0 ? page - 1 : 0) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY");
@@ -408,6 +413,90 @@ namespace Charcutarie.Repository
             var data = await context.SalesPerMonths.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToListAsync();
             var result = mapper.Map<IEnumerable<SalesPerMonth>>(data);
             return result.OrderBy(o => o.Date);
+        }
+
+        public PagedResult<SummarizedOrderReport> GetSummarizedReport(int corpClientId, int volumeUnitId, int massUnitId,
+                                                                List<OrderItemStatusEnum> itemStatus,
+                                                                List<long> productIds,
+                                                                SummarizedOrderOrderBy orderBy, OrderByDirection direction,
+                                                                int? page, int? pageSize)
+        {
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId),
+                new SqlParameter("@mid", massUnitId),
+                new SqlParameter("@vid", volumeUnitId)
+            };
+            var query = new StringBuilder(@"SELECT * FROM(SELECT 
+	                                        NEWID() as RowId,
+	                                        ProductId, 
+	                                        Product,
+	                                        OrderItemStatusId,
+	                                        OrderItemStatus,
+	                                        SUM(Quantity) as Quantity,
+	                                        CASE 
+                                                WHEN MeasureUnitTypeId = 1 THEN @mid
+											    ELSE @vid 
+                                            END as MeasureUnitId,
+	                                        (SELECT M.Description FROM MeasureUnit M WHERE M.MeasureUnitId = IIF(X.MeasureUnitTypeId=1,@mid,@vid)) as MeasureUnit,
+	                                        (SELECT M.ShortName FROM MeasureUnit M WHERE M.MeasureUnitId = IIF(X.MeasureUnitTypeId=1,@mid,@vid)) as ShortMeasureUnit
+                                        FROM 
+	                                        (SELECT	
+		                                        P.ProductId,
+		                                        P.Name as Product,
+		                                        CASE 
+			                                        WHEN U.MeasureUnitTypeId = 1 THEN
+				                                        CAST(dbo.ConvertMeasure(I.MeasureUnitId,I.Quantity,@mid) as Decimal(18,2))
+			                                        ELSE
+				                                        CAST(dbo.ConvertMeasure(I.MeasureUnitId,I.Quantity,@vid) as Decimal(18,2))
+		                                        END as Quantity,
+		                                        CASE 
+			                                        WHEN U.MeasureUnitTypeId = 1 THEN 1
+			                                        ELSE 5
+		                                        END as MeasureUnitId,
+		                                        U.MeasureUnitTypeId,
+		                                        S.OrderItemStatusId,
+		                                        S.Description AS  OrderItemStatus
+	                                        FROM OrderItem I
+	                                        JOIN Product P ON I.ProductId  = P.ProductId
+	                                        JOIN OrderItemStatus S ON I.OrderItemStatusId = S.OrderItemStatusId
+	                                        JOIN MeasureUnit U ON I.MeasureUnitId = U.MeasureUnitId
+	                                        WHERE P.CorpClientId = @corpClientId) X
+                                        GROUP BY	
+	                                        ProductId, 
+	                                        Product,
+	                                        MeasureUnitTypeId,
+	                                        OrderItemStatusId,
+	                                        OrderItemStatus,
+	                                        MeasureUnitId
+                                        ) X WHERE 1 = 1 ");
+
+            if (itemStatus != null && itemStatus.Any())
+                query.Append($" AND OrderItemStatusId IN ({string.Join(',', itemStatus.Select(i => (int)i).ToArray())})");
+
+            if (productIds != null && productIds.Any())
+                query.Append($" AND ProductId IN ({string.Join(',', productIds.Select(i => i).ToArray())})");
+
+            var count = context.SummarizedOrderReports.FromSqlRaw(query.ToString(), sqlParams.ToArray()).Count();
+            if (orderBy == SummarizedOrderOrderBy.OrderItemStatus)
+                query.Append($" ORDER BY {orderBy} {direction}, Product ASC");
+            else if (orderBy == SummarizedOrderOrderBy.Product)
+                query.Append($" ORDER BY {orderBy} {direction}, OrderItemStatus ASC");
+            else
+                query.Append($" ORDER BY {orderBy} {direction}, OrderItemStatus ASC, Product ASC");
+
+            if (page.HasValue && pageSize.HasValue)
+                query.Append($" OFFSET {(page > 0 ? page - 1 : 0) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY");
+
+            var data = context.SummarizedOrderReports.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToList();
+            var result = mapper.Map<IEnumerable<SummarizedOrderReport>>(data);
+            return new PagedResult<SummarizedOrderReport>
+            {
+                CurrentPage = page ?? 1,
+                Data = result,
+                RecordCount = count,
+                RecordsPerpage = pageSize ?? count
+            };
         }
     }
 }

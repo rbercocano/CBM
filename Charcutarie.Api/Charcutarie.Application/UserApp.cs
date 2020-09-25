@@ -5,6 +5,7 @@ using Charcutarie.Models;
 using Charcutarie.Models.ViewModels;
 using Charcutarie.Repository.Contracts;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Charcutarie.Application
@@ -62,12 +63,23 @@ namespace Charcutarie.Application
             return newPassword;
         }
 
-        public async Task ChangePassword(ChangePassword model, int corpClientId)
+        public async Task ChangePassword(ChangePassword model, int corpClientId, long userId)
         {
+            var currentUser = await userRepository.Get(userId, corpClientId);
+
+
+            if (model.Password != currentUser.Password)
+                throw new BusinessException("Senha atual inválida.");
+
             if (model.NewPassword != model.NewPasswordConfirmation)
                 throw new BusinessException("As senhas informadas não coincidem");
 
-            await userRepository.ChangePassword(model.UserId, model.NewPassword, corpClientId);
+
+            var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+            if(!regex.IsMatch(model.NewPassword))
+                throw new BusinessException("A senha não atende aos requisitos mínimos de segurança. Tamanho mínimo de 8 caractéres,ao menos uma letra maíuscula, minúscula, número e caracteres especias.");
+
+            await userRepository.ChangePassword(userId, model.NewPassword, corpClientId);
         }
     }
 }

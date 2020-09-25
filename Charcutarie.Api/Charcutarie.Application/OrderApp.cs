@@ -78,6 +78,12 @@ namespace Charcutarie.Application
             return await repository.GetSalesSummary(corpClientId);
         }
 
+        public PagedResult<SummarizedOrderReport> GetSummarizedReport(int corpClientId, int volumeUnitId, int massUnitId, List<OrderItemStatusEnum> itemStatus, List<long> productIds, SummarizedOrderOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
+        {
+            return repository.GetSummarizedReport(corpClientId, volumeUnitId, massUnitId, itemStatus, productIds, orderBy, direction, page, pageSize);
+        }
+
+
         public async Task Update(UpdateOrder model, int corpClientId)
         {
             await repository.Update(model, corpClientId);

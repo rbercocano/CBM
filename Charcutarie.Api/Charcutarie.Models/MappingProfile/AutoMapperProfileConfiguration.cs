@@ -112,6 +112,7 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.ProductionCostProfit, vm.ProductionCostProfit>().ReverseMap();
             CreateMap<ef.Production, vm.Production>().ReverseMap();
             CreateMap<ef.SalesPerMonth, vm.SalesPerMonth>().ReverseMap();
+            CreateMap<ef.SummarizedOrderReport, vm.SummarizedOrderReport>().ReverseMap();
         }
     }
 }

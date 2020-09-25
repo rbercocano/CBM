@@ -17,6 +17,8 @@ import { ProfitSummary } from '../../models/profitSummary';
 import { SalesSummary } from '../../models/salesSummary';
 import { PendingPaymentsSummary } from '../../models/pendingPaymentSummary';
 import { SalesPerMonth } from '../../models/salesPerMonth';
+import { SummarizedProductionFilter } from '../../models/summarizedProductionFilter';
+import { SummarizedOrderReport } from '../../models/summarizedOrderReport';
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +97,7 @@ export class OrderService {
       params = params.append('orderStatus', String(s.orderStatusId));
     });
     if (filter.completeByFrom != null)
-    params = params.append('completeByFrom', filter.completeByFrom);
+      params = params.append('completeByFrom', filter.completeByFrom);
     if (filter.completeByTo != null)
       params = params.append('completeByTo', filter.completeByTo);
     if (filter.customer)
@@ -122,5 +124,24 @@ export class OrderService {
 
   public getSalesPerMonth(): Observable<SalesPerMonth[]> {
     return this.httpClient.get<SalesPerMonth[]>(`${environment.apiUrl}/Order/Report/SalesPerMonth`);
+  }
+  public getSummarizedReport(filter: SummarizedProductionFilter, page: number, pageSize: number): Observable<PagedResult<SummarizedOrderReport>> {
+    let params = new HttpParams();
+    (filter.itemStatus ?? []).forEach(s => {
+      params = params.append('itemStatus', String(s.orderItemStatusId));
+    });
+    (filter.products ?? []).forEach(s => {
+      params = params.append('products', String(s.productId));
+    });
+    if (filter.volumeUnitId != null)
+      params = params.append('volumeUnitId', String(filter.volumeUnitId));
+    if (filter.massUnitId != null)
+      params = params.append('massUnitId', String(filter.massUnitId));
+    if (filter.orderBy != null)
+      params = params.append('orderBy', String(filter.orderBy));
+    if (filter.direction != null)
+      params = params.append('direction', String(filter.direction));
+    return this.httpClient.get<PagedResult<SummarizedOrderReport>>(`${environment.apiUrl}/Order/Report/SummarizedProduction/${page}/${pageSize}`, { params: params });
+
   }
 }

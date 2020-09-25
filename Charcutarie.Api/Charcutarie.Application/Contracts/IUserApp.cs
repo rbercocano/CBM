@@ -15,7 +15,7 @@ namespace Charcutarie.Application.Contracts
         Task SaveRefreshToken(long userId, string refreshToken, DateTime createdOn);
         Task<string> GetRefreshToken(long userId);
         Task<string> ResetPassword(long userId, int corpClientId);
-        Task ChangePassword(ChangePassword model, int corpClientId);
+        Task ChangePassword(ChangePassword model, int corpClientId, long userId);
         Task<User> GetByLogin(string username, int corpClientId);
     }
 }

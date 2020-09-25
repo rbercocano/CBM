@@ -53,7 +53,7 @@ export class DataSheetComponent implements OnInit {
     forkJoin(oProduct, oDataSheet, oMaterial).subscribe(r => {
       this.product = r[0];
       this.title = `${this.product.name} / Ficha Técnica`;
-      this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId };
+      this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, increaseWeight: true, weightVariationPercentage: 0 };
       this.rawMaterials = r[2] ?? [];
       this.spinner.hide();
     },

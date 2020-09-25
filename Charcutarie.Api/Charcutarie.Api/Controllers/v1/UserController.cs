@@ -69,5 +69,12 @@ namespace Charcutarie.Api.Controllers.v1
             var email = await service.ResetPassword(data.Username, data.CorpClientId);
             return Ok(new { email });
         }
+        [HttpPut("Password/Change")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ChangePassword(ChangePassword data)
+        {
+            await service.ChangePassword(data, UserData.CorpClientId.Value, UserData.UserId);
+            return Ok();
+        }
     }
 }
