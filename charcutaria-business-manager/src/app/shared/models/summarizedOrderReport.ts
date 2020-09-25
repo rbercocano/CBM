@@ -7,4 +7,5 @@ export interface SummarizedOrderReport {
     MeasureUnitId: number;
     MeasureUnit: string;
     ShortMeasureUnit: string;
+    MeasureUnitTypeId: number;
 }

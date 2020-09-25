@@ -427,12 +427,13 @@ namespace Charcutarie.Repository
                 new SqlParameter("@mid", massUnitId),
                 new SqlParameter("@vid", volumeUnitId)
             };
-            var query = new StringBuilder(@"SELECT * FROM(SELECT 
+        var query = new StringBuilder(@"SELECT * FROM(SELECT 
 	                                        NEWID() as RowId,
 	                                        ProductId, 
 	                                        Product,
 	                                        OrderItemStatusId,
 	                                        OrderItemStatus,
+                                            MeasureUnitTypeId,
 	                                        SUM(Quantity) as Quantity,
 	                                        CASE 
                                                 WHEN MeasureUnitTypeId = 1 THEN @mid

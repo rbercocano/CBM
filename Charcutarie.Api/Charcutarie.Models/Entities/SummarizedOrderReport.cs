@@ -15,5 +15,6 @@ namespace Charcutarie.Models.Entities
         public int MeasureUnitId { get; set; }
         public string MeasureUnit { get; set; }
         public string ShortMeasureUnit { get; set; }
+        public int MeasureUnitTypeId { get; set; }
     }
 }

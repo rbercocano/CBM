@@ -50,7 +50,7 @@
                             <tr *ngFor="let i of items">
                                 <td>
                                     {{i.product}}
-                                </td>                                
+                                </td>
                                 <td>
                                     <app-order-item-status-label
                                         [status]="{orderItemStatusId:i.orderItemStatusId, description: i.orderItemStatus}">
@@ -90,16 +90,28 @@
     <div class="modal-body ">
         <div class="row form-group">
             <div class="col-6">
+                <label class="m-b-0">Produtos</label>
+                <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="productSettings" [data]="products"
+                    [(ngModel)]="filter.products">
+                </ng-multiselect-dropdown>
+            </div>
+            <div class="col-6">
                 <label class="m-b-0">Status</label>
                 <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="orderItemStatusSettings"
                     [data]="itemStatus" [(ngModel)]="filter.itemStatus">
                 </ng-multiselect-dropdown>
             </div>
             <div class="col-6">
-                <label class="m-b-0">Produtos</label>
-                <ng-multiselect-dropdown [placeholder]="'Selecione'" [settings]="productSettings" [data]="products"
-                    [(ngModel)]="filter.products">
-                </ng-multiselect-dropdown>
+                <label class="m-b-0">Unidade Medida para Massa</label>
+                <select class="form-control" [(ngModel)]="filter.massUnitId">
+                    <option *ngFor="let i of mass" [ngValue]="i.measureUnitId">{{i.shortName}}</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Unidade Medida para Volume</label>
+                <select class="form-control" [(ngModel)]="filter.volumeUnitId">
+                    <option *ngFor="let i of volumes" [ngValue]="i.measureUnitId">{{i.shortName}}</option>
+                </select>
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin } from 'rxjs';
+import { MeasureUnit } from 'src/app/shared/models/measureUnit';
 import { OrderItemReportFilter } from 'src/app/shared/models/OrderItemReportFilter';
 import { OrderItemStatus } from 'src/app/shared/models/orderItemStatus';
 import { PagedResult } from 'src/app/shared/models/pagedResult';
@@ -30,6 +31,8 @@ export class SummarizedProductionComponent implements OnInit {
   public items: SummarizedOrderReport[] = [];
   public products: Product[] = [];
   public itemStatus: OrderItemStatus[] = [];
+  public mass: MeasureUnit[] = [];
+  public volumes: MeasureUnit[] = [];
   constructor(private orderService: OrderService,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -74,14 +77,22 @@ export class SummarizedProductionComponent implements OnInit {
     this.spinner.show();
     let oStatus = this.domainService.GetOrderItemStatus();
     let oProducts = this.productService.GetPaged(1, 1000, null, true);
+    let oMeasures = this.domainService.GetMeasureUnits();
     let oItems = this.orderService.getSummarizedReport(this.lastFilter, this.paginationInfo.currentPage, this.paginationInfo.recordsPerpage);
-    forkJoin(oStatus, oProducts, oItems).subscribe(r => {
+    forkJoin([oStatus, oProducts, oItems, oMeasures]).subscribe(r => {
       this.spinner.hide();
       this.itemStatus = r[0] ?? [];
       let prodInfo: PagedResult<Product> = r[1] ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
       this.products = prodInfo.data;
       let info: PagedResult<SummarizedOrderReport> = r[2] ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
       this.items = info.data;
+      let measures = r[3] ?? [];
+      measures.forEach(m => {
+        if (m.measureUnitTypeId == 1)
+          this.mass.push(m);
+        else if (m.measureUnitTypeId == 2)
+          this.volumes.push(m);
+      });
       this.paginationInfo = info;
       this.paginationService.updatePaging(info);
     }, (e) => {
@@ -104,6 +115,7 @@ export class SummarizedProductionComponent implements OnInit {
         this.items = info.data;
         this.paginationInfo = info;
         this.paginationService.updatePaging(info);
+        this.filter = { ...this.lastFilter };
       }, (e) => {
         this.spinner.hide();
         this.notificationService.notifyHttpError(e);
@@ -120,7 +132,7 @@ export class SummarizedProductionComponent implements OnInit {
     this.paginationService.changePageSize(this.paginationInfo.recordsPerpage);
   }
   open(content) {
-    this.resetFilter();
+    // this.resetFilter();
     this.modal = this.modalService.open(content, { size: 'lg' });
   }
   resetFilter() {
@@ -129,7 +141,7 @@ export class SummarizedProductionComponent implements OnInit {
     this.filter.direction = null;
     this.filter.itemStatus = null;
     this.filter.massUnitId = 1;
-    this.filter.volumeUnitId = 4;
+    this.filter.volumeUnitId = 5;
   }
 
   sort(column: number) {

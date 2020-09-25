@@ -16,6 +16,9 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.Quantity)
                 .HasColumnType("DECIMAL(18,2)")
                 .IsRequired();
+            builder.Property(p => p.MeasureUnitTypeId)
+                .HasColumnType("INT")
+                .IsRequired();
             builder.Property(p => p.MeasureUnitId)
                 .HasColumnType("INT")
                 .IsRequired();
