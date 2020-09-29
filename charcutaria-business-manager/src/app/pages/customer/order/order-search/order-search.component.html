@@ -1,6 +1,9 @@
 <app-toolbar [title]="'Pedidos'">
-    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Novo" (click)="new()">
+    <a [routerLink]="['/order', 'new']" class="btn btn-primary btn-mini  m-l-5" ngbTooltip="Novo">
         <i class="fa fa-plus"></i>
+    </a>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Atualizar" (click)="search()">
+        <i class="fa fa-refresh"></i>
     </button>
     <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="open(content)">
         <i class="fa fa-search"></i>
@@ -26,9 +29,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped">
+                <table class="table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>
                                 <a href="javascript:" (click)="sort(1)">#
                                     <ng-container *ngIf="sortColumn == 1; then sorting;else nosorting">
@@ -71,7 +75,7 @@
                                     </ng-container>
                                 </a>
                             </th>
-                            <th>
+                            <th class="text-right">
                                 <a href="javascript:" (click)="sort(9)">Preço Final
                                     <ng-container *ngIf="sortColumn == 9; then sorting;else nosorting">
                                     </ng-container>
@@ -82,41 +86,101 @@
                     </thead>
                     <tbody>
                         <ng-container *ngIf="orders.length > 0">
-                            <tr *ngFor="let o of orders">
-                                <td>#{{o.orderNumber}}</td>
-                                <td>
-                                    {{o.name}}
-                                    <p *ngIf="o.socialIdentifier">
-                                        <span *ngIf="o.customerTypeId==1">CPF: </span>
-                                        <span *ngIf="o.customerTypeId==2">CNPJ: </span>
-                                        {{o.socialIdentifier}}
-                                    </p>
-                                </td>
-                                <td>
-                                    <app-order-status-label
-                                        [status]="{orderStatusId:o.orderStatusId, description: o.orderStatus}">
-                                    </app-order-status-label>
-                                </td>
-                                <td>
-                                    <app-payment-status-label
-                                        [status]="{paymentStatusId:o.paymentStatusId, description: o.paymentStatus}">
-                                    </app-payment-status-label>
-                                </td>
-                                <td>{{o.createdOn | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{o.completeBy | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{o.paidOn | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{o.finalPrice | cbmCurrency}}</td>
-                                <td>
-                                    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Detalhes"
-                                        (click)="details(o.orderNumber)">
-                                        <i class="fa fa-list"></i>
-                                    </button>
-                                    <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Editar"
-                                        (click)="edit(o.orderNumber)">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <ng-container *ngFor="let o of orders;let odd=odd">
+                                <tr [class.expanded-row]="o.isExpanded" [class.bg-gray]="odd">
+                                    <td>
+                                        <button class="btn btn-primary btn-mini" (click)="toggle(o)">
+                                            <i class="fa"
+                                                [ngClass]="{'fa-plus': !o.isExpanded, 'fa-minus': o.isExpanded }"></i>
+                                        </button>
+                                    </td>
+                                    <td>#{{o.orderNumber}}</td>
+                                    <td>
+                                        {{o.name}}
+                                        <p *ngIf="o.socialIdentifier">
+                                            <span *ngIf="o.customerTypeId==1">CPF: </span>
+                                            <span *ngIf="o.customerTypeId==2">CNPJ: </span>
+                                            {{o.socialIdentifier}}
+                                        </p>
+                                    </td>
+                                    <ng-container *ngIf="o.orderStatusId != 4">
+                                        <td>
+                                            <app-order-status-label
+                                                [status]="{orderStatusId:o.orderStatusId, description: o.orderStatus}">
+                                            </app-order-status-label>
+                                        </td>
+                                        <td *ngIf="o.orderStatusId != 4">
+                                            <app-payment-status-label
+                                                [status]="{paymentStatusId:o.paymentStatusId, description: o.paymentStatus}">
+                                            </app-payment-status-label>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngIf="o.orderStatusId == 4">
+                                        <td colspan="2">
+                                            <span class="label label-danger text-center p-t-5"
+                                                style="width: 100%;display:block; font-size: 12px;">
+                                                Cancelado
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                    <td>{{o.createdOn | date: 'dd/MM/yyyy'}}</td>
+                                    <td>{{o.completeBy | date: 'dd/MM/yyyy'}}</td>
+                                    <td>{{o.paidOn | date: 'dd/MM/yyyy'}}</td>
+                                    <td class="text-right">{{o.finalPrice | cbmCurrency}}</td>
+                                    <td>
+                                        <a [routerLink]="['/order', 'details',o.orderNumber]"
+                                            class="btn btn-primary btn-mini  m-l-5" placement="top"
+                                            ngbTooltip="Detalhes">
+                                            <i class="fa fa-list"></i>
+                                        </a>
+                                        <a [routerLink]="['/order', 'edit',o.orderNumber]"
+                                            class="btn btn-primary btn-mini  m-l-5" placement="top" ngbTooltip="Editar">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a [routerLink]="['/order', 'new']" class="btn btn-primary btn-mini  m-l-5"
+                                            [state]="{data:{cloneFrom: o.orderNumber}}" placement="top"
+                                            ngbTooltip="Duplicar Pedido">
+                                            <i class="fa fa-clone"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="o.isExpanded" class="detail-row">
+                                    <td colspan="10">
+                                        <div class="detail-row-content">
+                                            <table class="table details table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Produto</th>
+                                                        <th>Status do Item</th>
+                                                        <th class="text-right">Qtd.</th>
+                                                        <th class="text-right">Preço</th>
+                                                        <th>Data do Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let i of o.orderItems">
+                                                        <td>
+                                                            {{i.product}}
+                                                        </td>
+                                                        <td>
+                                                            <app-order-item-status-label
+                                                                [status]="{orderItemStatusId:i.orderItemStatusId, description: i.orderItemStatus}">
+                                                            </app-order-item-status-label>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            {{i.quantity}} {{i.measureUnit}}
+                                                        </td>
+                                                        <td class="text-right">
+                                                            {{i.finalPrice | cbmCurrency}}
+                                                        </td>
+                                                        <td>{{i.lastStatusDate | date: 'dd/MM/yyyy'}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </ng-container>
                         <tr *ngIf="orders.length == 0">
                             <td colspan="9" class="text-center">Nenhum pedido encontrado</td>

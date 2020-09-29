@@ -90,12 +90,21 @@ export class OrderService {
     let params = new HttpParams();
     if (filter.orderNumber != null)
       params = params.append('orderNumber', String(filter.orderNumber));
+    if (filter.customerId != null)
+      params = params.append('customerId', String(filter.customerId));
     (filter.itemStatus ?? []).forEach(s => {
       params = params.append('itemStatus', String(s.orderItemStatusId));
+    });
+    (filter.products ?? []).forEach(s => {
+      params = params.append('productId', String(s));
     });
     (filter.orderStatus ?? []).forEach(s => {
       params = params.append('orderStatus', String(s.orderStatusId));
     });
+    if (filter.volumeUnitId != null)
+      params = params.append('volumeUnitId', String(filter.volumeUnitId));
+    if (filter.massUnitId != null)
+      params = params.append('massUnitId', String(filter.massUnitId));
     if (filter.completeByFrom != null)
       params = params.append('completeByFrom', filter.completeByFrom);
     if (filter.completeByTo != null)

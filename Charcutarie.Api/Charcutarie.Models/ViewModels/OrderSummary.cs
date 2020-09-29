@@ -20,5 +20,6 @@ namespace Charcutarie.Models.ViewModels
         public DateTime CreatedOn { get; set; }
         public DateTime? PaidOn { get; set; }
         public double FinalPrice { get; set; }
+        public long CustomerId { get; set; }
     }
 }

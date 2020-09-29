@@ -113,16 +113,19 @@ namespace Charcutarie.Repository
                                                           List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
                                                          int? page, int? pageSize)
         {
-            var sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId)
+            };
             var query = new StringBuilder(@"Select * FROM (SELECT C.CorpClientId,
 	                        O.OrderId,
 	                        O.OrderNumber,
 	                        CASE C.CustomerTypeId WHEN 1 THEN RTRIM(c.Name + ' ' + ISNULL(c.LastName,'')) ELSE c.DBAName END AS Name,
 	                        CASE C.CustomerTypeId WHEN 1 THEN c.CPF ELSE c.CNPJ END AS SocialIdentifier,
-	                        P.PaymentStatusId  ,
-	                        OS.OrderStatusId ,
-                            C.CustomerTypeId,
+	                        P.PaymentStatusId,
+	                        OS.OrderStatusId,
+                            C.CustomerTypeId,   
+                            C.CustomerId,
 	                        P.Description AS PaymentStatus,
 	                        OS.Description AS OrderStatus,
 	                        CAST( O.CompleteBy AS DATE) CompleteBy,
@@ -195,12 +198,16 @@ namespace Charcutarie.Repository
                 RecordsPerpage = pageSize ?? count
             };
         }
-        public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
-                                                               string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction,
+        public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<long> productIds, int massUnitId, int volumeUnitId, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
+                                                               string customer, long? customerId, OrderItemReportOrderBy orderBy, OrderByDirection direction,
                                                                int? page, int? pageSize)
         {
-            var sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId),
+                new SqlParameter("@mid", massUnitId),
+                new SqlParameter("@vid", volumeUnitId)
+            };
             var query = new StringBuilder(@"SELECT * FROM(SELECT 
 	                                        O.OrderId,
                                             I.OrderItemId,
@@ -212,13 +219,21 @@ namespace Charcutarie.Repository
 	                                        CASE C.CustomerTypeId WHEN 1 THEN c.CPF ELSE c.CNPJ END AS SocialIdentifier,
 	                                        I.ItemNumber,
 	                                        P.Name as Product,
-	                                        I.Quantity,
-	                                        M.ShortName as MeasureUnit,
 	                                        OIS.Description as OrderItemStatus,
 	                                        OIS.OrderItemStatusId as OrderItemStatusId,
 	                                        I.PriceAfterDiscount as FinalPrice,
 	                                        I.LastStatusDate,
-	                                        O.CompleteBy
+	                                        O.CompleteBy,
+                                            P.ProductId, 
+                                            C.CustomerId,
+	                                        CASE 
+		                                        WHEN M.MeasureUnitTypeId = 1 THEN
+			                                        CAST(dbo.ConvertMeasure(M.MeasureUnitId,I.Quantity,@mid) as Decimal(18,2))
+		                                        ELSE
+			                                        CAST(dbo.ConvertMeasure(M.MeasureUnitId,I.Quantity,@vid) as Decimal(18,2))
+	                                        END as Quantity,
+	                                        (SELECT M2.ShortName FROM MeasureUnit M2 WHERE M2.MeasureUnitId = IIF(M.MeasureUnitTypeId=1,@mid,@vid)) as MeasureUnit
+ 
                                         FROM [Order] O
                                         JOIN OrderStatus OS ON O.OrderStatusId = OS.OrderStatusId
                                         JOIN PaymentStatus PS ON O.PaymentStatusId = PS.PaymentStatusId
@@ -229,6 +244,14 @@ namespace Charcutarie.Repository
                                         JOIN Product P ON I.ProductId = P.ProductId
                                         WHERE P.CorpClientId = @corpClientId AND C.CorpClientId = @corpClientId) X WHERE 1 = 1 ");
 
+            if (productIds != null && productIds.Any())
+                query.Append($" AND ProductId IN ({string.Join(',', productIds.Select(i => i).ToArray())})");
+
+            if (customerId.HasValue)
+            {
+                query.Append($" AND CustomerId = @customerId");
+                sqlParams.Add(new SqlParameter("@customerId", customerId) { SqlDbType = SqlDbType.BigInt });
+            }
             if (completeByFrom.HasValue)
             {
                 query.Append(" AND CompleteBy >= @completeByFrom");
@@ -427,7 +450,7 @@ namespace Charcutarie.Repository
                 new SqlParameter("@mid", massUnitId),
                 new SqlParameter("@vid", volumeUnitId)
             };
-        var query = new StringBuilder(@"SELECT * FROM(SELECT 
+            var query = new StringBuilder(@"SELECT * FROM(SELECT 
 	                                        NEWID() as RowId,
 	                                        ProductId, 
 	                                        Product,

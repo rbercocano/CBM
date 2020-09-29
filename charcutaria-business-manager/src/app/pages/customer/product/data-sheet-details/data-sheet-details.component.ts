@@ -39,18 +39,27 @@ export class DataSheetDetailsComponent implements OnInit {
   }
   ngOnInit(): void {
     this.spinner.show();
+    let state = history.state.data;
+    if (state != null) {
+      this.production.quantity = state.quantity;
+      this.production.measureUnit = state.measureUnitId;
+    }
     let id = this.route.snapshot.params.id;
     let oProduct = this.productService.GetProduct(id);
     let oDataSheet = this.productService.getDataSheet(id);
     let oMeasures = this.domainService.GetMeasureUnits();
-    forkJoin(oProduct, oDataSheet, oMeasures).pipe(flatMap(r => {
+    forkJoin([oProduct, oDataSheet, oMeasures]).pipe(flatMap(r => {
       this.product = r[0];
       this.title = `${this.product.name} / Ficha Técnica`;
       this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, weightVariationPercentage: 0, increaseWeight: true };
       this.measures = r[2] ?? [];
       this.spinner.hide();
       let result: ProductionItem[] = [];
-      this.production.measureUnit = this.product.measureUnitId;
+      if (state == null) {
+        this.production.measureUnit = this.product.measureUnitId;
+        this.production.quantity = 1;
+      }
+
       this.dataSheet.dataSheetItems.forEach(i => {
         let item = { ...i } as ProductionItem;
         item.quantity = 0;

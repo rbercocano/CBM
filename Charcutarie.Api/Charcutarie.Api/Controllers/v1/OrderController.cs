@@ -97,9 +97,9 @@ namespace Charcutarie.Api.Controllers.v1
             return NoContent();
         }
         [HttpGet("Report/Item/{page:int}/{pageSize:int}")]
-        public ActionResult<PagedResult<OrderItemReport>> GetOrderItemReport([FromQuery] int? orderNumber, [FromQuery] List<OrderStatusEnum> orderStatus, [FromQuery] List<OrderItemStatusEnum> itemStatus, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] string? customer, [FromQuery] OrderItemReportOrderBy orderBy = OrderItemReportOrderBy.OrderItemStatus, [FromQuery] OrderByDirection direction = OrderByDirection.Asc, int? page = 1, int? pageSize = 10)
+        public ActionResult<PagedResult<OrderItemReport>> GetOrderItemReport([FromQuery] int? orderNumber, [FromQuery] List<long> productId, [FromQuery] List<OrderStatusEnum> orderStatus, [FromQuery] List<OrderItemStatusEnum> itemStatus, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] string? customer, [FromQuery] long? customerId, [FromQuery] int massUnitId = 1, [FromQuery] int volumeUnitId = 5, [FromQuery] OrderItemReportOrderBy orderBy = OrderItemReportOrderBy.OrderItemStatus, [FromQuery] OrderByDirection direction = OrderByDirection.Asc, int? page = 1, int? pageSize = 10)
         {
-            var data = service.GetOrderItemReport(UserData.CorpClientId.Value, orderNumber, orderStatus, itemStatus, completeByFrom, completeByTo, customer, orderBy, direction, page, pageSize);
+            var data = service.GetOrderItemReport(UserData.CorpClientId.Value, orderNumber, productId, massUnitId, volumeUnitId, orderStatus, itemStatus, completeByFrom, completeByTo, customer, customerId, orderBy, direction, page, pageSize);
             if (data.Data.Any())
                 return Ok(data);
             return NoContent();

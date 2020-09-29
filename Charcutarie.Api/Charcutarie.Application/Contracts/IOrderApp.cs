@@ -22,8 +22,8 @@ namespace Charcutarie.Application.Contracts
                                                           List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
                                                          int? page, int? pageSize);
 
-        PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
-                                                               string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction,
+        PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<long> productIds, int massUnitId, int volumeUnitId, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo,
+                                                               string customer, long? customerId, OrderItemReportOrderBy orderBy, OrderByDirection direction,
                                                                int? page, int? pageSize);
 
         Task<OrderCountSummary> GetOrderCountSummary(int corpClientId);

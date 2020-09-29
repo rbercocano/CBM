@@ -1,11 +1,11 @@
 export interface SummarizedOrderReport {
-    ProductId: number;
-    Product: string;
-    OrderItemStatusId: number;
-    OrderItemStatus: string;
-    Quantity: number;
-    MeasureUnitId: number;
-    MeasureUnit: string;
-    ShortMeasureUnit: string;
-    MeasureUnitTypeId: number;
+    productId: number;
+    product: string;
+    orderItemStatusId: number;
+    orderItemStatus: string;
+    quantity: number;
+    measureUnitId: number;
+    measureUnit: string;
+    shortMeasureUnit: string;
+    measureUnitTypeId: number;
 }

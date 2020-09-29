@@ -20,7 +20,7 @@ namespace Charcutarie.Services.Contracts
         Task UpdateOrderItem(UpdateOrderItem model, int corpClientId);
         Task<long> AddOrderItem(NewOrderItem model, int corpClientId);
         PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo, DateTime? paidOnFrom, DateTime? paidOnTo, DateTime? completeByFrom, DateTime? completeByTo, List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize);
-        PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo, string customer, OrderItemReportOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize);
+        PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<long> productIds, int massUnitId, int volumeUnitId, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo, string customer,long? customerId, OrderItemReportOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize);
         Task CloseOrder(int orderNumber, int corpClientId);
         Task<OrderCountSummary> GetOrderCountSummary(int corpClientId);
         Task<ProfitSummary> GetProfitSummary(int corpClientId);

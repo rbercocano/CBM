@@ -107,7 +107,7 @@
                                     {{i.product}}
                                 </td>
                                 <td>
-                                    {{i.quantity}}{{i.measureUnit}}
+                                    {{i.quantity}} {{i.measureUnit}}
                                 </td>
                                 <td>
                                     {{i.finalPrice | cbmCurrency}}
@@ -202,6 +202,18 @@
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="m-b-0">Unidade Medida para Massa</label>
+                        <select class="form-control" [(ngModel)]="filter.massUnitId">
+                            <option *ngFor="let i of mass" [ngValue]="i.measureUnitId">{{i.shortName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="m-b-0">Unidade Medida para Volume</label>
+                        <select class="form-control" [(ngModel)]="filter.volumeUnitId">
+                            <option *ngFor="let i of volumes" [ngValue]="i.measureUnitId">{{i.shortName}}</option>
+                        </select>
                     </div>
                 </div>
             </div>

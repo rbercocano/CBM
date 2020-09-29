@@ -11,6 +11,7 @@ import { PagedResult } from 'src/app/shared/models/pagedResult';
 import { PaginationInfo } from 'src/app/shared/models/paginationInfo';
 import { Product } from 'src/app/shared/models/product';
 import { SummarizedOrderReport } from 'src/app/shared/models/summarizedOrderReport';
+import { SummarizedOrderReportVM } from 'src/app/shared/models/summarizedOrderReportVM';
 import { SummarizedProductionFilter } from 'src/app/shared/models/summarizedProductionFilter';
 import { DomainService } from 'src/app/shared/services/domain/domain.service';
 import { NotificationService } from 'src/app/shared/services/notification/notification.service';
@@ -28,7 +29,7 @@ export class SummarizedProductionComponent implements OnInit {
   public filter: SummarizedProductionFilter = new SummarizedProductionFilter();
   private lastFilter: SummarizedProductionFilter;
   public paginationInfo: PaginationInfo = {} as PaginationInfo;
-  public items: SummarizedOrderReport[] = [];
+  public items: SummarizedOrderReportVM[] = [];
   public products: Product[] = [];
   public itemStatus: OrderItemStatus[] = [];
   public mass: MeasureUnit[] = [];
@@ -85,7 +86,7 @@ export class SummarizedProductionComponent implements OnInit {
       let prodInfo: PagedResult<Product> = r[1] ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
       this.products = prodInfo.data;
       let info: PagedResult<SummarizedOrderReport> = r[2] ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
-      this.items = info.data;
+      this.items = info.data as SummarizedOrderReportVM[];
       let measures = r[3] ?? [];
       measures.forEach(m => {
         if (m.measureUnitTypeId == 1)
@@ -112,7 +113,7 @@ export class SummarizedProductionComponent implements OnInit {
       .subscribe(r => {
         this.spinner.hide();
         let info: PagedResult<SummarizedOrderReport> = r ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
-        this.items = info.data;
+        this.items = info.data as SummarizedOrderReportVM[];
         this.paginationInfo = info;
         this.paginationService.updatePaging(info);
         this.filter = { ...this.lastFilter };
@@ -158,5 +159,27 @@ export class SummarizedProductionComponent implements OnInit {
   }
   public get sortDirection(): number {
     return this.lastFilter.direction;
+  }
+  toggle(item: SummarizedOrderReportVM) {
+    item.isExpanded = item.isExpanded ?? false;
+    item.orders = item.orders ?? [];
+    if (!item.isExpanded && item.orders.length == 0) {
+      this.spinner.show();
+      let filter = new OrderItemReportFilter();
+      filter.volumeUnitId = this.lastFilter.volumeUnitId;
+      filter.massUnitId = this.lastFilter.massUnitId;
+      filter.products = [item.productId];
+      filter.itemStatus = [{ orderItemStatusId: item.orderItemStatusId, description: item.orderItemStatus }];
+      this.orderService.getOrderItemReport(filter, 1, 50).subscribe(r => {
+        item.orders = r.data ?? [];
+        item.isExpanded = !item.isExpanded;
+        this.spinner.hide();
+      }, (e) => {
+        this.spinner.hide();
+        this.notificationService.notifyHttpError(e);
+      });
+    } else {
+      item.isExpanded = !item.isExpanded;
+    }
   }
 }

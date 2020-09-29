@@ -14,6 +14,8 @@ import { PaymentStatus } from 'src/app/shared/models/paymentStatus';
 import { DomainService } from 'src/app/shared/services/domain/domain.service';
 import { forkJoin } from 'rxjs';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { OrderSummaryVM } from 'src/app/shared/models/orderSummaryVM';
+import { OrderItemReportFilter } from 'src/app/shared/models/OrderItemReportFilter';
 
 @Component({
   selector: 'app-order-search',
@@ -23,7 +25,7 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 export class OrderSearchComponent implements OnInit {
   public paginationInfo: PaginationInfo = {} as PaginationInfo;
   public active: boolean = null;
-  public orders: OrderSummary[] = [];
+  public orders: OrderSummaryVM[] = [];
   public orderStatus: OrderStatus[] = [];
   public paymentStatus: PaymentStatus[] = [];
   public filter: orderSummaryFilter = new orderSummaryFilter();
@@ -77,12 +79,12 @@ export class OrderSearchComponent implements OnInit {
     let oStatusPag = this.domainService.GetPaymentStatus();
     let oStatusOrder = this.domainService.GetOrderStatus();
     let oOrder = this.orderService.getOrderSummary(this.lastFilter, this.paginationInfo.currentPage, this.paginationInfo.recordsPerpage);
-    forkJoin(oStatusPag, oStatusOrder, oOrder).subscribe(r => {
+    forkJoin([oStatusPag, oStatusOrder, oOrder]).subscribe(r => {
       this.spinner.hide();
       this.paymentStatus = r[0] ?? [];
       this.orderStatus = r[1] ?? [];
       let info: PagedResult<OrderSummary> = r[2] ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
-      this.orders = info.data;
+      this.orders = info.data as OrderSummaryVM[];
       this.paginationInfo = info;
       this.paginationService.updatePaging(info);
     }, (e) => {
@@ -92,12 +94,6 @@ export class OrderSearchComponent implements OnInit {
   }
   new() {
     this.router.navigate(['/order/new']);
-  }
-  details(orderNumber: number) {
-    this.router.navigate(['/order/details', orderNumber]);
-  }
-  edit(orderNumber: number) {
-    this.router.navigate(['/order/edit', orderNumber]);
   }
   newSearch() {
     this.filter.direction = 1;
@@ -118,7 +114,7 @@ export class OrderSearchComponent implements OnInit {
       .subscribe(r => {
         this.spinner.hide();
         let info: PagedResult<OrderSummary> = r ?? { data: [], currentPage: 1, recordCount: 0, recordsPerpage: this.paginationInfo.recordsPerpage, totalPages: 0 };
-        this.orders = info.data;
+        this.orders = info.data as OrderSummaryVM[];
         this.paginationInfo = info;
         this.paginationService.updatePaging(info);
       }, (e) => {
@@ -131,7 +127,7 @@ export class OrderSearchComponent implements OnInit {
   }
   open(content) {
     this.resetFilter();
-    this.modal = this.modalService.open(content,{size:'lg'});
+    this.modal = this.modalService.open(content, { size: 'lg' });
   }
   resetFilter() {
     this.filter = new orderSummaryFilter();
@@ -152,5 +148,26 @@ export class OrderSearchComponent implements OnInit {
   }
   public get sortDirection(): number {
     return this.lastFilter.direction;
+  }
+  toggle(order: OrderSummaryVM) {
+    order.isExpanded = order.isExpanded ?? false;
+    order.orderItems = order.orderItems ?? [];
+    if (!order.isExpanded && order.orderItems.length == 0) {
+      this.spinner.show();
+      let filter = new OrderItemReportFilter();
+      filter.massUnitId = 2;
+      filter.volumeUnitId = 5;
+      filter.orderNumber = order.orderNumber;
+      this.orderService.getOrderItemReport(filter, 1, 50).subscribe(r => {
+        order.orderItems = r.data ?? [];
+        order.isExpanded = !order.isExpanded;
+        this.spinner.hide();
+      }, (e) => {
+        this.spinner.hide();
+        this.notificationService.notifyHttpError(e);
+      });
+    } else {
+      order.isExpanded = !order.isExpanded;
+    }
   }
 }

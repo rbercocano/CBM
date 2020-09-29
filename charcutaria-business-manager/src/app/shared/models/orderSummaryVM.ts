@@ -1,7 +1,11 @@
-export interface OrderSummary {
+import { OrderItemDetails } from './orderItemDetails';
+import { OrderItemReport } from './orderItemReport';
+import { OrderSummary } from './orderSummary';
+
+export class OrderSummaryVM implements OrderSummary {
     orderId: number;
     orderNumber: number;
-    name: string,
+    name: string;
     socialIdentifier: string;
     customerTypeId: number;
     paymentStatusId: number;
@@ -12,5 +16,7 @@ export interface OrderSummary {
     CreatedOn: string;
     paidOn: string;
     finalPrice: number;
+    isExpanded: boolean = false;
+    orderItems: OrderItemReport[] = [];
     customerId: number;
 }

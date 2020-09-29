@@ -1,8 +1,25 @@
-table td:nth-child(8),th:nth-child(8){
-    text-align: right;
+
+table td:nth-child(10),
+th:nth-child(10) {
+    width: 105px;
 }
-table td p{
-    margin:0;
+table td p {
+    margin: 0;
     font-size: 12px;
     font-style: italic;
+}
+
+.bg-gray{    
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+.expanded-row {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-left: solid 1px silver;
+    border-right: solid 1px silver;
+    border-top: solid 2px silver;
+}
+.detail-row {
+    border-left: solid 1px silver;
+    border-right: solid 1px silver;
+    border-bottom: solid 2px silver;
 }

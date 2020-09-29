@@ -73,7 +73,7 @@ export class EditOrderComponent implements OnInit {
     let oOrder = this.orderService.getByNumber(orderNumber);
     let oMeasures = this.domainService.GetMeasureUnits();
     let oProducts = this.productService.GetAll();
-    forkJoin(oPaymentStatus, oOrderStatus, oOrderItemStatus, oOrder, oMeasures, oProducts).subscribe(r => {
+    forkJoin([oPaymentStatus, oOrderStatus, oOrderItemStatus, oOrder, oMeasures, oProducts]).subscribe(r => {
       this.paymentStatus = r[0] ?? [];
       this.orderStatus = r[1] ?? [];
       this.orderItemStatus = r[2] ?? [];

@@ -1,4 +1,7 @@
 <app-toolbar [title]="'Relatório de Status Produção'">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Atualizar" (click)="search()">
+        <i class="fa fa-refresh"></i>
+    </button>
     <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="open(content)">
         <i class="fa fa-search"></i>
     </button>
@@ -23,9 +26,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped">
+                <table class="table parent">
                     <thead>
-                        <tr>
+                        <tr class="bg-gray">
+                            <th></th>
                             <th>
                                 <a href="javascript:" (click)="sort(2)">Produto
                                     <ng-container *ngIf="sortColumn == 2; then sorting;else nosorting">
@@ -44,25 +48,95 @@
                                     </ng-container>
                                 </a>
                             </th>
+                            <th></th>
                     </thead>
                     <tbody>
-                        <ng-container *ngIf="items.length > 0">
-                            <tr *ngFor="let i of items">
-                                <td>
-                                    {{i.product}}
-                                </td>
-                                <td>
-                                    <app-order-item-status-label
-                                        [status]="{orderItemStatusId:i.orderItemStatusId, description: i.orderItemStatus}">
-                                    </app-order-item-status-label>
-                                </td>
-                                <td>
-                                    {{i.quantity}} {{i.shortMeasureUnit}}
-                                </td>
-                            </tr>
+                        <ng-container *ngIf="items.length > 0 ">
+                            <ng-container *ngFor="let i of items;let odd=odd">
+                                <tr [class.expanded-row]="i.isExpanded" [class.bg-gray]="odd">
+                                    <td>
+                                        <button class="btn btn-primary btn-mini" (click)="toggle(i)">
+                                            <i class="fa"
+                                                [ngClass]="{'fa-plus': !i.isExpanded, 'fa-minus': i.isExpanded }"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        {{i.product}}
+                                    </td>
+                                    <td>
+                                        <app-order-item-status-label
+                                            [status]="{orderItemStatusId:i.orderItemStatusId, description: i.orderItemStatus}">
+                                        </app-order-item-status-label>
+                                    </td>
+                                    <td>
+                                        {{i.quantity}} {{i.shortMeasureUnit}}
+                                    </td>
+                                    <td>
+                                        <a [routerLink]="['/product', i.productId,'datasheet', 'details']"
+                                            class="btn btn-primary btn-mini"
+                                            [state]="{data:{productId:i.productId, measureUnitId: i.measureUnitId, quantity: i.quantity}}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="i.isExpanded" class="detail-row">
+                                    <td colspan="5">
+                                        <div class="detail-row-content">
+                                            <table class="table details table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th># Pedido</th>
+                                                        <th>Cliente</th>
+                                                        <th>Status do Pedido</th>
+                                                        <th>Produto</th>
+                                                        <th>Qtd.</th>
+                                                        <th>Preço</th>
+                                                        <th>Data do Status</th>
+                                                        <th>Finalizar até</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let o of i.orders">
+                                                        <td>
+                                                            <a [routerLink]="['/order/details',o.orderNumber]"
+                                                                target="_blank">
+                                                                #{{o.orderNumber}}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            {{o.customer}}
+                                                            <p *ngIf="o.socialIdentifier">
+                                                                <span *ngIf="o.customerTypeId==1">CPF: </span>
+                                                                <span *ngIf="o.customerTypeId==2">CNPJ: </span>
+                                                                {{o.socialIdentifier}}
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <app-order-status-label
+                                                                [status]="{orderStatusId:o.orderStatusId, description: o.orderStatus}">
+                                                            </app-order-status-label>
+                                                        </td>
+                                                        <td>
+                                                            {{o.product}}
+                                                        </td>
+                                                        <td>
+                                                            {{o.quantity}} {{o.measureUnit}}
+                                                        </td>
+                                                        <td>
+                                                            {{o.finalPrice | cbmCurrency}}
+                                                        </td>
+                                                        <td>{{o.lastStatusDate | date: 'dd/MM/yyyy'}}</td>
+                                                        <td>{{o.completeBy | date: 'dd/MM/yyyy'}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
                         </ng-container>
                         <tr *ngIf="items.length == 0">
-                            <td colspan="3" class="text-center">Nenhum item encontrado</td>
+                            <td colspan="5" class="text-center">Nenhum item encontrado</td>
                         </tr>
                     </tbody>
                 </table>

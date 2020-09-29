@@ -14,6 +14,7 @@ import { DomainService } from 'src/app/shared/services/domain/domain.service';
 import { forkJoin } from 'rxjs';
 import { PagedResult } from 'src/app/shared/models/pagedResult';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { MeasureUnit } from 'src/app/shared/models/measureUnit';
 
 @Component({
   selector: 'app-order-item',
@@ -29,6 +30,8 @@ export class OrderItemComponent implements OnInit {
   public filter: OrderItemReportFilter = new OrderItemReportFilter();
   private lastFilter: OrderItemReportFilter;
   private modal: NgbModalRef;
+  public mass: MeasureUnit[] = [];
+  public volumes: MeasureUnit[] = [];
 
   public orderStatusSettings: IDropdownSettings = {
     singleSelection: false,
@@ -73,10 +76,11 @@ export class OrderItemComponent implements OnInit {
   }
   ngOnInit(): void {
     this.spinner.show();
+    let oMeasures = this.domainService.GetMeasureUnits();
     let oOrderItemStatus = this.domainService.GetOrderItemStatus();
     let oStatusOrder = this.domainService.GetOrderStatus();
     let oOrder = this.orderService.getOrderItemReport(this.lastFilter, this.paginationInfo.currentPage, this.paginationInfo.recordsPerpage);
-    forkJoin(oOrderItemStatus, oStatusOrder, oOrder).subscribe(r => {
+    forkJoin([oOrderItemStatus, oStatusOrder, oOrder, oMeasures]).subscribe(r => {
       this.spinner.hide();
       this.orderItemStatus = r[0] ?? [];
       this.orderStatus = r[1] ?? [];
@@ -84,6 +88,13 @@ export class OrderItemComponent implements OnInit {
       this.items = info.data;
       this.paginationInfo = info;
       this.paginationService.updatePaging(info);
+      let measures = r[3] ?? [];
+      measures.forEach(m => {
+        if (m.measureUnitTypeId == 1)
+          this.mass.push(m);
+        else if (m.measureUnitTypeId == 2)
+          this.volumes.push(m);
+      });
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -129,6 +140,8 @@ export class OrderItemComponent implements OnInit {
     this.filter.direction = null;
     this.filter.itemStatus = null;
     this.filter.orderStatus = null;
+    this.filter.massUnitId = 1;
+    this.filter.volumeUnitId = 5;
   }
 
   sort(column: number) {

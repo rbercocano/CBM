@@ -16,6 +16,9 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.CustomerTypeId)
                 .HasColumnType("INT")
                 .IsRequired();
+            builder.Property(p => p.CustomerId)
+                .HasColumnType("BIGINT")
+                .IsRequired();
             builder.Property(p => p.Name)
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();

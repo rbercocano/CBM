@@ -19,6 +19,7 @@ import { PricingService } from 'src/app/shared/services/pricing/pricing.service'
 import { OrderItem } from 'src/app/shared/models/orderItem';
 import { OrderService } from 'src/app/shared/services/order/order.service';
 import { Router } from '@angular/router';
+import { OrderDetails } from 'src/app/shared/models/orderDetails';
 
 @Component({
   selector: 'app-new-order',
@@ -61,9 +62,14 @@ export class NewOrderComponent implements OnInit {
     this.spinner.show();
     let oMeasures = this.domainService.GetMeasureUnits();
     let oProducts = this.productService.GetAll();
-    forkJoin(oProducts, oMeasures).subscribe(r => {
-      this.products = r[0] ?? [];
-      this.measures = r[1] ?? [];
+    let orderNumber = history.state.data != null ? history.state.data.cloneFrom : null;
+    let oOrder = of(null as OrderDetails);
+    if (orderNumber != null) {
+      oOrder = this.orderService.getByNumber(orderNumber);
+    }
+    forkJoin([oProducts, oMeasures, oOrder]).subscribe(resp => {
+      this.products = resp[0] ?? [];
+      this.measures = resp[1] ?? [];
       if (this.products.length > 0) {
         this.currentQuote.product = this.products[0];
         this.setMeasure();
@@ -72,6 +78,37 @@ export class NewOrderComponent implements OnInit {
         this.currentQuote.measureUnit = this.measures.filter((v, i) => v.measureUnitId == this.currentQuote.product.measureUnitId)[0];
       }
       this.spinner.hide();
+      let r = resp[2];
+      if (r == null) return;
+      this.selectedCustomer = { ...r.customer };
+      this.order.completeBy = new Date().toISOString();
+      this.order.createdOn = r.createdOn;
+      this.order.customerId = r.customer.customerId;
+      this.order.freightPrice = r.freightPrice;
+      this.order.lastUpdated = r.lastUpdated;
+      this.order.orderId = 0;
+      this.order.orderStatusId = r.orderStatusId;
+      this.order.paymentStatusId = r.paymentStatusId;
+      r.orderItems.forEach(i => {
+        this.order.orderItems.push({
+          additionalInfo: i.additionalInfo,
+          discount: i.discount,
+          measureUnitId: i.measureUnit.measureUnitId,
+          orderItemStatusId: 1,
+          productId: i.product.productId,
+          product: i.product.name,
+          originalPrice: i.originalPrice,
+          priceAfterDiscount: i.priceAfterDiscount,
+          quantity: i.quantity,
+          measureUnit: i.measureUnit.description,
+          measureUnitShort: i.measureUnit.shortName,
+          orderId: 0,
+          orderItemId: 0,
+          createdOn: null,
+          lastUpdated: null
+        });
+      });
+      this.calculateOrderValue();
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
