@@ -14,5 +14,6 @@ namespace Charcutarie.Models.Entities
 
         public MeasureUnit MeasureUnit { get; set; }
         public DataSheet DataSheet { get; set; }
+        public VwProductCost ProductCost { get; set; }
     }
 }

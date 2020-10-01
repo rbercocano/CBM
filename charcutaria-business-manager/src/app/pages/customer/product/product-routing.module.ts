@@ -19,7 +19,7 @@ const routes: Routes = [{
   path: ':id/datasheet',
   component: DataSheetComponent
 }, {
-  path: ':id/datasheet/details',
+  path: 'datasheet/details',
   component: DataSheetDetailsComponent
 }];
 

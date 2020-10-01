@@ -24,7 +24,10 @@ export class ProductEditComponent implements OnInit {
     name: null,
     price: null,
     productId: null,
-    corpClientId: null
+    corpClientId: null,
+    cost:null,
+    profit:null,
+    profitPercentage:null
   };
   public measures: MeasureUnit[] = [];
   constructor(private productService: ProductService,

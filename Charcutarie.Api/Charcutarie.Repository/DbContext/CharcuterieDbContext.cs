@@ -109,6 +109,7 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new ProductionConfiguration());
             modelBuilder.ApplyConfiguration(new SalesPerMonthConfiguration());
             modelBuilder.ApplyConfiguration(new SummarizedOrderReportConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCostConfiguration());
             
         }
         public async Task<int> ExecuteScalar(string command)

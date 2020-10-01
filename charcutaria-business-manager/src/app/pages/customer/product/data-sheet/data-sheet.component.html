@@ -1,8 +1,10 @@
 <app-toolbar [title]="title">
-    <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Visualizar Ficha Técnica"
-        (click)="datasheetDetails()">
+
+    <a [routerLink]="['/product', 'datasheet', 'details']" class="btn btn-primary btn-mini" placement="top"
+        ngbTooltip="Visualizar Ficha Técnica"
+        [state]="{data:{productId:product.productId, measureUnitId: product.measureUnitId, quantity: 1}}">
         <i class="fa fa-eye"></i>
-    </button>
+    </a>
     <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Ir para Produtos" (click)="back()">
         <i class="fa fa-list"></i>
     </button>

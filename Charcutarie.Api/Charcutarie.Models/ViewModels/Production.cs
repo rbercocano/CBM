@@ -1,6 +1,7 @@
 ﻿using Charcutarie.Models.Enums;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace Charcutarie.Models.ViewModels

@@ -72,8 +72,9 @@
                                         {{i.quantity}} {{i.shortMeasureUnit}}
                                     </td>
                                     <td>
-                                        <a [routerLink]="['/product', i.productId,'datasheet', 'details']"
+                                        <a [routerLink]="['/product', 'datasheet', 'details']"
                                             class="btn btn-primary btn-mini"
+                                            placement="top" ngbTooltip="Visualizar Ficha Técnica"
                                             [state]="{data:{productId:i.productId, measureUnitId: i.measureUnitId, quantity: i.quantity}}">
                                             <i class="fa fa-eye"></i>
                                         </a>

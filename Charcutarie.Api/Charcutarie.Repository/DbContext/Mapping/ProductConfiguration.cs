@@ -38,6 +38,9 @@ namespace Charcutarie.Repository.DbContext.Mapping
 
             builder.HasOne(p => p.DataSheet)
                 .WithOne(p => p.Product);
+
+            builder.HasOne(p => p.ProductCost)
+                .WithOne(p => p.Product);
         }
     }
 }

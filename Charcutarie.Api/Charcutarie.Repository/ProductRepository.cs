@@ -44,7 +44,11 @@ namespace Charcutarie.Repository
         }
         public async Task<PagedResult<Product>> GetPaged(int corpClientId, int page, int pageSize, string name, bool? active = null)
         {
-            var query = context.Products.Include(p => p.MeasureUnit).Where(p => p.CorpClientId == corpClientId).AsQueryable();
+            var query = context.Products
+                .Include(p => p.ProductCost)
+                .Include(p => p.MeasureUnit)
+                .Where(p => p.CorpClientId == corpClientId).AsQueryable();
+
             if (!string.IsNullOrEmpty(name))
                 query = query.Where(c => c.Name.Contains(name));
 
@@ -124,8 +128,10 @@ namespace Charcutarie.Repository
 
         public async Task<IEnumerable<Production>> GetProduction(int corpClientId)
         {
-            var sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("@corpClientId", corpClientId)
+            };
             var query = new StringBuilder(@"SELECT 
 	                                        ProductId, 
 	                                        Product,

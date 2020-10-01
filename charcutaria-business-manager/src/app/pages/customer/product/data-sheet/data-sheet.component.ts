@@ -50,7 +50,7 @@ export class DataSheetComponent implements OnInit {
     let oProduct = this.productService.GetProduct(id);
     let oDataSheet = this.productService.getDataSheet(id);
     let oMaterial = this.rawMaterialService.GetAll(1);
-    forkJoin(oProduct, oDataSheet, oMaterial).subscribe(r => {
+    forkJoin([oProduct, oDataSheet, oMaterial]).subscribe(r => {
       this.product = r[0];
       this.title = `${this.product.name} / Ficha Técnica`;
       this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, increaseWeight: true, weightVariationPercentage: 0 };

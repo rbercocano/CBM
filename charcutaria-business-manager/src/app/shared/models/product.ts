@@ -6,4 +6,7 @@ export interface Product{
     activeForSale:boolean;
     corpClientId:number;
     measureUnit:string;
+    cost:number;
+    profit:number;
+    profitPercentage:number;
 }

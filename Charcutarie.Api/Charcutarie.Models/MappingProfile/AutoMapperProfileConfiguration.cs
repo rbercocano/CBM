@@ -20,7 +20,8 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.CorpClient, vm.UpdateCorpClient>().ReverseMap();
 
             CreateMap<ef.Product, vm.Product>()
-                .ForMember(m => m.MeasureUnit, m => m.MapFrom(s => s.MeasureUnit.Description));
+                .ForMember(m => m.MeasureUnit, m => m.MapFrom(s => s.MeasureUnit.Description))
+                .ForMember(m => m.Cost, m => m.MapFrom(s => s.ProductCost != null ? s.ProductCost.Cost : new decimal?()));
             CreateMap<ef.Product, vm.NewProduct>().ReverseMap();
             CreateMap<ef.Product, vm.UpdateProduct>().ReverseMap();
 

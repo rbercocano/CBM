@@ -9,9 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification/notification.service';
 import { DomainService } from 'src/app/shared/services/domain/domain.service';
 import { MeasureUnit } from 'src/app/shared/models/measureUnit';
-import { of } from 'rxjs';
 import { ProductionItem } from 'src/app/shared/models/productionItem';
-import { flatMap } from 'rxjs/operators';
+import { flatMap, tap } from 'rxjs/operators';
 import { ProductionSummary } from 'src/app/shared/models/productionSummary';
 
 @Component({
@@ -21,13 +20,13 @@ import { ProductionSummary } from 'src/app/shared/models/productionSummary';
 })
 export class DataSheetDetailsComponent implements OnInit {
 
-  public title = 'Ficha Técnica';
   public product: Product = {} as Product;
+  public products: Product[] = [];
   public dataSheet: DataSheet = {} as DataSheet;
   public currentItem: DataSheetItem = {} as DataSheetItem;
   public measures: MeasureUnit[] = [];
   public summary: ProductionSummary = { profitPercentage: 0, productionCost: 0, productionItems: [], profit: 0, salePrice: 0 };
-  public production = { quantity: 1, measureUnit: 1 };
+  public production = { quantity: 1, measureUnit: 1, productId: 0 };
   constructor(private productService: ProductService,
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -41,35 +40,49 @@ export class DataSheetDetailsComponent implements OnInit {
     this.spinner.show();
     let state = history.state.data;
     if (state != null) {
-      this.production.quantity = state.quantity;
-      this.production.measureUnit = state.measureUnitId;
     }
-    let id = this.route.snapshot.params.id;
-    let oProduct = this.productService.GetProduct(id);
-    let oDataSheet = this.productService.getDataSheet(id);
-    let oMeasures = this.domainService.GetMeasureUnits();
-    forkJoin([oProduct, oDataSheet, oMeasures]).pipe(flatMap(r => {
-      this.product = r[0];
-      this.title = `${this.product.name} / Ficha Técnica`;
-      this.dataSheet = r[1] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, weightVariationPercentage: 0, increaseWeight: true };
-      this.measures = r[2] ?? [];
+    this.productService.GetAll().pipe(
+      flatMap(r => {
+        this.products = r;
+        if (state != null) {
+          this.production.quantity = state.quantity;
+          this.production.measureUnit = state.measureUnitId;
+          this.production.productId = state.productId;
+        } else
+          this.production.productId = this.products[0].productId;
+
+        var prod = this.products.filter(p => p.productId == this.production.productId);
+        this.product = prod[0];
+        let oDataSheet = this.productService.getDataSheet(this.production.productId);
+        let oMeasures = this.domainService.GetMeasureUnits();
+        return forkJoin([oDataSheet, oMeasures]);
+      }),
+      flatMap(r => {
+        if (state == null) {
+          this.production.measureUnit = this.product.measureUnitId;
+          this.production.quantity = 1;
+        }
+        let result: ProductionItem[] = [];
+        this.dataSheet = r[0] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, weightVariationPercentage: 0, increaseWeight: true };
+        this.measures = r[1] ?? [];
+
+        return this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity);
+      })).subscribe(r => {
+        this.spinner.hide();
+        this.summary = r;
+      }, (e) => {
+        this.spinner.hide();
+        this.notificationService.notifyHttpError(e);
+      });
+  }
+  getDataSheet() {
+    this.spinner.show();
+    let oSummary = this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity);
+    let oDataSheet = this.productService.getDataSheet(this.product.productId);
+    forkJoin([oDataSheet, oSummary]).subscribe(r => {
+      this.dataSheet = r[0] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, increaseWeight: true, weightVariationPercentage: 0 };
+      this.summary = r[1];
       this.spinner.hide();
-      let result: ProductionItem[] = [];
-      if (state == null) {
-        this.production.measureUnit = this.product.measureUnitId;
-        this.production.quantity = 1;
-      }
-
-      this.dataSheet.dataSheetItems.forEach(i => {
-        let item = { ...i } as ProductionItem;
-        item.quantity = 0;
-        item.cost = 0;
-        result.push(item);
-      })
-      return this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity)
-
-    })).subscribe(r => {
-      this.summary = r;
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);
@@ -86,6 +99,9 @@ export class DataSheetDetailsComponent implements OnInit {
   }
   public get otherItems(): DataSheetItem[] {
     return this.summary.productionItems.filter(i => !i.isBaseItem);
+  }
+  public get title(): string {
+    return `${this.product.name} / Ficha Técnica`;
   }
   calculate() {
     this.spinner.show();
