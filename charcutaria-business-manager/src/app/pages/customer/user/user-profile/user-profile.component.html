@@ -1,0 +1,118 @@
+<form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
+    <app-toolbar [title]="'Perfil'">
+        <button class="btn btn-warning btn-mini" placement="top" ngbTooltip="Cancelar" *ngIf="editing"
+            (click)="cancel()" type="button">
+            <i class="fa fa-times"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit" *ngIf="editing">
+            <i class="fa fa-save"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar" *ngIf="!editing" type="button"
+            (click)="editing = true">
+            <i class="fa fa-pencil"></i>
+        </button>
+    </app-toolbar>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Login</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" disabled [value]="user.username" />
+                        </div>
+                    </div>
+                    <div class="row form-group" [class.has-danger]="f.submitted && name.invalid">
+                        <label class="col-4 m-b-0">Nome</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" [(ngModel)]="user.name" name="name" #name="ngModel"
+                                maxlength="100" required [disabled]="!editing">
+                            <div class="col-form-label" *ngIf="f.submitted && name.invalid && name.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" [class.has-danger]="f.submitted && lastName.invalid">
+                        <label class="col-4 m-b-0">Sobrenome</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" [(ngModel)]="user.lastName" name="lastName"
+                                #lastName="ngModel" maxlength="100" required [disabled]="!editing">
+                            <div class="col-form-label"
+                                *ngIf="f.submitted && lastName.invalid && lastName.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Data de Nascimento</label>
+                        <div class="input-group col-6" *ngIf="!editing">
+                            <input class="form-control" type="text" disabled [value]="dob" />
+                        </div>
+                        <div class="input-group col-6" *ngIf="editing">
+                            <input class="form-control" type="text" [(ngModel)]="user.dateOfBirth" name="dateOfBirth"
+                                #dateOfBirth="ngbDatepicker" placement="bottom-left" readonly ngbDatepicker>
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-sm" (click)="user.dateOfBirth=null" type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="dateOfBirth.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" [class.has-danger]="f.submitted && email.invalid">
+                        <label class="col-4 m-b-0">E-mail</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" [(ngModel)]="user.email" name="email"
+                                #email="ngModel" maxlength="100" required [disabled]="!editing" email>
+                            <div class="col-form-label" *ngIf="f.submitted && email.invalid && email.errors.required">
+                                Campo Obrigatório
+                            </div>
+                            <div class="col-form-label" *ngIf="f.submitted && email.invalid && email.errors.email">
+                                E-mail Inválido
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Telefone Residencial</label>
+                        <div class="col-6">
+                            <input class="form-control" type="text" [(ngModel)]="user.homePhone" name="homePhone"
+                                #homePhone="ngModel" maxlength="20" [disabled]="!editing">
+                        </div>
+                    </div>
+
+                    <div class="row form-group" [class.has-danger]="f.submitted && mobile.invalid">
+                        <label class="col-4 m-b-0">Telefone Celular</label>
+                        <div class="col-6">
+                            <input class="form-control" type="text" [(ngModel)]="user.mobile" name="mobile"
+                                #mobile="ngModel" maxlength="20" required [disabled]="!editing">
+                            <div class="col-form-label" *ngIf="f.submitted && mobile.invalid && mobile.errors.required">
+                                Campo Obrigatório
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Unidade Medida Padrão (Massa)</label>
+                        <div class="col-6">
+                            <select class="form-control" type="text" [(ngModel)]="user.defaultMassMid"
+                                name="defaultMassMid" #mobile="ngModel" [disabled]="!editing">
+                                <option *ngFor="let m of mass" [value]="m.measureUnitId">{{m.description}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Unidade Medida Padrão (Volume)</label>
+                        <div class="col-6">
+                            <select class="form-control" type="text" [(ngModel)]="user.defaultVolumeMid"
+                                name="defaultVolumeMid" #mobile="ngModel" [disabled]="!editing">
+                                <option *ngFor="let m of volumes" [value]="m.measureUnitId">{{m.description}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<app-toasts></app-toasts>

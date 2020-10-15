@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OrderItemReport } from 'src/app/shared/models/orderItemReport';
 import { OrderItemReportFilter } from 'src/app/shared/models/OrderItemReportFilter';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +22,7 @@ import { MeasureUnit } from 'src/app/shared/models/measureUnit';
   styleUrls: ['./order-item.component.scss']
 })
 export class OrderItemComponent implements OnInit {
+  @ViewChild('content', { static: true }) modalContent: any;
   public paginationInfo: PaginationInfo = {} as PaginationInfo;
   public active: boolean = null;
   public items: OrderItemReport[] = [];
@@ -130,9 +131,9 @@ export class OrderItemComponent implements OnInit {
   changePageSize() {
     this.paginationService.changePageSize(this.paginationInfo.recordsPerpage);
   }
-  open(content) {
+  open() {
     this.resetFilter();
-    this.modal = this.modalService.open(content, { size: 'lg' });
+    this.modal = this.modalService.open(this.modalContent, { size: 'lg' });
   }
   resetFilter() {
     this.filter = new OrderItemReportFilter();

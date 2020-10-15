@@ -13,7 +13,8 @@
                 <div class="row">
                     <div class="col-4 form-inline">
                         Exibir&nbsp;
-                        <select class="form-control-sm m-w-100 w-100p" [(ngModel)]="paginationInfo.recordsPerpage" (change)="changePageSize()">
+                        <select class="form-control-sm m-w-100 w-100p" [(ngModel)]="paginationInfo.recordsPerpage"
+                            (change)="changePageSize()">
                             <option [ngValue]="5">5</option>
                             <option [ngValue]="10">10</option>
                             <option [ngValue]="15">15</option>
@@ -52,16 +53,27 @@
                             <tr *ngFor="let p of products">
                                 <td>{{p.name}}</td>
                                 <td>{{p.price | cbmCurrency}} / {{p.measureUnit}}</td>
-                                <td>{{p.cost | cbmCurrency}}</td>
-                                <td>{{p.profit | cbmCurrency}} ({{p.profitPercentage}}%)</td>
+                                <ng-container *ngIf="p.cost!=null">
+                                    <td *ngIf="p.cost!=null">{{p.cost | cbmCurrency}}</td>
+                                    <td *ngIf="p.cost!=null">{{p.profit | cbmCurrency}} ({{p.profitPercentage}}%)</td>
+                                </ng-container>
+                                <td *ngIf="p.cost==null" colspan="2">
+                                    <span class="label label-danger text-center p-t-5"
+                                        style="width: 100%;display:block; font-size: 12px;">
+                                        Não Calculado
+                                    </span>
+                                </td>
                                 <td>{{p.activeForSale ? 'Ativo' : 'Inativo'}}</td>
                                 <td>
-                                    <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Visualizar Ficha Técnica"
-                                        (click)="datasheetDetails(p.productId)">
+
+                                    <a [routerLink]="['/product', 'datasheet', 'details']"
+                                        class="btn btn-primary btn-mini" placement="top"
+                                        ngbTooltip="Visualizar Ficha Técnica"
+                                        [state]="{data:{productId:p.productId, measureUnitId: p.measureUnitId, quantity: 1}}">
                                         <i class="fa fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-primary btn-mini  m-l-5" placement="top" ngbTooltip="Editar Ficha Técnica"
-                                        (click)="datasheet(p.productId)">
+                                    </a>
+                                    <button class="btn btn-primary btn-mini  m-l-5" placement="top"
+                                        ngbTooltip="Editar Ficha Técnica" (click)="datasheet(p.productId)">
                                         <i class="fa fa-tasks"></i>
                                     </button>
                                     <button class="btn btn-primary btn-mini m-l-5" placement="top" ngbTooltip="Editar"

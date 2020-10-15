@@ -10,6 +10,7 @@ export class CbmNumberPipe implements PipeTransform {
 
   }
   transform(value: number): string {
+    if(value == null) return '';
     var vDecimal = this.decimalPipe.transform(value, '1.2-2');
     return vDecimal.toString()
                       .replace(/,/g, "x")

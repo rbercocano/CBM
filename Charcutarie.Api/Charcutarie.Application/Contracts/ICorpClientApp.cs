@@ -8,7 +8,7 @@ namespace Charcutarie.Application.Contracts
     public interface ICorpClientApp
     {
         Task<PagedResult<CorpClient>> GetPaged(int page, int pageSize, string filter, bool? active = null);
-        Task<int> Add(NewCorpClient model);
+        Task<CorpClient> Add(ClientRegistration model);
 
         Task<CorpClient> Update(UpdateCorpClient model);
         Task<CorpClient> Get(int id);

@@ -1,5 +1,6 @@
 ﻿using Charcutarie.Core.Security;
 using Charcutarie.Models.Entities;
+using Charcutarie.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -36,6 +37,32 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.LastUpdated)
                 .HasColumnType("DATETIME");
 
+            builder.Property(p => p.DateOfBirth)
+                .HasColumnType("DATETIME");
+            builder.Property(p => p.LastName)
+                .HasColumnType("VARCHAR(100)");
+            builder.Property(p => p.HomePhone)
+                .HasColumnType("VARCHAR(20)");
+            builder.Property(p => p.Mobile)
+                .HasColumnType("VARCHAR(20)");
+
+            builder.Property(p => p.DefaultVolumeMid)
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (MeasureUnitEnum)v);
+
+            builder.Property(p => p.DefaultMassMid)
+                .IsRequired()
+                 .HasConversion(v => (int)v,
+                                v => (MeasureUnitEnum)v);
+
+            builder.HasOne(p => p.MassMeasureUnit)
+                .WithMany()
+                .HasForeignKey(p => p.DefaultMassMid);
+
+            builder.HasOne(p => p.VolumeMeasureUnit)
+                .WithMany()
+                .HasForeignKey(p => p.DefaultVolumeMid);
 
         }
     }

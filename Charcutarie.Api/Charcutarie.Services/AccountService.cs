@@ -14,9 +14,9 @@ namespace Charcutarie.Services
         {
             this.userApp = userApp;
         }
-        public async Task<JWTUserInfo> DoLogin(int corpClientId, string username, string password)
+        public async Task<JWTUserInfo> DoLogin(string accountNumber, string username, string password)
         {
-            return await userApp.DoLogin(corpClientId, username, password);
+            return await userApp.DoLogin(accountNumber, username, password);
         }
 
         public async Task<string> GetRefreshToken(long userId)

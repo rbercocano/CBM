@@ -35,7 +35,7 @@ namespace Charcutarie.Api.Controllers.v1
         [HttpPost("Login")]
         public async Task<ActionResult> GetToken([FromBody] Login request)
         {
-            var userData = await accountService.DoLogin(request.CorpClientId, request.Username, request.Password);
+            var userData = await accountService.DoLogin(request.AccountNumber, request.Username, request.Password);
             if (userData == null)
             {
                 return Ok(new TokenData

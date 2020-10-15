@@ -25,6 +25,7 @@ import { ProductService } from 'src/app/shared/services/product/product.service'
   styleUrls: ['./summarized-production.component.scss']
 })
 export class SummarizedProductionComponent implements OnInit {
+  @ViewChild('content', { static: true }) modalContent: any;
   private modal: NgbModalRef;
   public filter: SummarizedProductionFilter = new SummarizedProductionFilter();
   private lastFilter: SummarizedProductionFilter;
@@ -132,9 +133,8 @@ export class SummarizedProductionComponent implements OnInit {
   changePageSize() {
     this.paginationService.changePageSize(this.paginationInfo.recordsPerpage);
   }
-  open(content) {
-    // this.resetFilter();
-    this.modal = this.modalService.open(content, { size: 'lg' });
+  open() {
+    this.modal = this.modalService.open(this.modalContent, { size: 'lg' });
   }
   resetFilter() {
     this.filter = new SummarizedProductionFilter();

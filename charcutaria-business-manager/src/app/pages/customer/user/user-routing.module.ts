@@ -3,19 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 
 const routes: Routes = [{
-  path: '',
-  component: UserSearchComponent
-},
-{
-  path: 'create',
-  component: UserRegistrationComponent
-},
-{
-  path: 'edit',
-  component: UserRegistrationComponent
+  path: 'profile',
+  component: UserProfileComponent
 },
 {
   path: 'change-password',

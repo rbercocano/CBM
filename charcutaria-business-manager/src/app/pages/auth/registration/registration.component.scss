@@ -1,0 +1,25 @@
+.row {
+    div {
+        &.left-panel {
+            position: relative;
+            float: left;
+            padding: 10px 15px;
+            border-right: solid 1px silver;
+            width: 50%;
+        }
+        &.right-panel {
+            position: relative;
+            float: left;
+            padding: 10px 15px;
+            width: 50%;
+        }
+    }
+}
+.back-to-login {
+    color: red;
+}
+.signup-card {
+    &.auth-body {
+        width: 850px;
+    }
+}

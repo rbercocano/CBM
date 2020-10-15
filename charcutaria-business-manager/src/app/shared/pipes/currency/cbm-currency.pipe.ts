@@ -13,6 +13,7 @@ export class CbmCurrencyPipe implements PipeTransform {
 
   }
   transform(value: number, precision: number = 2): string {
+    if(value == null) return '';
     let currency = this.authService.userData.currency ?? 'R$';
     precision = precision ?? 2;
     let vDecimal = this.decimalPipe.transform(value, `1.2-${precision}`);

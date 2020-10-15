@@ -16,28 +16,24 @@
               </div>
               <hr />
               <div class="input-group">
-                <select class="form-control" [disabled]="loading" [(ngModel)]="login.corpClientId"
-                  #corpClientId="ngModel" name="corpClientId" required>
-                  <option [ngValue]="null" *ngIf="loading">Carregando...</option>
-                  <option [ngValue]="null" *ngIf="!loading">Selecione sua Empresa</option>
-                  <option [ngValue]="c.corpClientId" *ngFor="let c of corpClients">{{c.dbaName}}</option>
-                </select>
-                <div *ngIf="f.submitted && corpClientId.invalid && !loading" class="error">
-                  <div *ngIf="corpClientId.errors.required">Selecione sua Empresa</div>
+                <input type="text" class="form-control" placeholder="Conta" [(ngModel)]="login.accountNumber"
+                  #accountNumber="ngModel" name="accountNumber" required digitOnly maxlength="10">
+                <div *ngIf="f.submitted && accountNumber.invalid" class="error">
+                  <div *ngIf="accountNumber.errors.required">Informe o número da conta</div>
                 </div>
                 <span class="md-line"></span>
               </div>
               <div class="input-group">
-                <input [disabled]="loading" type="text" class="form-control" placeholder="Login"
-                  [(ngModel)]="login.username" #username="ngModel" required name="username">
+                <input type="text" class="form-control" placeholder="Login" [(ngModel)]="login.username"
+                  #username="ngModel" required name="username">
                 <div *ngIf="f.submitted && username.invalid" class="error">
                   <div *ngIf="username.errors.required">Informe seu login</div>
                 </div>
                 <span class="md-line"></span>
               </div>
               <div class="input-group">
-                <input type="password" [disabled]="loading" class="form-control" placeholder="Senha"
-                  [(ngModel)]="login.password" #password="ngModel" name="password" required>
+                <input type="password" class="form-control" placeholder="Senha" [(ngModel)]="login.password"
+                  #password="ngModel" name="password" required>
                 <div *ngIf="f.submitted && password.invalid" class="error">
                   <div *ngIf="password.errors.required">Informe sua senha</div>
                 </div>
@@ -52,8 +48,9 @@
               </div>
               <div class="row m-t-15">
                 <div class="col-md-12">
-                  <button type="button" type="submit" [disabled]="loading"
-                    class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Sign in</button>
+                  <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-5">Sign
+                    in</button>
+                  <a [routerLink]="['/auth/signup']" class="btn btn-secondary btn-md btn-block waves-effect text-center m-b-20">Cadastre-se</a>
                   <div class="input-group" *ngIf="authRes.length">
                     <div class="error text-center">
                       <b>{{authRes}}</b>

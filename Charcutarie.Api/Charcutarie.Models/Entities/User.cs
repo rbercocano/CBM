@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Charcutarie.Models.Enums;
+using System;
 
 namespace Charcutarie.Models.Entities
 {
@@ -16,5 +17,13 @@ namespace Charcutarie.Models.Entities
         public DateTime? LastUpdated { get; set; }
         public CorpClient CorpClient { get; set; }
         public string Email { get; set; }
+        public string LastName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string HomePhone { get; set; }
+        public string Mobile { get; set; }
+        public MeasureUnit MassMeasureUnit { get; set; }
+        public MeasureUnit VolumeMeasureUnit { get; set; }
+        public MeasureUnitEnum DefaultMassMid { get; set; }
+        public MeasureUnitEnum DefaultVolumeMid { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 export class Login {
-    corpClientId: Number;
+    accountNumber: string;
     username: string;
     password: string;
 }

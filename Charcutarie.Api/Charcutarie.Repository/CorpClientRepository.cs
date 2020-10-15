@@ -21,12 +21,12 @@ namespace Charcutarie.Repository
             this.context = context;
             this.mapper = mapper;
         }
-        public async Task<int> Add(NewCorpClient model)
+        public async Task<CorpClient> Add(ClientRegistration model)
         {
             var entity = mapper.Map<EF.CorpClient>(model);
             context.Add(entity);
             var rows = await context.SaveChangesAsync();
-            return await Task.FromResult(entity.CorpClientId);
+            return mapper.Map<CorpClient>(entity);
         }
         public async Task<CorpClient> Update(UpdateCorpClient model)
         {

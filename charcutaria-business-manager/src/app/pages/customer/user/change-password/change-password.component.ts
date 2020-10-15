@@ -32,6 +32,9 @@ export class ChangePasswordComponent implements OnInit {
     if (this.form.valid) {
       this.userService.changePassword(this.login).subscribe(r => {
         this.email = r.email;
+        this.login = {} as ChangePassword;
+        this.notificationService.showSuccess('Sucesso','Senha atualizada com sucesso');
+
       }, e => {
         this.notificationService.notifyHttpError(e);
       });

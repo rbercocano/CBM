@@ -35,9 +35,13 @@ namespace Charcutarie.Repository
         {
             var entity = context.Users.Find(model.UserId);
             entity.Name = model.Name;
-            entity.Active = model.Active;
-            entity.Username = model.Username;
-            entity.CorpClientId = corpClientId;
+            entity.DateOfBirth = model.DateOfBirth;
+            entity.LastName = model.LastName;
+            entity.HomePhone = model.HomePhone;
+            entity.Mobile = model.Mobile;
+            entity.Email = model.Email;
+            entity.DefaultMassMid = model.DefaultMassMid;
+            entity.DefaultVolumeMid = model.DefaultVolumeMid;
             context.Update(entity);
             var rows = await context.SaveChangesAsync();
             var result = mapper.Map<User>(entity);
@@ -81,14 +85,14 @@ namespace Charcutarie.Repository
             return result;
         }
 
-        public async Task<JWTUserInfo> DoLogin(int corpClientId, string username, string password)
+        public async Task<JWTUserInfo> DoLogin(string accountNumber, string username, string password)
         {
             var entity = await context.Users
                 .Include(c => c.CorpClient)
                 .Include(c => c.Role)
                 .FirstOrDefaultAsync(p => p.Username == username
                                                                   && p.Password == password
-                                                                  && p.CorpClientId == corpClientId
+                                                                  && p.CorpClient.AccountNumber == accountNumber
                                                                   && p.Active
                                                                   && p.CorpClient.Active);
             var result = mapper.Map<JWTUserInfo>(entity);

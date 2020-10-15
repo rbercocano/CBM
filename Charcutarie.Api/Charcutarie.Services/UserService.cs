@@ -51,7 +51,7 @@ namespace Charcutarie.Services
                 throw new BusinessException("Usuário não encontrado");
             var newPassword = await userApp.ResetPassword(user.UserId, corpClientId);
             var body = $"<p>Sua senha foi redefinida conforme solicitado.</p><p>Nova Senha: <b>{newPassword}</b></p>";
-            var subject = "Nova Senha";
+            var subject = "Charcuterie Business Manager - Nova Senha";
             emailManager.SendEmail(new List<string>() { user.Email }, body, subject, true);
             return user.Email;
         }

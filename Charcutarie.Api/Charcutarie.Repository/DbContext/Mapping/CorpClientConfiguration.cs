@@ -31,6 +31,28 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("BIT")
                 .IsRequired();
 
+            builder.Property(p => p.CustomerTypeId)
+                .HasColumnType("INT")
+                .IsRequired();
+
+            builder.Property(p => p.LastUpdated)
+                .HasColumnType("DATETIME");
+
+            builder.Property(p => p.LicenseExpirationDate)
+                .HasColumnType("DATETIME");
+
+            builder.Property(p => p.AccountNumber)
+                .HasColumnType("VARCHAR(8)")
+                .IsRequired();
+
+            builder.Property(p => p.CNPJ)
+               .HasColumnName("CNPJ")
+               .HasColumnType("VARCHAR(18)");
+
+            builder.Property(p => p.CPF)
+               .HasColumnName("CPF")
+               .HasColumnType("VARCHAR(14)");
+
         }
     }
 }

@@ -5,3 +5,6 @@
 .table th, .table td {
     vertical-align: middle;
 }
+.table th:nth-child(3), .table td:nth-child(3) {
+    text-align: right;
+}

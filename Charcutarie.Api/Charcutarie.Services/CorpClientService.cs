@@ -10,18 +10,21 @@ namespace Charcutarie.Services
     public class CorpClientService : ICorpClientService
     {
         private readonly ICorpClientApp corpClientApp;
+        private readonly IUserApp userApp;
 
-        public CorpClientService(ICorpClientApp corpClientApp)
+        public CorpClientService(ICorpClientApp corpClientApp, IUserApp userApp)
         {
             this.corpClientApp = corpClientApp;
+            this.userApp = userApp;
         }
         public async Task<PagedResult<CorpClient>> GetPaged(int page, int pageSize, string filter, bool? active = null)
         {
             return await corpClientApp.GetPaged(page, pageSize, filter, active);
         }
-        public async Task<int> Add(NewCorpClient model)
+        public async Task<string> Register(ClientRegistration model)
         {
-            return await corpClientApp.Add(model);
+            var result = await corpClientApp.Add(model);
+            return result.AccountNumber;
         }
 
         public async Task<CorpClient> Update(UpdateCorpClient model)

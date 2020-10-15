@@ -20,9 +20,9 @@ namespace Charcutarie.Application
         }
 
 
-        public async Task<JWTUserInfo> DoLogin(int corpClientId, string username, string password)
+        public async Task<JWTUserInfo> DoLogin(string accountNumber, string username, string password)
         {
-            return await userRepository.DoLogin(corpClientId, username, password);
+            return await userRepository.DoLogin(accountNumber, username, password);
         }
 
         public async Task<User> Get(long id, int corpClientId)

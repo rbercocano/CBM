@@ -11,13 +11,12 @@ import { ParentModule } from '../models/parentModule';
 export class NavbarComponent implements OnInit {
 
   collapsed = false;
-  public companyName: string;
+
   public modules: ParentModule[] = [];
   constructor(private userService: UserService,
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.companyName = this.authService.userData.companyName;
     this.modules = this.userService.userModules;
     if (this.modules == null || this.modules.length == 0)
       this.userService.GetUserModules(this.authService.userData.userId).subscribe(m => {
@@ -26,6 +25,16 @@ export class NavbarComponent implements OnInit {
   }
   logout() {
     this.authService.logout();
+  }
+  public get companyName(): string {
+    if (this.authService.userData != null)
+      return this.authService.userData.companyName;
+    return '';
+  }
+  public get name(): string {
+    if (this.authService.userData != null)
+      return this.authService.userData.name;
+    return '';
   }
 
 }

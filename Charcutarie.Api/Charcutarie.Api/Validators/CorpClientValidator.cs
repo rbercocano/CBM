@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Charcutarie.Api.Validators
 {
-    public class NewCorpClientValidator : AbstractValidator<NewCorpClient>
+    public class NewCorpClientValidator : AbstractValidator<ClientRegistration>
     {
         public NewCorpClientValidator()
         {

@@ -22,20 +22,18 @@ namespace Charcutarie.Api.Controllers.v1
         }
 
         [HttpGet("{page:int}/{pageSize:int}")]
-        public async Task<ActionResult<PagedResult<CorpClient>>> GetPaged(int page, int pageSize, [FromQuery]string filter = null, [FromQuery]bool? active = null)
+        public async Task<ActionResult<PagedResult<CorpClient>>> GetPaged(int page, int pageSize, [FromQuery] string filter = null, [FromQuery] bool? active = null)
         {
             var data = await service.GetPaged(page, pageSize, filter, active);
             if (data.Data.Any())
                 return Ok(data);
             return NoContent();
         }
-        [HttpPost]
-        public async Task<ActionResult<int>> Add(NewCorpClient model)
+        [HttpPost("Register")]
+        public async Task<ActionResult<int>> Register(ClientRegistration model)
         {
-            var id = await service.Add(model);
-            if (id > 0)
-                return Ok(id);
-            return new StatusCodeResult(304);
+            var acc = await service.Register(model);
+            return Ok(acc);
         }
         [HttpPut]
         public async Task<ActionResult<CorpClient>> Update(UpdateCorpClient model)

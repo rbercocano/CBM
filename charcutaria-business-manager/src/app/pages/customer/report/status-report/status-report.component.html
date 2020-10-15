@@ -1,0 +1,19 @@
+<app-toolbar [title]="title">
+    <div class="btn-group">
+        <button type="button" class="btn btn-mini" [ngClass]="{'btn-secondary':view==1,'btn-primary':view==2}"
+            placement="top" ngbTooltip="Analítico" (click)="view=1;">
+            <i class="fa fa-list-alt"></i></button>
+        <button type="button" class="btn btn-mini" [ngClass]="{'btn-secondary':view==2,'btn-primary':view==1}"
+            placement="top" ngbTooltip="Sintético" (click)="view=2;">
+            <i class="fa fa-th-list"></i>
+        </button>
+    </div>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Atualizar" (click)="search()">
+        <i class="fa fa-refresh"></i>
+    </button>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Pesquisar" (click)="open()">
+        <i class="fa fa-search"></i>
+    </button>
+</app-toolbar>
+<app-summarized-production *ngIf="view==1"></app-summarized-production>
+<app-order-item *ngIf="view==2"></app-order-item>

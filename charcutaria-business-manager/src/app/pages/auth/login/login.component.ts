@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { CorpClientService } from 'src/app/shared/services/corpclient/corp-client.service';
 import { CorpClient } from 'src/app/shared/models/corpClient';
 import { Login } from 'src/app/shared/models/login';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
@@ -16,19 +15,14 @@ import { UserService } from 'src/app/shared/services/user/user.service';
 })
 export class LoginComponent implements OnInit {
   @ViewChild('f', { static: true }) form: NgForm;
-  public loading = true;
   public authRes: string = "";
   public corpClients: CorpClient[] = [];
-  public login: Login = { corpClientId: null, password: "", username: "" };
-  constructor(private corpClientService: CorpClientService,
+  public login: Login = { accountNumber: null, password: "", username: "" };
+  constructor(
     private userService: UserService,
     private authService: AuthService, private route: Router) { }
 
   ngOnInit(): void {
-    this.corpClientService.GetActives().subscribe(c => {
-      this.corpClients = c;
-      this.loading = false;
-    });
   }
   signIn(): void {
     this.authRes = "";

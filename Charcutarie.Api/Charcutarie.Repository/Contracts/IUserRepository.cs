@@ -11,7 +11,7 @@ namespace Charcutarie.Repository.Contracts
         Task<long> Add(NewUser model, int? corpClientId);
         Task<User> Update(UpdateUser model, int? corpClientId);
         Task<User> Get(long id, int corpClientId);
-        Task<JWTUserInfo> DoLogin(int corpClientId, string username, string password);
+        Task<JWTUserInfo> DoLogin(string accountNumber, string username, string password);
         Task SaveRefreshToken(long userId, string refreshToken, DateTime createdOn);
         Task<string> GetRefreshToken(long userId);
         Task ChangePassword(long userId, string password, int corpClientId);

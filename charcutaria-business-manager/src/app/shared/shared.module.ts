@@ -32,6 +32,11 @@ import { OrderItemStatusLabelComponent } from './order-item-status-label/order-i
 import { SafeHtmlPipe } from './pipes/safeHtml/safe-html.pipe';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ValidatorService } from './services/validator/validator.service';
+import { EmailDirective } from './directives/email-validator/email.directive';
+import { DigitOnlyDirective } from './directives/digit-only/digit-only.directive';
+import { CpfDirective } from './directives/cpf-validator/cpf.directive';
+import { CnpjDirective } from './directives/cnpj/cnpj.directive';
 
 
 
@@ -49,13 +54,17 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     PaymentStatusLabelComponent,
     OrderItemStatusLabelComponent,
     SafeHtmlPipe,
-    ConfirmModalComponent],
+    ConfirmModalComponent,
+    EmailDirective,
+    DigitOnlyDirective,
+    CpfDirective,
+    CnpjDirective],
   imports: [
     CommonModule,
     FormsModule,
     NgbModule,
     HttpClientModule,
-    NgxMaskModule.forRoot(),    
+    NgxMaskModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule
   ],
@@ -75,7 +84,11 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     PaymentStatusLabelComponent,
     OrderItemStatusLabelComponent,
     ConfirmModalComponent,
-    NgMultiSelectDropDownModule
+    NgMultiSelectDropDownModule,
+    EmailDirective,
+    DigitOnlyDirective,
+    CpfDirective,
+    CnpjDirective
   ],
   providers: [
     UserService,
@@ -88,6 +101,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     PaginationService,
     PricingService,
     OrderService,
+    ValidatorService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpsRequestInterceptor,

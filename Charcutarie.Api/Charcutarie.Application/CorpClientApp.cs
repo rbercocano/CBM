@@ -16,7 +16,7 @@ namespace Charcutarie.Application
             this.corpClientRepository = corpClientRepository;
         }
 
-        public async Task<int> Add(NewCorpClient model)
+        public async Task<CorpClient> Add(ClientRegistration model)
         {
             return await corpClientRepository.Add(model);
         }

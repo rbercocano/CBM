@@ -1,4 +1,4 @@
-.cbm-header{
+.cbm-header {
     position: fixed;
     display: block;
     min-height: 50px;
@@ -9,7 +9,7 @@
     background: linear-gradient(to right, #4099ff, #73b4ff);
     line-height: 35px;
     padding: 0;
-    div.logo{
+    div.logo {
         position: relative;
         align-items: center;
         display: flex;
@@ -18,22 +18,21 @@
         text-align: center;
         width: 400px;
         padding: 10px;
-        a span.title{
+        a span.title {
             padding: 0 0 0 10px;
             color: #fff;
             font-size: 18px;
             line-height: 30px;
             vertical-align: middle;
         }
-        img.img-fluid{
+        img.img-fluid {
             width: 30px;
             height: auto;
         }
-    
     }
 }
-.cbm-menu{    
-    top:56px;
+.cbm-menu {
+    top: 56px;
     background-color: #fff;
     height: 44px;
     display: block;
@@ -45,11 +44,19 @@
     font-size: 13px;
     padding: 1px 10px;
 }
-.dropdown-menu{
+.dropdown-menu {
     padding: 0 !important;
 }
-.nav-item{
+.nav-item {
     line-height: 26px;
     vertical-align: middle;
-    cursor: pointer ;
+    cursor: pointer;
+}
+.user-name {
+    padding: 0 0 0 10px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 30px;
+    vertical-align: top;
+    margin-right: 10px;
 }
