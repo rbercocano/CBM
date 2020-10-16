@@ -16,5 +16,6 @@ namespace Charcutarie.Repository.Contracts
         Task<string> GetRefreshToken(long userId);
         Task ChangePassword(long userId, string password, int corpClientId);
         Task<User> GetByLogin(string username, int corpClientId);
+        Task<User> GetByLogin(string username, string accountNumber);
     }
 }

@@ -37,6 +37,8 @@ import { EmailDirective } from './directives/email-validator/email.directive';
 import { DigitOnlyDirective } from './directives/digit-only/digit-only.directive';
 import { CpfDirective } from './directives/cpf-validator/cpf.directive';
 import { CnpjDirective } from './directives/cnpj/cnpj.directive';
+import { SecurePasswordDirective } from './directives/secure-password/secure-password.directive';
+import { MobilePhoneDirective } from './directives/mobile-phone/mobile-phone.directive';
 
 
 
@@ -58,7 +60,9 @@ import { CnpjDirective } from './directives/cnpj/cnpj.directive';
     EmailDirective,
     DigitOnlyDirective,
     CpfDirective,
-    CnpjDirective],
+    CnpjDirective,
+    SecurePasswordDirective,
+    MobilePhoneDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -88,7 +92,9 @@ import { CnpjDirective } from './directives/cnpj/cnpj.directive';
     EmailDirective,
     DigitOnlyDirective,
     CpfDirective,
-    CnpjDirective
+    CnpjDirective,
+    SecurePasswordDirective,
+    MobilePhoneDirective
   ],
   providers: [
     UserService,

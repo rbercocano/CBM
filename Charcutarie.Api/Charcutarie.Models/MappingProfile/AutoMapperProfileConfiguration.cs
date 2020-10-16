@@ -16,6 +16,7 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.Role, vm.Role>().ReverseMap();
 
             CreateMap<ef.CorpClient, vm.CorpClient>().ReverseMap();
+            CreateMap<ef.CorpClient, vm.NewCorpClient>().ReverseMap();
             CreateMap<ef.CorpClient, vm.ClientRegistration>().ReverseMap();
             CreateMap<ef.CorpClient, vm.UpdateCorpClient>().ReverseMap();
 

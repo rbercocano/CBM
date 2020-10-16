@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace Charcutarie.Repository
 {
@@ -21,12 +24,38 @@ namespace Charcutarie.Repository
             this.context = context;
             this.mapper = mapper;
         }
-        public async Task<CorpClient> Add(ClientRegistration model)
+        public async Task<CorpClient> Add(NewCorpClient model)
         {
-            var entity = mapper.Map<EF.CorpClient>(model);
-            context.Add(entity);
-            var rows = await context.SaveChangesAsync();
-            return mapper.Map<CorpClient>(entity);
+            var @params = new[]
+                {
+                   new SqlParameter("@p0", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 100, Value= model.Name},
+                   new SqlParameter("@p1", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 100, Value = model.DBAName},
+                   new SqlParameter("@p2", SqlDbType.Bit) {Direction = ParameterDirection.Input, Value =model.Active},
+                   new SqlParameter("@p3", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size =200, Value = model.Email},
+                   new SqlParameter("@p4", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 20, Value = model.Mobile},
+                   new SqlParameter("@p5", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 4, Value = model.Currency},
+                   new SqlParameter("@p6", SqlDbType.Int) {Direction = ParameterDirection.Input, Value = model.CustomerTypeId},
+                   new SqlParameter("@p7", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 14, Value = model.CPF},
+                   new SqlParameter("@p8", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 18, Value = model.CNPJ},
+                   new SqlParameter("@p9", SqlDbType.DateTime) {Direction = ParameterDirection.Input, Value = model.LicenseExpirationDate.HasValue ? (object)model.LicenseExpirationDate.Value: DBNull.Value},
+                   new SqlParameter("@ID", SqlDbType.Int) {Direction = ParameterDirection.Output}
+                 };
+            var id = await context.Database.ExecuteSqlRawAsync("exec @ID = AddCorpClient @p0,@p1,@p2,@p3,@p4,@p5,@p6,@p7,@p8,@p9", @params);
+            return await Get(Convert.ToInt32(@params[10].Value));
+        }
+        public async Task<CorpClient> GetByCpf(string cpf)
+        {
+            var entity = await context.CorpClients.FirstOrDefaultAsync(c => c.CPF == cpf);
+            var result = mapper.Map<CorpClient>(entity);
+            return result;
+
+        }
+        public async Task<CorpClient> GetByCnpj(string cnpj)
+        {
+            var entity = await context.CorpClients.FirstOrDefaultAsync(c => c.CNPJ == cnpj);
+            var result = mapper.Map<CorpClient>(entity);
+            return result;
+
         }
         public async Task<CorpClient> Update(UpdateCorpClient model)
         {
@@ -61,9 +90,9 @@ namespace Charcutarie.Repository
         }
         public async Task<CorpClient> Get(int id)
         {
-            var entity = context.CorpClients.Find(id);
+            var entity = await context.CorpClients.FirstOrDefaultAsync(c => c.CorpClientId == id);
             var result = mapper.Map<CorpClient>(entity);
-            return await Task.FromResult(result);
+            return result;
         }
         public async Task<IEnumerable<CorpClient>> GetActives()
         {

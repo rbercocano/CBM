@@ -17,5 +17,6 @@ namespace Charcutarie.Application.Contracts
         Task<string> ResetPassword(long userId, int corpClientId);
         Task ChangePassword(ChangePassword model, int corpClientId, long userId);
         Task<User> GetByLogin(string username, int corpClientId);
+        Task<User> GetByLogin(string username, string accountNumber);
     }
 }

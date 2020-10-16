@@ -30,10 +30,11 @@ namespace Charcutarie.Api.Controllers.v1
             return NoContent();
         }
         [HttpPost("Register")]
-        public async Task<ActionResult<int>> Register(ClientRegistration model)
+        [AllowAnonymous]
+        public async Task<ActionResult<CorpClient>> Register(ClientRegistration model)
         {
-            var acc = await service.Register(model);
-            return Ok(acc);
+            var data = await service.Register(model);
+            return Ok(data);
         }
         [HttpPut]
         public async Task<ActionResult<CorpClient>> Update(UpdateCorpClient model)

@@ -17,7 +17,7 @@
               <hr />
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Conta" [(ngModel)]="login.accountNumber"
-                  #accountNumber="ngModel" name="accountNumber" required digitOnly maxlength="10">
+                  #accountNumber="ngModel" name="accountNumber" required digitOnly maxlength="8">
                 <div *ngIf="f.submitted && accountNumber.invalid" class="error">
                   <div *ngIf="accountNumber.errors.required">Informe o número da conta</div>
                 </div>

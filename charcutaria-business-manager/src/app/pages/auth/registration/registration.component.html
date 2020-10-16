@@ -13,142 +13,194 @@
                             <span class="login-title">Charcuterie Business Manager</span>
                         </div>
                         <div class="auth-box">
-                            <div class="row m-b-20">
-                                <div class="col-md-12">
-                                    <h3 class="text-center txt-primary">Cadastre-se. Rápido e fácil!</h3>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="input-group">
-                                        <select class="form-control" [(ngModel)]="client.customerTypeId"
-                                            (change)="client.socialIdentifier = '' " #customerTypeId="ngModel"
-                                            name="customerTypeId">
-                                            <option *ngFor="let c of customerTypes" [value]="c.customerTypeId">
-                                                {{c.description}}</option>
-                                        </select>
+                            <ng-container *ngIf="registered">
+                                <div class="row m-b-10">
+                                    <div class="col-md-12">
+                                        <h3 class="text-center txt-primary theme-color">Cadastro efetuado com sucesso!</h3>
                                     </div>
                                 </div>
-                                <div class="left-panel">
-                                    <ng-container *ngIf="client.customerTypeId==1">
+                                <hr />
+                                <div class="row m-b-30">
+                                    <div class="col-md-12 text-center text-inverse">
+                                        <h3 class="text-center theme-color">Bem vindo</h3>
+                                        <h5>{{corpClient.name}}</h5>
+                                        <ng-container *ngIf="corpClient.customerTypeId == 1">
+                                            <i><span>CPF: {{corpClient.cpf}}</span></i>
+                                        </ng-container>
+                                        <ng-container *ngIf="corpClient.customerTypeId == 2">
+                                            <i><span>CNPJ: {{corpClient.cnpj}}</span></i>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row m-b-10">
+                                    <div class="col-md-12 text-center text-inverse">
+                                        <h5 class="theme-color">Utilize os dados abaixo para acessar o sistema:</h5>
+                                        <p class="m-t-20 m-b-5">
+                                            <b>Conta: </b>{{corpClient.accountNumber}}
+                                        </p>
+                                        <p>
+                                            <b>Login: </b>{{client.username}}
+                                        </p>
+                                        <p>
+                                            <i>Enviamos um e-mail para <span class="theme-color"><u>{{corpClient.email}}</u></span> com as informações acima.</i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row m-t-30">
+                                    <div class="col-md-12">
+                                        <a [routerLink]="['/auth/login']"
+                                            class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Ir para página de Login</a>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="!registered">
+                                <div class="row m-b-20">
+                                    <div class="col-md-12">
+                                        <h3 class="text-center txt-primary">Cadastre-se. É rápido e fácil!</h3>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Nome"
-                                                [(ngModel)]="client.name" #name="ngModel" name="name" required>
-                                            <span class="md-line"></span>
-                                            <div *ngIf="f.submitted && name.invalid" class="error">
-                                                <div *ngIf="name.errors.required">Campo Obrigatório</div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="CPF"
-                                                [(ngModel)]="client.socialIdentifier" #cpf="ngModel" name="cpf" required
-                                                cpf maxlength="14" mask="000.000.000-00"
-                                                [dropSpecialCharacters]="false">
-                                            <span class="md-line"></span>
-                                            <div *ngIf="f.submitted && cpf.invalid" class="error">
-                                                <div *ngIf="cpf.errors.required">Campo Obrigatório</div>
-                                                <div *ngIf="cpf.errors.cpf">CPF Inválido</div>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                    <ng-container *ngIf="client.customerTypeId==2">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Nome Fantasia"
-                                                [(ngModel)]="client.name" #name="ngModel" name="name" required>
-                                            <span class="md-line"></span>
-                                            <div *ngIf="f.submitted && name.invalid" class="error">
-                                                <div *ngIf="name.errors.required">Campo Obrigatório</div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Razão Social"
-                                                [(ngModel)]="client.dbaName" #dbaName="ngModel" name="dbaName" required>
-                                            <span class="md-line"></span>
-                                            <div *ngIf="f.submitted && dbaName.invalid" class="error">
-                                                <div *ngIf="dbaName.errors.required">Campo Obrigatório</div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="CNPJ"
-                                                mask="00.000.000/0000-00" [dropSpecialCharacters]="false"
-                                                [(ngModel)]="client.socialIdentifier" #cnpj="ngModel" name="cnpj"
-                                                required maxlength="18" cnpj>
-                                            <span class="md-line"></span>
-                                            <div *ngIf="f.submitted && cnpj.invalid" class="error">
-                                                <div *ngIf="cnpj.errors.required">Campo Obrigatório</div>
-                                                <div *ngIf="cnpj.errors.cnpj">CNPJ Inválido</div>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Celular"
-                                            [(ngModel)]="client.mobile" #mobile="ngModel" name="mobile" required>
-                                        <span class="md-line"></span>
-                                        <div *ngIf="f.submitted && mobile.invalid" class="error">
-                                            <div *ngIf="mobile.errors.required">Campo Obrigatório</div>
+                                            <select class="form-control" [(ngModel)]="client.customerTypeId"
+                                                (change)="client.socialIdentifier = '' " #customerTypeId="ngModel"
+                                                name="customerTypeId">
+                                                <option *ngFor="let c of customerTypes" [value]="c.customerTypeId">
+                                                    {{c.description}}</option>
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="right-panel">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Login"
-                                            [(ngModel)]="client.username" #username="ngModel" name="username" required>
-                                        <span class="md-line"></span>
-                                        <div *ngIf="f.submitted && username.invalid" class="error">
-                                            <div *ngIf="username.errors.required">Campo Obrigatório</div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" placeholder="Senha"
-                                            [(ngModel)]="client.password" #password="ngModel" name="password" required>
-                                        <span class="md-line"></span>
-                                        <div *ngIf="f.submitted && password.invalid" class="error">
-                                            <div *ngIf="password.errors.required">Campo Obrigatório</div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" placeholder="Confirmação de senha"
-                                            [(ngModel)]="client.passwordConfirmation" #passwordConfirmation="ngModel"
-                                            name="passwordConfirmation" required>
-                                        <span class="md-line"></span>
-                                        <div *ngIf="f.submitted && passwordConfirmation.invalid" class="error">
-                                            <div *ngIf="passwordConfirmation.errors.required">Campo Obrigatório</div>
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="E-mail"
-                                            [(ngModel)]="client.email" #email="ngModel" name="email" required email>
-                                        <span class="md-line"></span>
-                                        <div *ngIf="f.submitted && email.invalid" class="error">
-                                            <div *ngIf="email.errors.required">Campo Obrigatório</div>
-                                            <div *ngIf="email.errors.email && !email.errors.required">E-mail inválido
+                                    <div class="left-panel">
+                                        <ng-container *ngIf="client.customerTypeId==1" [class.has-danger]="f.submitted && name.invalid">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Nome"
+                                                    [(ngModel)]="client.name" #name="ngModel" name="name" required>
+                                                <span class="md-line"></span>
+                                                <div *ngIf="f.submitted && name.invalid" class="error">
+                                                    <div *ngIf="name.errors.required">Campo Obrigatório</div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group" [class.has-danger]="f.submitted && cpf.invalid">
+                                                <input type="text" class="form-control" placeholder="CPF"
+                                                    [(ngModel)]="client.socialIdentifier" #cpf="ngModel" name="cpf"
+                                                    required cpf maxlength="14" mask="000.000.000-00"
+                                                    [dropSpecialCharacters]="false">
+                                                <span class="md-line"></span>
+                                                <div *ngIf="f.submitted && cpf.invalid" class="error">
+                                                    <div *ngIf="cpf.errors.required">Campo Obrigatório</div>
+                                                    <div *ngIf="cpf.errors.cpf">CPF Inválido</div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="client.customerTypeId==2">
+                                            <div class="input-group" [class.has-danger]="f.submitted && name.invalid">
+                                                <input type="text" class="form-control" placeholder="Nome Fantasia"
+                                                    [(ngModel)]="client.name" #name="ngModel" name="name" required>
+                                                <span class="md-line"></span>
+                                                <div *ngIf="f.submitted && name.invalid" class="error">
+                                                    <div *ngIf="name.errors.required">Campo Obrigatório</div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group" [class.has-danger]="f.submitted && dbaName.invalid">
+                                                <input type="text" class="form-control" placeholder="Razão Social"
+                                                    [(ngModel)]="client.dbaName" #dbaName="ngModel" name="dbaName"
+                                                    required>
+                                                <span class="md-line"></span>
+                                                <div *ngIf="f.submitted && dbaName.invalid" class="error">
+                                                    <div *ngIf="dbaName.errors.required">Campo Obrigatório</div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group" [class.has-danger]="f.submitted && cnpj.invalid">
+                                                <input type="text" class="form-control" placeholder="CNPJ"
+                                                    mask="00.000.000/0000-00" [dropSpecialCharacters]="false"
+                                                    [(ngModel)]="client.socialIdentifier" #cnpj="ngModel" name="cnpj"
+                                                    required maxlength="18" cnpj>
+                                                <span class="md-line"></span>
+                                                <div *ngIf="f.submitted && cnpj.invalid" class="error">
+                                                    <div *ngIf="cnpj.errors.required">Campo Obrigatório</div>
+                                                    <div *ngIf="cnpj.errors.cnpj">CNPJ Inválido</div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="input-group" [class.has-danger]="f.submitted && mobile.invalid">
+                                            <input type="text" class="form-control" placeholder="Celular" 
+                                                mask="(000) 00000-0000" [dropSpecialCharacters]="false" mobilePhone country="BR"
+                                                [(ngModel)]="client.mobile" #mobile="ngModel" name="mobile" required>
+                                            <span class="md-line"></span>
+                                            <div *ngIf="f.submitted && mobile.invalid" class="error">
+                                                <div *ngIf="mobile.errors.required">Campo Obrigatório</div>
+                                                <div *ngIf="!mobile.errors.required && mobile.errors.mobile">Número Inválido</div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="right-panel">
+                                        <div class="input-group" [class.has-danger]="f.submitted && username.invalid">
+                                            <input type="text" class="form-control" placeholder="Login"
+                                                [(ngModel)]="client.username" #username="ngModel" name="username" 
+                                                required minlength="4">
+                                            <span class="md-line"></span>
+                                            <div *ngIf="f.submitted && username.invalid" class="error">
+                                                <div *ngIf="username.errors.required">Campo Obrigatório</div>
+                                                <div *ngIf="username.errors.minlength">O login deve possuir ao menos 4 caractéres</div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group" [class.has-danger]="password.invalid">
+                                            <input type="password" class="form-control"  placeholder="Senha"
+                                                [(ngModel)]="client.password" #password="ngModel" name="password"
+                                                required securePassword>
+                                            <span class="md-line"></span>
+                                            <div *ngIf="password.invalid" class="error">
+                                                <div *ngIf="password.errors.securePassword">A senha deve conter no mínimo 8 caractéres,ao menos uma letra maíuscula, minúscula, número e caracteres especias</div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group" [class.has-danger]="f.submitted && passwordConfirmation.invalid">
+                                            <input type="password" class="form-control"
+                                                placeholder="Confirmação de senha"
+                                                [(ngModel)]="client.passwordConfirmation"
+                                                #passwordConfirmation="ngModel" name="passwordConfirmation" required>
+                                            <span class="md-line"></span>
+                                            <div *ngIf="f.submitted && passwordConfirmation.invalid" class="error">
+                                                <div *ngIf="passwordConfirmation.errors.required">Campo Obrigatório
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group" [class.has-danger]="f.submitted && email.invalid">
+                                            <input type="text" class="form-control" placeholder="E-mail"
+                                                [(ngModel)]="client.email" #email="ngModel" name="email" required email>
+                                            <span class="md-line"></span>
+                                            <div *ngIf="f.submitted && email.invalid" class="error">
+                                                <div *ngIf="email.errors.required">Campo Obrigatório</div>
+                                                <div *ngIf="email.errors.email && !email.errors.required">E-mail
+                                                    inválido
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row m-t-30">
-                                <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-primary btn-md btn-block waves-effect text-center m-b-5">Confirmar
-                                        Cadastro</button>
-                                    <a [routerLink]="['/auth/login']"
-                                        class="btn btn-secondary btn-md btn-block waves-effect text-center m-b-20">Sign
-                                        In</a>
+                                <div class="row m-t-30">
+                                    <div class="col-md-12">
+                                        <button type="submit"
+                                            class="btn btn-primary btn-md btn-block waves-effect text-center m-b-5">Confirmar
+                                            Cadastro</button>
+                                        <a [routerLink]="['/auth/login']"
+                                            class="btn btn-secondary btn-md btn-block waves-effect text-center m-b-20">Sign
+                                            In</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <p class="text-inverse text-left m-b-0">Thank you and enjoy our website.</p>
-                                    <p class="text-inverse text-left"><b>Your Authentication Team</b></p>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <p class="text-inverse text-left m-b-0">Thank you and enjoy our website.</p>
+                                        <p class="text-inverse text-left"><b>Your Authentication Team</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <img src="assets/images/pig_small.png" alt="Charcuterie Business Manager">
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <img src="assets/images/pig_small.png" alt="Charcuterie Business Manager">
-                                </div>
-                            </div>
-
+                            </ng-container>
                         </div>
                     </form>
                     <!-- end of form -->

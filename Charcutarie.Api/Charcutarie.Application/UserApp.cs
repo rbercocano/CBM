@@ -33,6 +33,10 @@ namespace Charcutarie.Application
         {
             return await userRepository.GetByLogin(username, corpClientId);
         }
+        public async Task<User> GetByLogin(string username, string accountNumber)
+        {
+            return await userRepository.GetByLogin(username, accountNumber);
+        }
 
         public async Task<PagedResult<User>> GetPaged(int page, int pageSize, string filter, bool? active = null)
         {
@@ -75,8 +79,7 @@ namespace Charcutarie.Application
                 throw new BusinessException("As senhas informadas não coincidem");
 
 
-            var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-            if(!regex.IsMatch(model.NewPassword))
+            if(!Password.IsPasswordSecure(model.NewPassword))
                 throw new BusinessException("A senha não atende aos requisitos mínimos de segurança. Tamanho mínimo de 8 caractéres,ao menos uma letra maíuscula, minúscula, número e caracteres especias.");
 
             await userRepository.ChangePassword(userId, model.NewPassword, corpClientId);

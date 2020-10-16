@@ -16,4 +16,10 @@
     <PackageReference Include="UnitsNet" Version="4.60.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Templates\Registration.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

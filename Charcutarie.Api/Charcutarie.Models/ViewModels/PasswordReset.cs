@@ -6,7 +6,7 @@ namespace Charcutarie.Models.ViewModels
 {
     public class PasswordReset
     {
-        public int CorpClientId { get; set; }
+        public string AccountNumber { get; set; }
         public string Username { get; set; }
     }
 }

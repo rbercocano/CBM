@@ -43,7 +43,7 @@ export class UserService {
     return modules;
   }
 
-  public resetPassword(data: { corpClientId: number, username: string }): Observable<any> {
+  public resetPassword(data: { accountNumber: string, username: string }): Observable<any> {
     return this.httpClient.post<any>(`${environment.apiUrl}/User/Password/Reset`, data);
   }
   public changePassword(data: ChangePassword): Observable<any> {

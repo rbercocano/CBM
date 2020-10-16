@@ -53,6 +53,14 @@ namespace Charcutarie.Repository.DbContext.Mapping
                .HasColumnName("CPF")
                .HasColumnType("VARCHAR(14)");
 
+            builder.Property(p => p.Email)
+               .HasColumnName("Email")
+               .HasColumnType("VARCHAR(200)");
+
+            builder.Property(p => p.Mobile)
+               .HasColumnName("Mobile")
+               .HasColumnType("VARCHAR(20)");
+
         }
     }
 }

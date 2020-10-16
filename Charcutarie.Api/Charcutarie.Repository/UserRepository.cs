@@ -84,6 +84,16 @@ namespace Charcutarie.Repository
             var result = mapper.Map<User>(entity);
             return result;
         }
+        public async Task<User> GetByLogin(string username, string accountNumber)
+        {
+            var entity = await context.Users
+                .FirstOrDefaultAsync(p => p.Username == username
+                                                                  && p.CorpClient.AccountNumber == accountNumber
+                                                                  && p.Active
+                                                                  && p.CorpClient.Active);
+            var result = mapper.Map<User>(entity);
+            return result;
+        }
 
         public async Task<JWTUserInfo> DoLogin(string accountNumber, string username, string password)
         {

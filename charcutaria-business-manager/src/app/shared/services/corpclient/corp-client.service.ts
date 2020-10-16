@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { CorpClient } from '../../models/corpClient';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import { ClientRegistration } from '../../models/clientRegistration';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,9 @@ export class CorpClientService {
   }
   public Add(CorpClient: CorpClient): Observable<number> {
     return this.httpClient.post<number>(`${environment.apiUrl}/CorpClient`, CorpClient);
+  }
+  public Register(registrationData: ClientRegistration): Observable<CorpClient> {
+    return this.httpClient.post<CorpClient>(`${environment.apiUrl}/CorpClient/Register`, registrationData);
   }
   public Update(CorpClient: CorpClient): Observable<CorpClient> {
     return this.httpClient.put<CorpClient>(`${environment.apiUrl}/CorpClient`, CorpClient);

@@ -16,7 +16,7 @@ namespace Charcutarie.Application
             this.corpClientRepository = corpClientRepository;
         }
 
-        public async Task<CorpClient> Add(ClientRegistration model)
+        public async Task<CorpClient> Add(NewCorpClient model)
         {
             return await corpClientRepository.Add(model);
         }
@@ -29,6 +29,16 @@ namespace Charcutarie.Application
         public async Task<IEnumerable<CorpClient>> GetActives()
         {
             return await corpClientRepository.GetActives();
+        }
+
+        public async Task<CorpClient> GetByCnpj(string cnpj)
+        {
+            return await corpClientRepository.GetByCnpj(cnpj);
+        }
+
+        public async Task<CorpClient> GetByCpf(string cpf)
+        {
+            return await corpClientRepository.GetByCpf(cpf);
         }
 
         public async Task<PagedResult<CorpClient>> GetPaged(int page, int pageSize, string filter, bool? active = null)

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Linq;
 using Microsoft.Extensions.Options;
+using System.IO;
 
 namespace Charcutarie.Core.SMTP
 {
@@ -32,6 +33,19 @@ namespace Charcutarie.Core.SMTP
             };
             to.ForEach(t => mailMessage.To.Add(t));
             client.Send(mailMessage);
+        }
+
+        public void SendRegistrationEmail(string account, string username, string to, string company, int customerTypeId, string socialIdentifier)
+        {
+            var type = customerTypeId == 1 ? "CPF" : "CNPJ";
+            var path = Path.Combine(Environment.CurrentDirectory, "Templates", "Registration.html");
+            var body = File.ReadAllText(path);
+            body = body.Replace("[account_number]", account)
+                .Replace("[username]", username)
+                .Replace("[name]", company)
+                .Replace("[social_identifier_type]", type)
+                .Replace("[social_identifier]", socialIdentifier);
+            SendEmail(new List<string> { to }, body, "Bem vindo ao Charcuterie Business Manager", true);
         }
     }
 }

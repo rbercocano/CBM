@@ -11,6 +11,8 @@ export class ValidatorService {
     return regexp.test(email);
   }
   isValidCPF(cpf: string) {
+    if (cpf == null) return false;
+    cpf = cpf.replace(/[^\d]+/g, '');
     let soma = 0;
     let resto = 0;
     if (cpf == "00000000000") return false;
@@ -31,6 +33,7 @@ export class ValidatorService {
     return true;
   }
   isValidCNPJ(cnpj: string) {
+    if (cnpj == null) return false;
     cnpj = cnpj.replace(/[^\d]+/g, '');
     if (cnpj == '') return false;
     if (cnpj.length != 14)
@@ -76,5 +79,16 @@ export class ValidatorService {
     if (resultado != parseInt(digitos.charAt(1)))
       return false;
     return true;
+  }
+  isPasswordSecure(password: string) {
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+    return regex.test(password);
+  }
+  isValidMobile(phone: string, country: string) {
+    if (country == "BR") {
+      var regex = /[(](\d){3}[)]\s(\d){5}[-](\d){4}/;
+      return regex.test(phone);
+    }
+    return false;
   }
 }

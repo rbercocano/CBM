@@ -34,7 +34,7 @@ namespace Charcutarie.Api
             services.AddMvc().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewCorpClientValidator>());
+            }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ClientRegistrationValidator>());
             services.AddCors(options =>
             {
                 options.AddPolicy("CBM", p =>

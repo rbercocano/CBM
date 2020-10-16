@@ -44,12 +44,12 @@ namespace Charcutarie.Services
             return await systemModuleApp.GetUserModules(userId);
         }
 
-        public async Task<string> ResetPassword(string userName, int corpClientId)
+        public async Task<string> ResetPassword(string userName, string accountNumber)
         {
-            var user = await userApp.GetByLogin(userName, corpClientId);
+            var user = await userApp.GetByLogin(userName, accountNumber);
             if (user == null)
                 throw new BusinessException("Usuário não encontrado");
-            var newPassword = await userApp.ResetPassword(user.UserId, corpClientId);
+            var newPassword = await userApp.ResetPassword(user.UserId, user.CorpClientId.Value);
             var body = $"<p>Sua senha foi redefinida conforme solicitado.</p><p>Nova Senha: <b>{newPassword}</b></p>";
             var subject = "Charcuterie Business Manager - Nova Senha";
             emailManager.SendEmail(new List<string>() { user.Email }, body, subject, true);

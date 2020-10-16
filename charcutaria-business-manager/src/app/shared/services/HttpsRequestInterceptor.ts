@@ -9,12 +9,14 @@ import { TokenInfo } from '../models/tokenInfo';
 @Injectable()
 export class HttpsRequestInterceptor implements HttpInterceptor {
 
+    private byPassUrls = [`${environment.apiUrl}/Authentication/Login`,
+    `${environment.apiUrl}/Authentication/Token/Refresh`,
+    `${environment.apiUrl}/CorpClient/Actives`,
+    `${environment.apiUrl}/CorpClient/Register`,
+    `${environment.apiUrl}/User/Password/Reset`]
     constructor(private authService: AuthService) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (req.url == `${environment.apiUrl}/Authentication/Login` ||
-            req.url == `${environment.apiUrl}/Authentication/Token/Refresh` ||
-            req.url == `${environment.apiUrl}/CorpClient/Actives` ||
-            req.url == `${environment.apiUrl}/User/Password/Reset`) {
+        if (this.byPassUrls.includes(req.url)) {
             const dupReq = req.clone({
                 setHeaders: {
                     'Cache-Control': 'no-cache',

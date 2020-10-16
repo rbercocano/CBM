@@ -12,7 +12,7 @@ namespace Charcutarie.Services.Contracts
         Task<User> Update(UpdateUser model, int? corpClientId);
         Task<User> Get(long id, int corpClientId);
         Task<IEnumerable<ParentModule>> GetUserModules(long userId);
-        Task<string> ResetPassword(string userName, int corpClientId);
+        Task<string> ResetPassword(string userName, string accountNumber);
         Task ChangePassword(ChangePassword model, int corpClientId, long userId);
     }
 }

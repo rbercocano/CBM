@@ -9,6 +9,7 @@ namespace Charcutarie.Models.ViewModels
         public int CorpClientId { get; set; }
         public DateTime CreatedOn { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }
         public string DBAName { get; set; }
         public bool Active { get; set; }
         public string Currency { get; set; }

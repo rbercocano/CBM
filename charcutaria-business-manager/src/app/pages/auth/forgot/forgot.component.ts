@@ -15,7 +15,7 @@ export class ForgotComponent implements OnInit {
   public loading = true;
   public email: string = "";
   public corpClients: CorpClient[] = [];
-  public login = { corpClientId: null, username: "" };
+  public login = { accountNumber: "", username: "" };
   constructor(private corpClientService: CorpClientService,
     private notificationService: NotificationService,
     private userService: UserService) { }

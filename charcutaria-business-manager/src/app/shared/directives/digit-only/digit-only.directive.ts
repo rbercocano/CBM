@@ -13,7 +13,7 @@ export class DigitOnlyDirective {
   onKeyDown(e: KeyboardEvent) {
     if (
       // Allow: Delete, Backspace, Tab, Escape, Enter, etc
-      ['46','8', '9', '27', '13', '110', '190'].indexOf(e.key) > -1 ||
+      ['46','8', '9', '27', '13', '110', '190','Backspace','Tab'].indexOf(e.key) > -1 ||
       (e.key === 'a' && e.ctrlKey === true) || // Allow: Ctrl+A
       (e.key === 'c' && e.ctrlKey === true) || // Allow: Ctrl+C
       (e.key === 'v' && e.ctrlKey === true) || // Allow: Ctrl+V

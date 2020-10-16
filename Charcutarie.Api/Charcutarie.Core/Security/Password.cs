@@ -4,6 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Charcutarie.Core.Security
 {
@@ -95,6 +96,11 @@ namespace Charcutarie.Core.Security
                 }
             }
             return cipherText;
+        }
+        public static bool IsPasswordSecure(string password)
+        {
+            var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+            return regex.IsMatch(password);
         }
     }
 }

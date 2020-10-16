@@ -95,7 +95,10 @@ namespace Charcutarie.Repository
 	                                            P2.Name AS Product,
 	                                            Cost,
 	                                            Price - Cost AS Profit,
-	                                            ROUND((Price - Cost)/ Cost * 100,2) as ProfitPercentage
+												CASE WHEN Cost > 0 THEN
+	                                            ROUND((Price - Cost)/ Cost * 100,2) 
+												ELSE 0
+												END as ProfitPercentage
                                             FROM 
                                             (SELECT 
 		                                            X.ProductId,

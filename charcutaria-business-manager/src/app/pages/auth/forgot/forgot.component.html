@@ -19,15 +19,11 @@
                             </p>
                             <hr />
                             <div class="input-group">
-                                <select class="form-control" [disabled]="loading" [(ngModel)]="login.corpClientId"
-                                    #corpClientId="ngModel" name="corpClientId" required>
-                                    <option [ngValue]="null" *ngIf="loading">Carregando...</option>
-                                    <option [ngValue]="null" *ngIf="!loading">Selecione sua Empresa</option>
-                                    <option [ngValue]="c.corpClientId" *ngFor="let c of corpClients">{{c.dbaName}}
-                                    </option>
-                                </select>
-                                <div *ngIf="f.submitted && corpClientId.invalid && !loading" class="error">
-                                    <div *ngIf="corpClientId.errors.required">Selecione sua Empresa</div>
+                                <input type="text" class="form-control" placeholder="Conta"
+                                    [(ngModel)]="login.accountNumber" #accountNumber="ngModel" name="accountNumber"
+                                    required digitOnly maxlength="10">
+                                <div *ngIf="f.submitted && accountNumber.invalid" class="error">
+                                    <div *ngIf="accountNumber.errors.required">Informe o número da conta</div>
                                 </div>
                                 <span class="md-line"></span>
                             </div>
