@@ -20,7 +20,9 @@ export class BRDateAdapter extends NgbDateAdapter<string> {
     }
 
     toModel(date: NgbDateStruct | null): string | null {
-        return date ?
-            moment(`${date.year}-${date.month}-${date.day}`).format() : null;
+        if (date == null) return null;
+        var today = new Date();
+        var dt = moment(`${date.year}-${date.month}-${date.day} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`);
+        return dt.format();
     }
 }

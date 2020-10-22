@@ -19,14 +19,14 @@ namespace Charcutarie.Services
             this.pricingApp = pricingApp;
             this.measureUnitApp = measureUnitApp;
         }
-        public double CalculatePricePerTotalWeight(PriceRequest model)
+        public decimal CalculatePricePerTotalWeight(PriceRequest model)
         {
             var m = measureUnitApp.GetAll().Result;
             var pType = m.FirstOrDefault(m => m.MeasureUnitId == model.ProductMeasureUnit).MeasureUnitTypeId;
             var qType = m.FirstOrDefault(m => m.MeasureUnitId == model.QuantityMeasureUnit).MeasureUnitTypeId;
             return pricingApp.CalculatePricePerTotalWeight(model,pType,qType);
         }
-        public double CalculatePricePerUnit(PriceRequest model)
+        public decimal CalculatePricePerUnit(PriceRequest model)
         {
             var m = measureUnitApp.GetAll().Result;
             var pType = m.FirstOrDefault(m => m.MeasureUnitId == model.ProductMeasureUnit).MeasureUnitTypeId;

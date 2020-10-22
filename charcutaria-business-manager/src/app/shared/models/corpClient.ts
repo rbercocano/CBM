@@ -2,10 +2,12 @@ export interface CorpClient {
     corpClientId: number;
     name: string;
     email: string;
-    dBAName: string;
-    active: boolean;
+    dbaName: string;
+    currency: string;
     cpf: string;
     cnpj: string;
+    mobile: string;
     accountNumber: string;
     customerTypeId:number;
+    socialIdentifier: string;
 }

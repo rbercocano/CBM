@@ -32,7 +32,7 @@ namespace Charcutarie.Repository
             var result = mapper.Map<OrderItem>(data);
             return result;
         }
-        public async Task<IEnumerable<OrderItem>> GetAll(int orderNumber, int corpClientId)
+        public async Task<IEnumerable<OrderItem>> GetAll(long orderNumber, int corpClientId)
         {
             var data = await context.OrderItems
                 .Where(i => i.Order.OrderNumber == orderNumber && i.Order.Customer.CorpClientId == corpClientId)
@@ -76,7 +76,7 @@ namespace Charcutarie.Repository
             context.OrderItems.Update(data);
             await context.SaveChangesAsync();
         }
-        public async Task UpdateAllOrderItemStatus(int orderNumber, OrderItemStatusEnum status, int corpClientId)
+        public async Task UpdateAllOrderItemStatus(long orderNumber, OrderItemStatusEnum status, int corpClientId)
         {
             var order = await context.OrderItems
                      .Where(i => i.Order.OrderNumber == orderNumber && i.Order.Customer.CorpClientId == corpClientId).FirstOrDefaultAsync();
@@ -93,7 +93,7 @@ namespace Charcutarie.Repository
             };
             context.Database.ExecuteSqlCommand(query, sqlParams);
         }
-        public async Task<int> GetLastItemNumber(int orderNumber, int corpClientId)
+        public async Task<int> GetLastItemNumber(long orderNumber, int corpClientId)
         {
             var query = context.OrderItems
                 .Where(i => i.Order.OrderNumber == orderNumber && i.Order.Customer.CorpClientId == corpClientId);

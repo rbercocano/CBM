@@ -9,7 +9,7 @@ namespace Charcutarie.Models.Entities
     {
         public long RawMaterialId { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int CorpClientId { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
         public MeasureUnit MeasureUnit { get; set; }

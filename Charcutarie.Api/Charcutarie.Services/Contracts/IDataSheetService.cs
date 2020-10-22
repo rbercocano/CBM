@@ -14,6 +14,6 @@ namespace Charcutarie.Services.Contracts
         Task<DataSheetItem> GetDataSheetItem(long itemId, int corpClientId);
         Task<long> Update(SaveDataSheet saveDataSheet, int corpClientId);
         Task UpdateItem(UpdateDataSheetItem item, int corpClientId);
-        Task<ProductionSummary> CalculateProduction(long productId, MeasureUnitEnum measureId, double quantity, int corpClientId);
+        Task<ProductionSummary> CalculateProduction(long productId, MeasureUnitEnum measureId, decimal quantity, int corpClientId);
     }
 }

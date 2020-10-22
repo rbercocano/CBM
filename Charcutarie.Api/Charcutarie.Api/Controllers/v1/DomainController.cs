@@ -76,5 +76,13 @@ namespace Charcutarie.Api.Controllers.v1
                 return Ok(data);
             return NoContent();
         }
+        [HttpGet("TransactionType")]
+        public async Task<ActionResult<IEnumerable<TransactionType>>> GetAllTransactionTypes()
+        {
+            var data = await service.GetAllTransactionTypes();
+            if (data.Any())
+                return Ok(data);
+            return NoContent();
+        }
     }
 }

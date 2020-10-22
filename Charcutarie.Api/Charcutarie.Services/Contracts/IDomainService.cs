@@ -13,5 +13,6 @@ namespace Charcutarie.Services.Contracts
         Task<IEnumerable<PaymentStatus>> GetAllPaymentStatus();
         Task<IEnumerable<OrderItemStatus>> GetAllOrderItemStatus();
         Task<IEnumerable<OrderStatus>> GetAllOrderStatus();
+        Task<IEnumerable<TransactionType>> GetAllTransactionTypes();
     }
 }

@@ -35,6 +35,7 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IRawMaterialService, RawMaterialService>();
             services.AddTransient<IDataSheetService, DataSheetService>();
+            services.AddTransient<ITransactionService, TransactionService>();
             services.AddSingleton<IEmailManager, EmailManager>();
         }
         private static void AddApps(IServiceCollection services)
@@ -59,6 +60,8 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IRawMaterialApp, RawMaterialApp>();
             services.AddTransient<IDataSheetApp, DataSheetApp>();
             services.AddTransient<IDataSheetItemApp, DataSheetItemApp>();
+            services.AddTransient<ITransactionTypeApp, TransactionTypeApp>();
+            services.AddTransient<ITransactionApp, TransactionApp>();
         }
         private static void AddReps(IServiceCollection services)
         {
@@ -81,6 +84,8 @@ namespace Charcutarie.Api.Infra
             services.AddTransient<IRawMaterialRepository, RawMaterialRepository>();
             services.AddTransient<IDataSheetRepository, DataSheetRepository>();
             services.AddTransient<IDataSheetItemRepository, DataSheetItemRepository>();
+            services.AddTransient<ITransactionTypeRepository, TransactionTypeRepository>();
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
         }
     }
 }

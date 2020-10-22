@@ -9,13 +9,13 @@ namespace Charcutarie.Models.ViewModels
     public class NewOrderItem
     {
         public long ProductId { get; set; }
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public OrderItemStatusEnum OrderItemStatusId { get; set; }
         public string AdditionalInfo { get; set; }
-        public double Discount { get; set; }
-        public double? Cost { get; set; }
-        public double? Profit { get; set; }
-        public double? ProfitPercentage
+        public decimal Discount { get; set; }
+        public decimal? Cost { get; set; }
+        public decimal? Profit { get; set; }
+        public decimal? ProfitPercentage
         {
             get
             {
@@ -30,10 +30,10 @@ namespace Charcutarie.Models.ViewModels
         [JsonIgnore]
         public int ItemNumber { get; set; }
         [JsonIgnore]
-        public double OriginalPrice { get; set; }
+        public decimal OriginalPrice { get; set; }
         [JsonIgnore]
-        public double PriceAfterDiscount { get { return OriginalPrice - Discount; } }
+        public decimal PriceAfterDiscount { get { return OriginalPrice - Discount; } }
         [JsonIgnore]
-        public double ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
     }
 }

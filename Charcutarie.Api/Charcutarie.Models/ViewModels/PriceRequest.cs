@@ -7,9 +7,9 @@ namespace Charcutarie.Models.ViewModels
 {
     public class PriceRequest
     {
-        public double ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
         public MeasureUnitEnum ProductMeasureUnit { get; set; }
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public MeasureUnitEnum QuantityMeasureUnit { get; set; }
         private int resultPrecision =2;
         public int ResultPrecision { get { return resultPrecision; } set { resultPrecision = value == 0 ? 2 : value; } }

@@ -17,7 +17,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(200)")
                 .IsRequired();
             builder.Property(p => p.Price)
-                .HasColumnType("DECIMAL(18,4)")
+                .HasColumnType("decimal(18,4)")
                 .IsRequired();
             builder.Property(p => p.CorpClientId)
                 .HasColumnType("INT")

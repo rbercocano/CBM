@@ -63,6 +63,8 @@ namespace Charcutarie.Repository.DbContext
         public DbSet<DataSheet> DataSheets { get; set; }
         public DbSet<DataSheetItem> DataSheetItems { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TransactionType> TransactionTypes { get; set; }
         //Custom Queries
         public DbSet<OrderSummary> OrderSummaries { get; set; }
         public DbSet<OrderItemReport> OrderItemReports { get; set; }
@@ -74,6 +76,7 @@ namespace Charcutarie.Repository.DbContext
         public DbSet<ProductionCostProfit> ProductionCostProfits { get; set; }
         public DbSet<Production> Production { get; set; }
         public DbSet<SummarizedOrderReport> SummarizedOrderReports { get; set; }
+        public DbSet<Balance> Balance { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -110,6 +113,9 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new SalesPerMonthConfiguration());
             modelBuilder.ApplyConfiguration(new SummarizedOrderReportConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCostConfiguration());
+            modelBuilder.ApplyConfiguration(new TransactionTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new BalanceConfiguration());
             
         }
         public async Task<int> ExecuteScalar(string command)

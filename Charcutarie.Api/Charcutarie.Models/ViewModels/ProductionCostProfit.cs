@@ -8,8 +8,8 @@ namespace Charcutarie.Models.ViewModels
     {
         public long ProductId { get; set; }
         public string Product { get; set; }
-        public double Cost { get; set; }
-        public double Profit { get; set; }
-        public double ProfitPercentage { get; set; }
+        public decimal Cost { get; set; }
+        public decimal Profit { get; set; }
+        public decimal ProfitPercentage { get; set; }
     }
 }

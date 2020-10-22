@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using vm = Charcutarie.Models.ViewModels;
 using ef = Charcutarie.Models.Entities;
+using System.Linq;
 
 namespace Charcutarie.Models.MappingProfile
 {
@@ -61,7 +62,8 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.Order, vm.NewOrder>().ReverseMap();
             CreateMap<ef.OrderItem, vm.NewOrderItem>().ReverseMap();
 
-            CreateMap<ef.Order, vm.Order>().ReverseMap();
+            CreateMap<ef.Order, vm.Order>()
+                .ForMember(m => m.Transactions, opt => opt.MapFrom(m => m.Transactions.OrderByDescending(t => t.Date).ToList()));
             CreateMap<ef.OrderItem, vm.OrderItem>().ReverseMap();
 
 
@@ -115,6 +117,17 @@ namespace Charcutarie.Models.MappingProfile
             CreateMap<ef.Production, vm.Production>().ReverseMap();
             CreateMap<ef.SalesPerMonth, vm.SalesPerMonth>().ReverseMap();
             CreateMap<ef.SummarizedOrderReport, vm.SummarizedOrderReport>().ReverseMap();
+
+            CreateMap<ef.Transaction, vm.Transaction>()
+                .ForMember(m => m.IsIncome, m => m.MapFrom(s => s.TransactionType != null ? s.TransactionType.Type == "I" : false))
+                .ForMember(m => m.TransactionType, m => m.MapFrom(s => s.TransactionType != null ? s.TransactionType.Description : string.Empty))
+                .ForMember(m => m.Username, m => m.MapFrom(s => s.User != null ? s.User.Username : string.Empty))
+                .ForMember(m => m.UserFullName, m => m.MapFrom(s => s.User != null ? $"{s.User.Name} {s.User.LastName}".Trim() : string.Empty));
+
+            CreateMap<ef.TransactionType, vm.TransactionType>().ReverseMap();
+
+            CreateMap<vm.NewTransaction, ef.Transaction>();
+            CreateMap<ef.Balance, vm.Balance>();
         }
     }
 }

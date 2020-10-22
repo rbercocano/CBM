@@ -16,7 +16,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("BIGINT")
                 .IsRequired();
             builder.Property(p => p.Cost)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.HasOne(p => p.Product)
                 .WithOne(p => p.ProductCost);

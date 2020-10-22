@@ -1,0 +1,31 @@
+table.table {
+    &.payments {
+        td:nth-child(2) {
+            text-align: right;
+        }
+    }
+}
+table.table {
+    &.transactions {
+        td:nth-child(1),
+        td:nth-child(3),
+        td:nth-child(4),
+        td:nth-child(5),
+        td:nth-child(6),
+        th:nth-child(1),
+        th:nth-child(3),
+        th:nth-child(4),
+        th:nth-child(5),
+        th:nth-child(6) {
+            text-align: center;
+        }
+        th:nth-child(2),
+        td:nth-child(2) {
+            text-align: right;
+        }
+    }
+}
+.positive-amount{
+    color:#28a52e;
+}
+

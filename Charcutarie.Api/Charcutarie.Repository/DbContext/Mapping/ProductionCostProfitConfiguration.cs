@@ -14,13 +14,13 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();
             builder.Property(p => p.Cost)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.Profit)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.ProfitPercentage)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
         }
     }

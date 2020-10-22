@@ -46,6 +46,14 @@ const routes: Routes = [{
     {
       path: 'report',
       loadChildren: () => import('./pages/customer/report/report.module').then(m => m.ReportModule)
+    },
+    {
+      path: 'account',
+      loadChildren: () => import('./pages/customer/corp-client/corp-client.module').then(m => m.CorpClientModule)
+    },
+    {
+      path: 'finances',
+      loadChildren: () => import('./pages/customer/finances/finances.module').then(m => m.FinancesModule)
     }]
 },
 {

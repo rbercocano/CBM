@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Charcutarie.Models.ViewModels
 {
@@ -10,6 +11,6 @@ namespace Charcutarie.Models.ViewModels
         public DateTime CompleteBy { get; set; }
         public PaymentStatusEnum PaymentStatusId { get; set; }
         public decimal FreightPrice { get; set; }
-        public int OrderNumber { get; set; }
+        public long OrderNumber { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.SocialIdentifier)
                 .HasColumnType("VARCHAR(MAX)");
             builder.Property(p => p.FinalPrice)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.PaidOn)
                 .HasColumnType("DATETIME");

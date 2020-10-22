@@ -7,7 +7,7 @@ namespace Charcutarie.Models.ViewModels
 {
     public class PricePerUnit
     {
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
     }
 }

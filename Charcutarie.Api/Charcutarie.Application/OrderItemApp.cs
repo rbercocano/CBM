@@ -21,7 +21,7 @@ namespace Charcutarie.Application
             return await repository.AddOrderItem(model, corpClientId);
         }
 
-        public async Task<IEnumerable<OrderItem>> GetAll(int orderNumber, int corpClientId)
+        public async Task<IEnumerable<OrderItem>> GetAll(long orderNumber, int corpClientId)
         {
             return await repository.GetAll(orderNumber, corpClientId);
         }
@@ -36,12 +36,12 @@ namespace Charcutarie.Application
             await repository.Update(model, corpClientId);
         }
 
-        public async Task<int> GetLastItemNumber(int orderNumber, int corpClientId)
+        public async Task<int> GetLastItemNumber(long orderNumber, int corpClientId)
         {
             return await repository.GetLastItemNumber(orderNumber, corpClientId);
         }
 
-        public async Task UpdateAllOrderItemStatus(int orderNumber, OrderItemStatusEnum status, int corpClientId)
+        public async Task UpdateAllOrderItemStatus(long orderNumber, OrderItemStatusEnum status, int corpClientId)
         {
             await repository.UpdateAllOrderItemStatus(orderNumber, status, corpClientId);
         }

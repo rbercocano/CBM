@@ -14,10 +14,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("DATE")
                 .IsRequired();
             builder.Property(p => p.TotalProfit)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.TotalSales)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
         }
     }

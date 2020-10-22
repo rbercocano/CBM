@@ -24,7 +24,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("BIGINT")
                 .IsRequired();
             builder.Property(p => p.Quantity)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.OrderItemStatusId)
                 .HasColumnType("INT")
@@ -40,27 +40,27 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(200)")
                 .IsRequired();
             builder.Property(p => p.OriginalPrice)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.Discount)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.PriceAfterDiscount)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.ProductPrice)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.ItemNumber)
                 .HasColumnType("INT")
                 .IsRequired();
 
             builder.Property(p => p.Cost)
-                .HasColumnType("DECIMAL(18,2)");
+                .HasColumnType("decimal(18,2)");
             builder.Property(p => p.Profit)
-                .HasColumnType("DECIMAL(18,2)");
+                .HasColumnType("decimal(18,2)");
             builder.Property(p => p.ProfitPercentage)
-                .HasColumnType("DECIMAL(18,2)");
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

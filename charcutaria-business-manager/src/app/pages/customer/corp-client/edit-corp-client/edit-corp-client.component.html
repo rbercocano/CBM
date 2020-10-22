@@ -1,0 +1,144 @@
+<form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
+    <app-toolbar [title]="'Perfil'">
+        <button class="btn btn-warning btn-mini" placement="top" ngbTooltip="Cancelar" *ngIf="editing"
+            (click)="cancel()" type="button">
+            <i class="fa fa-times"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit" *ngIf="editing">
+            <i class="fa fa-save"></i>
+        </button>
+        <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar" *ngIf="!editing" type="button"
+            (click)="editing = true">
+            <i class="fa fa-pencil"></i>
+        </button>
+    </app-toolbar>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Conta</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" disabled [value]="client.accountNumber" />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Tipo</label>
+                        <div class="col-8">
+                            <select class="form-control" [(ngModel)]="client.customerTypeId" #customerTypeId="ngModel"
+                                name="customerTypeId" [disabled]="!editing">
+                                <option *ngFor="let c of customerTypes" [value]="c.customerTypeId">
+                                    {{c.description}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="client.customerTypeId==1">
+                        <div class="row form-group" [class.has-danger]="f.submitted && name.invalid">
+                            <label class="col-4 m-b-0">Nome</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" placeholder="Nome" [(ngModel)]="client.name"
+                                    #name="ngModel" name="name" required [disabled]="!editing">
+                                <span class="md-line"></span>
+                                <div *ngIf="f.submitted && name.invalid" class="error">
+                                    <div *ngIf="name.errors.required">Campo Obrigatório</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group" [class.has-danger]="f.submitted && cpf.invalid">
+                            <label class="col-4 m-b-0">CPF</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" placeholder="CPF"
+                                    [(ngModel)]="client.socialIdentifier" #cpf="ngModel" name="cpf" required cpf
+                                    maxlength="14" mask="000.000.000-00" [dropSpecialCharacters]="false"
+                                    [disabled]="!editing">
+                                <span class="md-line"></span>
+                                <div *ngIf="f.submitted && cpf.invalid" class="error">
+                                    <div *ngIf="cpf.errors.required">Campo Obrigatório</div>
+                                    <div *ngIf="cpf.errors.cpf">CPF Inválido</div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="client.customerTypeId==2">
+                        <div class="row form-group" [class.has-danger]="f.submitted && name.invalid">
+                            <label class="col-4 m-b-0">Nome Fantasia</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" placeholder="Nome Fantasia"
+                                    [(ngModel)]="client.name" #name="ngModel" name="name" required
+                                    [disabled]="!editing">
+                                <span class="md-line"></span>
+                                <div *ngIf="f.submitted && name.invalid" class="error">
+                                    <div *ngIf="name.errors.required">Campo Obrigatório</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group" [class.has-danger]="f.submitted && dbaName.invalid">
+                            <label class="col-4 m-b-0">Razão Social</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" placeholder="Razão Social"
+                                    [(ngModel)]="client.dbaName" #dbaName="ngModel" name="dbaName" required
+                                    [disabled]="!editing">
+                                <span class="md-line"></span>
+                                <div *ngIf="f.submitted && dbaName.invalid" class="error">
+                                    <div *ngIf="dbaName.errors.required">Campo Obrigatório</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group" [class.has-danger]="f.submitted && cnpj.invalid">
+                            <label class="col-4 m-b-0">CNPJ</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" placeholder="CNPJ" mask="00.000.000/0000-00"
+                                    [dropSpecialCharacters]="false" [(ngModel)]="client.socialIdentifier"
+                                    #cnpj="ngModel" name="cnpj" required maxlength="18" cnpj [disabled]="!editing">
+                                <span class="md-line"></span>
+                                <div *ngIf="f.submitted && cnpj.invalid" class="error">
+                                    <div *ngIf="cnpj.errors.required">Campo Obrigatório</div>
+                                    <div *ngIf="cnpj.errors.cnpj">CNPJ Inválido</div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <div class="row form-group" [class.has-danger]="f.submitted && mobile.invalid">
+                        <label class="col-4 m-b-0">Celular</label>
+                        <div class="col-8">
+                            <input type="text" class="form-control" placeholder="Celular"
+                                 [(ngModel)]="client.mobile" #mobile="ngModel"
+                                name="mobile" required [disabled]="!editing">
+                            <span class="md-line"></span>
+                            <div *ngIf="f.submitted && mobile.invalid" class="error">
+                                <div *ngIf="mobile.errors.required">Campo Obrigatório</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group" [class.has-danger]="f.submitted && email.invalid">
+                        <label class="col-4 m-b-0">Nome</label>
+                        <div class="col-8">
+                            <input type="text" class="form-control" placeholder="E-mail" [(ngModel)]="client.email"
+                                #email="ngModel" name="email" required email [disabled]="!editing">
+                            <span class="md-line"></span>
+                            <div *ngIf="f.submitted && email.invalid" class="error">
+                                <div *ngIf="email.errors.required">Campo Obrigatório</div>
+                                <div *ngIf="email.errors.email && !email.errors.required">E-mail
+                                    inválido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-4 m-b-0">Moeda</label>
+                        <div class="col-8">
+                            <select class="form-control" [(ngModel)]="client.currency" #currency="ngModel"
+                                [disabled]="!editing" name="currency">
+                                <option *ngFor="let c of currencies" [value]="c">
+                                    {{c}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<app-toasts></app-toasts>

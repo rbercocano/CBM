@@ -9,7 +9,7 @@ namespace Charcutarie.Models.ViewModels
     public class NewRawMaterial
     {
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         [JsonIgnore]
         public int CorpClientId { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }

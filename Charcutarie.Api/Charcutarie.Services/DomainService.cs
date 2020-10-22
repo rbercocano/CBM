@@ -15,6 +15,7 @@ namespace Charcutarie.Services
         private readonly IOrderStatusApp orderStatusApp;
         private readonly IOrderItemStatusApp orderItemStatusApp;
         private readonly IPaymentStatusApp paymentStatus;
+        private readonly ITransactionTypeApp transactionTypeApp;
 
         public DomainService(IMeasureUnitApp measureUnitApp,
             ICustomerTypeApp customerTypeApp,
@@ -22,7 +23,8 @@ namespace Charcutarie.Services
             IContactTypeApp contactTypeApp,
             IOrderStatusApp orderStatusApp,
             IOrderItemStatusApp orderItemStatusApp,
-            IPaymentStatusApp paymentStatus)
+            IPaymentStatusApp paymentStatus,
+            ITransactionTypeApp transactionTypeApp)
         {
             this.measureUnitApp = measureUnitApp;
             this.customerTypeApp = customerTypeApp;
@@ -31,6 +33,7 @@ namespace Charcutarie.Services
             this.orderStatusApp = orderStatusApp;
             this.orderItemStatusApp = orderItemStatusApp;
             this.paymentStatus = paymentStatus;
+            this.transactionTypeApp = transactionTypeApp;
         }
         public async Task<IEnumerable<CustomerType>> GetAllCustomerTypes()
         {
@@ -60,6 +63,10 @@ namespace Charcutarie.Services
         public async Task<IEnumerable<PaymentStatus>> GetAllPaymentStatus()
         {
             return await paymentStatus.GetAll();
+        }
+        public async Task<IEnumerable<TransactionType>> GetAllTransactionTypes()
+        {
+            return await transactionTypeApp.GetAll();
         }
     }
 }

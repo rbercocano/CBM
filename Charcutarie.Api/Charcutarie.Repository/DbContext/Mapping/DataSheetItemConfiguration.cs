@@ -12,7 +12,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.HasKey(p => p.DataSheetItemId);
 
             builder.Property(p => p.Percentage)
-                .HasColumnType("DECIMAL(9,5)")
+                .HasColumnType("decimal(9,5)")
                 .IsRequired();
             builder.Property(p => p.DataSheetId)
                 .HasColumnType("BIGINT")

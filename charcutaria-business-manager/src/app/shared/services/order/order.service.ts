@@ -19,6 +19,8 @@ import { PendingPaymentsSummary } from '../../models/pendingPaymentSummary';
 import { SalesPerMonth } from '../../models/salesPerMonth';
 import { SummarizedProductionFilter } from '../../models/summarizedProductionFilter';
 import { SummarizedOrderReport } from '../../models/summarizedOrderReport';
+import { PayOrder } from '../../models/payOrder';
+import { RefundPayment } from '../../models/refundPayment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +40,12 @@ export class OrderService {
   }
   public update(model: UpdateOrder): Observable<OrderDetails> {
     return this.httpClient.put<OrderDetails>(`${environment.apiUrl}/Order`, model);
+  }
+  public addPayment(model: PayOrder): Observable<any> {
+    return this.httpClient.post<OrderDetails>(`${environment.apiUrl}/Order/Payment`, model);
+  }
+  public refundPayment(model: RefundPayment): Observable<any> {
+    return this.httpClient.post<OrderDetails>(`${environment.apiUrl}/Order/Refund`, model);
   }
   public cancel(orderNumber: number): Observable<any> {
     return this.httpClient.post<any>(`${environment.apiUrl}/Order/cancel/${orderNumber}`, {});

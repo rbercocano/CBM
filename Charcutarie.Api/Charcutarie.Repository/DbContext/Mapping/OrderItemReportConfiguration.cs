@@ -39,7 +39,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();
             builder.Property(p => p.Quantity)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.MeasureUnit)
                 .HasColumnType("VARCHAR(MAX)")
@@ -53,7 +53,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();
             builder.Property(p => p.FinalPrice)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
         }
     }

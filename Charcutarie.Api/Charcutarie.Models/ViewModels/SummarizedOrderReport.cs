@@ -10,7 +10,7 @@ namespace Charcutarie.Models.ViewModels
         public string Product { get; set; }
         public int OrderItemStatusId { get; set; }
         public string OrderItemStatus { get; set; }
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public int MeasureUnitTypeId { get; set; }
         public int MeasureUnitId { get; set; }
         public string MeasureUnit { get; set; }

@@ -51,11 +51,23 @@ namespace Charcutarie.Api.Validators
         {
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Name).Length(0, 100);
-            RuleFor(x => x.DBAName).NotEmpty();
-            RuleFor(x => x.DBAName).Length(0, 100);
-            RuleFor(x => x.Active).NotNull();
-            RuleFor(x => x.CorpClientId).NotNull();
-            RuleFor(x => x.CorpClientId).GreaterThan(0);
+            RuleFor(x => x.DbaName).Must((c, p) =>
+            {
+                if (c.CustomerTypeId == 1) return true;
+                return !string.IsNullOrWhiteSpace(p);
+            }).WithMessage("Razão Social não pode ser nulo para clientes do tipo Pessoa Jurídica");
+
+            RuleFor(x => x.SocialIdentifier).Must((c, p) =>
+            {
+                if (c.CustomerTypeId == 1) return true;
+                return p.IsCnpj();
+            }).WithMessage("CNPJ Inválido");
+
+            RuleFor(x => x.SocialIdentifier).Must((c, p) =>
+            {
+                if (c.CustomerTypeId == 2) return true;
+                return p.IsCpf();
+            }).WithMessage("CPF Inválido");
         }
     }
 }

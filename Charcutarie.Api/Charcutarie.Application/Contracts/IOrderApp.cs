@@ -10,12 +10,12 @@ namespace Charcutarie.Application.Contracts
 {
     public interface IOrderApp
     {
-        Task<int> Add(NewOrder model, int corpClientId);
+        Task<long> Add(NewOrder model, int corpClientId);
         Task<Order> Get(long orderId, int corpClientId);
-        Task<Order> GetByNumber(int orderNumber, int corpClientId);
+        Task<Order> GetByNumber(long orderNumber, int corpClientId);
         Task Update(UpdateOrder model, int corpClientId);
         Task ChangeStatus(UpdateOrderStatus model, int corpClientId);
-        Task<OrderStatusEnum> GetCurrentStatus(int orderNumber, int corpClientId);
+        Task<OrderStatusEnum> GetCurrentStatus(long orderNumber, int corpClientId);
         PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo,
                                                          DateTime? paidOnFrom, DateTime? paidOnTo,
                                                          DateTime? completeByFrom, DateTime? completeByTo,

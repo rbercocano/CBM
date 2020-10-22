@@ -113,9 +113,9 @@ namespace Charcutarie.Repository
 	                                            END * 
 	                                            CASE 
 		                                            WHEN D.IncreaseWeight = 1 THEN
-		                                            (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1+(CAST(D.WeightVariationPercentage as DECIMAL(4,2))/100))) * I.Percentage/100
+		                                            (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1+(CAST(D.WeightVariationPercentage as decimal(4,2))/100))) * I.Percentage/100
 		                                            ELSE
-		                                            (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1-(CAST(D.WeightVariationPercentage as DECIMAL(4,2))/100))) * I.Percentage/100
+		                                            (dbo.ConvertMeasure(P.MeasureUnitId,1,1) / (1-(CAST(D.WeightVariationPercentage as decimal(4,2))/100))) * I.Percentage/100
 		                                            END AS Cost
 	                                            FROM Product P
 	                                            JOIN DataSheet D ON P.ProductId = D.ProductId

@@ -68,7 +68,7 @@ namespace Charcutarie.Services
         {
             return await dataSheetApp.Get(productId, corpClientId);
         }
-        public async Task<ProductionSummary> CalculateProduction(long productId, MeasureUnitEnum measureId, double quantity, int corpClientId)
+        public async Task<ProductionSummary> CalculateProduction(long productId, MeasureUnitEnum measureId, decimal quantity, int corpClientId)
         {
             var items = new List<ProductionItem>();
             var dataSheet = await dataSheetApp.Get(productId, corpClientId);
@@ -90,7 +90,7 @@ namespace Charcutarie.Services
                     SalePrice = price,
                     ProductionItems = items
                 };
-            var q = UnitConverter.ToBaseUnit(measureId, quantity, sourceUnit.MeasureUnitTypeId);
+            var q = Convert.ToDecimal(UnitConverter.ToBaseUnit(measureId, quantity, sourceUnit.MeasureUnitTypeId));
             foreach (var di in dataSheet.DataSheetItems)
             {
                 var item = new ProductionItem
@@ -109,7 +109,7 @@ namespace Charcutarie.Services
                     item.Quantity = q / (1 - (dataSheet.WeightVariationPercentage / 100)) * item.Percentage / 100;
 
                 var rmSourceUnit = units.FirstOrDefault(u => u.MeasureUnitId == di.RawMaterial.MeasureUnitId);
-                var rmQuantity = UnitConverter.ToBaseUnit(rmSourceUnit.MeasureUnitId, 1, rmSourceUnit.MeasureUnitTypeId);
+                var rmQuantity = Convert.ToDecimal(UnitConverter.ToBaseUnit(rmSourceUnit.MeasureUnitId, 1, rmSourceUnit.MeasureUnitTypeId));
                 var rmPrice = di.RawMaterial.Price / rmQuantity;
                 item.Cost = rmPrice * item.Quantity;
 

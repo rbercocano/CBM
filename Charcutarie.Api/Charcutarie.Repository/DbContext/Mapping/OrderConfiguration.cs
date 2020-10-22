@@ -38,7 +38,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                  .HasConversion(v => (int)v,
                                 v => (PaymentStatusEnum)v);
             builder.Property(p => p.FreightPrice)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.PaidOn)
                 .HasColumnType("DATETIME");
@@ -54,6 +54,11 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.HasOne(p => p.Customer)
                 .WithMany(p => p.Orders)
                 .HasForeignKey(p => p.CustomerId);
+
+
+            builder.HasMany(p => p.Transactions)
+                .WithOne(p => p.Order)
+                .HasForeignKey(p => p.OrderId);
         }
     }
 }

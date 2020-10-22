@@ -8,7 +8,7 @@ namespace Charcutarie.Models.Entities
         public long ProductId { get; set; }
         public string Name { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public bool ActiveForSale { get; set; }
         public int CorpClientId { get; set; }
 

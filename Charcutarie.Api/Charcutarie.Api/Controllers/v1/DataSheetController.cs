@@ -74,8 +74,8 @@ namespace Charcutarie.Api.Controllers.v1
             await service.DeleteItem(itemId, UserData.CorpClientId.Value);
             return Ok();
         }
-        [HttpGet("Production/{productId:long}/{measureId:int}/{quantity:double}")]
-        public async Task<ActionResult<ProductionSummary>> CalculateProduction(long productId, int measureId, double quantity)
+        [HttpGet("Production/{productId:long}/{measureId:int}/{quantity:decimal}")]
+        public async Task<ActionResult<ProductionSummary>> CalculateProduction(long productId, int measureId, decimal quantity)
         {
             var data = await service.CalculateProduction(productId, (MeasureUnitEnum)measureId, quantity, UserData.CorpClientId.Value);
             if (data != null)

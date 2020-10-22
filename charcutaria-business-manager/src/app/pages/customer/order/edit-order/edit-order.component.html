@@ -1,8 +1,12 @@
 <form name="form" #f="ngForm" (ngSubmit)="save()" novalidate>
     <app-toolbar [title]="title">
         <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Detalhes" type="button"
-            (click)="goToDetails()">
+            *ngIf="order != null" (click)="goToDetails()">
             <i class="fa fa-list"></i>
+        </button>
+        <button class="btn btn-success btn-mini" placement="top" ngbTooltip="Efetuar Pagamento" type="button"
+            *ngIf="order != null && order.paymentStatusId != 2" (click)="openPayments()">
+            <i class="fa fa-dollar"></i>
         </button>
         <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Salvar" type="submit"
             *ngIf="allowUpdateStatus">
@@ -48,17 +52,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 m-b-5">
-                            <hr />
-                            <label class="m-b-0">Status do Pagamento</label>
-                            <select class="form-control" [(ngModel)]="order.paymentStatus" name="paymentStatus"
-                                *ngIf="allowUpdateStatus">
-                                <option [ngValue]="s" *ngFor="let s of paymentStatus">{{s.description}}</option>
-                            </select>
-                            <input *ngIf="!allowUpdateStatus" class="form-control" type="text"
-                                [value]="order.paymentStatus.description" readonly>
-                        </div>
                         <div class="col-12 m-b-0 p-t-5" [class.has-danger]="f.submitted && order.completeBy==null">
+                            <hr />
                             <label class="m-b-0">Finalizar em</label>
                             <input *ngIf="!allowEdit" class="form-control" type="text"
                                 value="{{order.completeBy | date: 'dd/MM/yyyy'}}" readonly>
@@ -94,73 +89,152 @@
                                 #totalPrice="ngModel" currencyMask
                                 [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" readonly>
                         </div>
+
+                        <div class="col-12 m-b-5">
+                            <hr />
+                            <label class="m-b-0">Status do Pagamento</label>
+                            <input class="form-control" type="text" [value]="order.paymentStatus.description" readonly>
+                            <table class="table payments">
+                                <tbody>
+                                    <tr>
+                                        <td>Total Recebido</td>
+                                        <td>{{order.payments | cbmCurrency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valor Pendente</td>
+                                        <td>{{order.remainingBalance | cbmCurrency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tips</td>
+                                        <td>{{order.tips | cbmCurrency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-9">
-            <div class="card">
-                <div class="card-header p-b-0">
-                    <h5>Itens do Pedido</h5>
-                    <button class="btn btn-primary btn-mini float-right" (click)="open(content,null)" type="button"
-                        placement="top" ngbTooltip="Adicionar Item" *ngIf="allowEdit">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                    <hr />
+            <div [hidden]="showTransactions">
+                <div class="card">
+                    <div class="card-header p-b-0">
+                        <h5>Itens do Pedido</h5>
+                        <button class="btn btn-primary btn-mini float-right" placement="top" ngbTooltip="Transações"
+                            type="button" (click)="showTransactions=true">
+                            <i class="fa fa-exchange"></i>
+                        </button>
+                        <button class="btn btn-primary btn-mini float-right m-r-5" (click)="open(content,null)"
+                            type="button" placement="top" ngbTooltip="Adicionar Item" *ngIf="allowEdit">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <hr />
+                    </div>
+                    <div class="card-body p-t-0">
+                        <table class="table order-items table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Produto</th>
+                                    <th>Status</th>
+                                    <th>Quantidade</th>
+                                    <th>Preço</th>
+                                    <th>Desconto</th>
+                                    <th>Preço Final</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let oi of order.orderItems">
+                                    <td>{{oi.itemNumber}}</td>
+                                    <td>{{oi.product.name}}
+                                        <p>{{oi.additionalInfo}}</p>
+                                    </td>
+                                    <td>
+                                        <app-order-item-status-label [status]="oi.orderItemStatus">
+                                        </app-order-item-status-label>
+                                    </td>
+                                    <td>{{oi.quantity | cbmNumber}} {{oi.measureUnit.shortName}} x
+                                        {{oi.productPrice | cbmCurrency}}</td>
+                                    <td>{{oi.originalPrice | cbmCurrency}}</td>
+                                    <td>-{{oi.discount | cbmCurrency}}</td>
+                                    <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
+                                    <td>
+                                        <button type="button" placement="top" ngbTooltip="Editar Item"
+                                            *ngIf="allowUpdateStatus" (click)="open(content,oi)"
+                                            class="btn btn-mini btn-primary " type="button">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button type="button" placement="top" ngbTooltip="Remover Item"
+                                            *ngIf="allowEdit" (click)="confirmRemoval(oi)"
+                                            class="btn btn-mini btn-danger m-l-5" type="button">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4">Totais</th>
+                                    <th>{{order.itemsTotal | cbmCurrency}}</th>
+                                    <th>-{{order.discountTotal | cbmCurrency}}</th>
+                                    <th>{{order.itemsTotalAfterDiscounts | cbmCurrency}}</th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
-                <div class="card-body p-t-0">
-                    <table class="table order-items table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Produto</th>
-                                <th>Status</th>
-                                <th>Quantidade</th>
-                                <th>Preço</th>
-                                <th>Desconto</th>
-                                <th>Preço Final</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let oi of order.orderItems">
-                                <td>{{oi.itemNumber}}</td>
-                                <td>{{oi.product.name}}
-                                    <p>{{oi.additionalInfo}}</p>
-                                </td>
-                                <td>
-                                    <app-order-item-status-label [status]="oi.orderItemStatus">
-                                    </app-order-item-status-label>
-                                </td>
-                                <td>{{oi.quantity | cbmNumber}} {{oi.measureUnit.shortName}} x
-                                    {{oi.productPrice | cbmCurrency}}</td>
-                                <td>{{oi.originalPrice | cbmCurrency}}</td>
-                                <td>-{{oi.discount | cbmCurrency}}</td>
-                                <td>{{oi.priceAfterDiscount | cbmCurrency}}</td>
-                                <td>
-                                    <button type="button" placement="top" ngbTooltip="Editar Item"
-                                        *ngIf="allowUpdateStatus" (click)="open(content,oi)"
-                                        class="btn btn-mini btn-primary " type="button">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>
-                                    <button type="button" placement="top" ngbTooltip="Remover Item" *ngIf="allowEdit"
-                                        (click)="confirmRemoval(oi)" class="btn btn-mini btn-danger m-l-5" type="button">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="4">Totais</th>
-                                <th>{{order.itemsTotal | cbmCurrency}}</th>
-                                <th>-{{order.discountTotal | cbmCurrency}}</th>
-                                <th>{{order.itemsTotalAfterDiscounts | cbmCurrency}}</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
+            </div>
+            <div [hidden]="!showTransactions">
+                <div class="card">
+                    <div class="card-header p-b-0">
+                        <h5>Transações</h5>
+                        <button class="btn btn-primary btn-mini float-right" placement="top"
+                            ngbTooltip="Itens do Pedido" type="button" (click)="showTransactions=false">
+                            <i class="fa fa-exchange"></i>
+                        </button>
+                        <hr />
+                    </div>
+                    <div class="card-body p-t-0">
+                        <table class="table table-striped transactions">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                    <th>Forma de Pagamento</th>
+                                    <th>Descrição</th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngIf="order.transactions!= null && order.transactions.length >0">
+                                    <tr *ngFor="let t of order.transactions"
+                                        [ngClass]="{'positive-amount':t.amount>0,'text-danger':t.amount<0}">
+                                        <td>{{t.date | date: 'dd/MM/yyyy HH:mm'}}</td>
+                                        <td>{{t.amount | cbmCurrency}}</td>
+                                        <td>{{t.transactionType}}</td>
+                                        <td>{{t.description}}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-mini" (click)="confirmRefund(t)"
+                                                *ngIf="t.transactionStatusId==1 && t.isIncome" type="button"  placement="top" ngbTooltip="Estornar">
+                                                <i class="fa fa-refresh"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="order.transactions == null ||  order.transactions.length == 0">
+                                    <tr>
+                                        <td colspan="6" class="text-center">Nenhuma transação efetuada</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -271,7 +345,8 @@
 </ng-template>
 
 <app-confirm-modal #close *ngIf="order != null" [data]="order.orderNumber" (confirm)="closeOrder($event)">
-    <h2>Deseja encerrar este pedido?</h2>
+    <h2>Deseja realmente encerrar este pedido?</h2>
+    <h5 class="text-danger" *ngIf="order?.paymentStatusId != 2">Este pedido ainda não foi pago!</h5>
     <p>Todos os itens do pedidos serão marcados como entregue.</p>
 </app-confirm-modal>
 <app-confirm-modal #restore *ngIf="order != null" [data]="order.orderNumber" (confirm)="restoreOrder($event)">
@@ -283,4 +358,67 @@
 <app-confirm-modal #removeitem *ngIf="order != null" (confirm)="removeItem()">
     <h2>Deseja remover este item do pedido?</h2>
 </app-confirm-modal>
+<app-confirm-modal #confirmRefund *ngIf="order != null" (confirm)="refund()">
+    <h2>Deseja estornar esta Transação?</h2>
+    <p class="text-danger">Você não poderá reverter esta ação!</p>
+</app-confirm-modal>
+
+
+<ng-template #paymentModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">Efetuar Pagamento</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="row form-group">
+            <div class="col-12 text-center">
+                <b>Valor Pendente: {{order.remainingBalance | cbmCurrency}}</b>
+                <hr />
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Forma de Pagamento</label>
+                <select class="form-control" [(ngModel)]="payment.orderPaymentMethod">
+                    <option [ngValue]="t.transactionTypeId" *ngFor="let t of transactionTypes">
+                        {{t.description}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-6" [class.has-danger]="payment.amount > order.remainingBalance">
+                <label class="m-b-0">Valor</label>
+                <input class="form-control" [(ngModel)]="payment.amount" type="text" currencyMask
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" />
+                <div class="col-form-label p-t-0" *ngIf="payment.amount > order.remainingBalance">
+                    O valor pago não pode ser maior que o valor pentende
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-6">
+                <label class="m-b-0">Forma de Pagamento</label>
+                <select class="form-control" [(ngModel)]="payment.tipPaymentMethod">
+                    <option [ngValue]="t.transactionTypeId" *ngFor="let t of transactionTypes">
+                        {{t.description}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Valor da Gorjeta (tip)</label>
+                <input class="form-control" [(ngModel)]="payment.tip" type="text" currencyMask
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mini" (click)="modal.dismiss()">
+            Cancelar
+        </button>
+        <button type="button" class="btn btn-primary btn-mini" (click)="pay()"
+            [disabled]="(payment.amount > order.remainingBalance) || payment.amount == 0">
+            Confirmar
+        </button>
+    </div>
+</ng-template>
+
 <app-toasts></app-toasts>

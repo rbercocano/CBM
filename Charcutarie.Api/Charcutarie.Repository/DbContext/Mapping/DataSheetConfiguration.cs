@@ -16,7 +16,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
 
             builder.Property(p => p.WeightVariationPercentage)
-                .HasColumnType("DECIMAL(4,2)")
+                .HasColumnType("decimal(4,2)")
                 .IsRequired();
 
             builder.Property(p => p.IncreaseWeight)

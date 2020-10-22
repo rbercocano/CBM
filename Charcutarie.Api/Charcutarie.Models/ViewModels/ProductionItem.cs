@@ -6,8 +6,8 @@ namespace Charcutarie.Models.ViewModels
 {
     public class ProductionItem : DataSheetItem
     {
-        public double Quantity { get; set; }
-        public double Cost { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Cost { get; set; }
         public MeasureUnit MeasureUnit { get; set; }
 
     }

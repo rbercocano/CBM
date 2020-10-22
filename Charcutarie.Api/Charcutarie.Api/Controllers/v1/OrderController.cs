@@ -38,8 +38,20 @@ namespace Charcutarie.Api.Controllers.v1
             await service.Update(model, UserData.CorpClientId.Value);
             return Ok();
         }
+        [HttpPost("Payment")]
+        public async Task<ActionResult> Pay(PayOrder model)
+        {
+            await service.AddPayment(model, UserData.CorpClientId.Value, UserData.UserId);
+            return Ok();
+        }
+        [HttpPost("Refund")]
+        public async Task<ActionResult> Refund(RefundPayment model)
+        {
+            await service.RefundPayment(model, UserData.CorpClientId.Value, UserData.UserId);
+            return Ok();
+        }
         [HttpPost("Cancel/{orderNumber:int}")]
-        public async Task<ActionResult> CancelOrder(int orderNumber)
+        public async Task<ActionResult> CancelOrder(long orderNumber)
         {
             await service.ChangeStatus(new UpdateOrderStatus
             {
@@ -49,7 +61,7 @@ namespace Charcutarie.Api.Controllers.v1
             return Ok();
         }
         [HttpPost("Restore/{orderNumber:int}")]
-        public async Task<ActionResult<OrderStatusEnum>> Restore(int orderNumber)
+        public async Task<ActionResult<OrderStatusEnum>> Restore(long orderNumber)
         {
             var nextStatus = await service.RestoreOrderStatus(orderNumber, UserData.CorpClientId.Value);
             return Ok(nextStatus);
@@ -105,7 +117,7 @@ namespace Charcutarie.Api.Controllers.v1
             return NoContent();
         }
         [HttpPost("Close/{orderNumber:int}")]
-        public async Task<ActionResult> CloseOrder(int orderNumber)
+        public async Task<ActionResult> CloseOrder(long orderNumber)
         {
             await service.CloseOrder(orderNumber, UserData.CorpClientId.Value);
             return Ok();

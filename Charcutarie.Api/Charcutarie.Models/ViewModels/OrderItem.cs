@@ -12,15 +12,15 @@ namespace Charcutarie.Models.ViewModels
         public MeasureUnit MeasureUnit { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
         public OrderItemStatusEnum OrderItemStatusId { get; set; }
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public string AdditionalInfo { get; set; }
-        public double Discount { get; set; }
-        public double OriginalPrice { get; set; }
-        public double PriceAfterDiscount { get; set; }
-        public double ProductPrice { get; set; }
-        public double? Cost { get; set; }
-        public double? Profit { get; set; }
-        public double? ProfitPercentage { get; set; }
+        public decimal Discount { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public decimal PriceAfterDiscount { get; set; }
+        public decimal ProductPrice { get; set; }
+        public decimal? Cost { get; set; }
+        public decimal? Profit { get; set; }
+        public decimal? ProfitPercentage { get; set; }
         public int ItemNumber { get; set; }
         public int OrderItemId { get; set; }
         public Order Order { get; set; }

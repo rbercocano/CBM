@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Text;
 
 namespace Charcutarie.Repository
 {
@@ -60,9 +61,22 @@ namespace Charcutarie.Repository
         public async Task<CorpClient> Update(UpdateCorpClient model)
         {
             var entity = context.CorpClients.Find(model.CorpClientId);
-            entity.DBAName = model.DBAName;
+            entity.DBAName = model.DbaName;
+            entity.Currency = model.Currency;
             entity.Name = model.Name;
-            entity.Active = model.Active;
+            entity.CustomerTypeId = model.CustomerTypeId;
+            entity.Mobile = model.Mobile;
+            entity.Email = model.Email;
+            if (model.CustomerTypeId == 1)
+            {
+                entity.CPF = model.SocialIdentifier;
+                entity.CNPJ = null;
+            }
+            else
+            {
+                entity.CNPJ = model.SocialIdentifier;
+                entity.CPF = null;
+            }
             context.Update(entity);
             var rows = await context.SaveChangesAsync();
             return mapper.Map<CorpClient>(entity);

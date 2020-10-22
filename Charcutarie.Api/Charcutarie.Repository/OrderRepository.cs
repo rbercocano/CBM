@@ -28,7 +28,7 @@ namespace Charcutarie.Repository
             this.context = context;
             this.mapper = mapper;
         }
-        public async Task<int> Add(NewOrder model, int corpClientId)
+        public async Task<long> Add(NewOrder model, int corpClientId)
         {
             var lastNumber = context.Orders.Where(o => o.Customer.CorpClientId == corpClientId).Max(o => (int?)o.OrderNumber) ?? 0;
             model.OrderNumber = lastNumber + 1;
@@ -45,9 +45,11 @@ namespace Charcutarie.Repository
         {
             var entity = await context.Orders.FirstOrDefaultAsync(o => o.Customer.CorpClientId == corpClientId && o.OrderNumber == model.OrderNumber);
 
-            if (entity.PaymentStatusId == PaymentStatusEnum.Pendente && model.PaymentStatusId == PaymentStatusEnum.Pago)
+            if (entity.PaymentStatusId != PaymentStatusEnum.Pago &&
+                (model.PaymentStatusId == PaymentStatusEnum.Pago || model.PaymentStatusId == PaymentStatusEnum.ParcialmentePago))
                 entity.PaidOn = DateTime.Now;
-            else if (entity.PaymentStatusId == PaymentStatusEnum.Pago && model.PaymentStatusId == PaymentStatusEnum.Pendente)
+            else if ((entity.PaymentStatusId == PaymentStatusEnum.Pago || entity.PaymentStatusId == PaymentStatusEnum.ParcialmentePago)
+                && model.PaymentStatusId != PaymentStatusEnum.Pendente)
                 entity.PaidOn = null;
 
             entity.CompleteBy = model.CompleteBy;
@@ -84,10 +86,12 @@ namespace Charcutarie.Repository
             return result;
         }
 
-        public async Task<Order> GetByNumber(int orderNumber, int corpClientId)
+        public async Task<Order> GetByNumber(long orderNumber, int corpClientId)
         {
             var data = await context.Orders.Where(o => o.OrderNumber == orderNumber
                                              && o.Customer.CorpClientId == corpClientId)
+                                            .Include(o => o.Transactions)
+                                                .ThenInclude(o => o.TransactionType)
                                             .Include(o => o.Customer)
                                                 .ThenInclude(o => o.Contacts)
                                                     .ThenInclude(o => o.ContactType)
@@ -103,7 +107,7 @@ namespace Charcutarie.Repository
             var result = mapper.Map<Order>(data.FirstOrDefault());
             return result;
         }
-        public async Task<OrderStatusEnum> GetCurrentStatus(int orderNumber, int corpClientId)
+        public async Task<OrderStatusEnum> GetCurrentStatus(long orderNumber, int corpClientId)
         {
             return await context.Orders.Where(o => o.OrderNumber == orderNumber && o.Customer.CorpClientId == corpClientId).Select(o => o.OrderStatusId).FirstOrDefaultAsync();
         }
@@ -228,9 +232,9 @@ namespace Charcutarie.Repository
                                             C.CustomerId,
 	                                        CASE 
 		                                        WHEN M.MeasureUnitTypeId = 1 THEN
-			                                        CAST(dbo.ConvertMeasure(M.MeasureUnitId,I.Quantity,@mid) as Decimal(18,2))
+			                                        CAST(dbo.ConvertMeasure(M.MeasureUnitId,I.Quantity,@mid) as decimal(18,2))
 		                                        ELSE
-			                                        CAST(dbo.ConvertMeasure(M.MeasureUnitId,I.Quantity,@vid) as Decimal(18,2))
+			                                        CAST(dbo.ConvertMeasure(M.MeasureUnitId,I.Quantity,@vid) as decimal(18,2))
 	                                        END as Quantity,
 	                                        (SELECT M2.ShortName FROM MeasureUnit M2 WHERE M2.MeasureUnitId = IIF(M.MeasureUnitTypeId=1,@mid,@vid)) as MeasureUnit
  
@@ -305,24 +309,50 @@ namespace Charcutarie.Repository
         {
             var sqlParams = new List<SqlParameter>();
             sqlParams.Add(new SqlParameter("@corpClientId", corpClientId));
-            var query = new StringBuilder(@"SELECT
-	                                        NEWID() as RowId,
-                                            (SELECT 
-	                                            ISNULL( SUM(I.PriceAfterDiscount),0)
-                                            FROM OrderItem I 
-                                            JOIN Product P ON I.ProductId = P.ProductId 
-                                            JOIN [Order] O ON I.OrderId = O.OrderId
-                                            WHere P.CorpClientId = @corpClientId
-                                            AND O.PaymentStatusId = 1
-                                            AND OrderStatusId <> 4)  as TotalPendingPayments,
-                                            (SELECT 
-	                                           ISNULL(  SUM(I.PriceAfterDiscount) ,0)
-                                            FROM OrderItem I 
-                                            JOIN Product P ON I.ProductId = P.ProductId 
-                                            JOIN [Order] O ON I.OrderId = O.OrderId
-                                            WHere P.CorpClientId = @corpClientId
-                                            AND O.PaymentStatusId = 1
-                                            AND O.OrderStatusId IN (3,5)) as FinishedOrdersPendingPayment");
+            var query = new StringBuilder(@"SELECT NewId() AS RowId, ISNULL(X.OrderTotals,0) - ISNULL(X.TotalPaid,0) AS TotalPendingPayments ,
+                                                   ISNULL(X.FinishedTotals,0) - ISNULL(X.FinishedPaid,0) AS FinishedOrdersPendingPayment
+                                            FROM 
+	                                            (SELECT 
+		                                            (SELECT 
+		                                            ISNULL(SUM(T.Amount),0) AS TotalPaid
+		                                            FROM [Transaction] T 
+		                                            JOIN [Order] O ON T.OrderId = O.OrderId
+		                                            JOIN [OrderItem] I ON I.OrderId = O.OrderId
+		                                            JOIN Product P ON I.ProductId = P.ProductId 
+		                                            JOIN TransactionType TT  ON T.TransactionTypeId = TT.TransactionTypeId
+		                                            WHERE P.CorpClientId = @corpClientId
+		                                            AND O.OrderStatusId NOT IN (4)
+		                                            AND T.IsOrderPrincipalAmount = 1
+		                                            AND O.PaymentStatusId  IN (1,3)) AS TotalPaid,
+		                                            (SELECT 
+			                                            ISNULL(  SUM(I.PriceAfterDiscount) ,0)
+		                                            FROM OrderItem I 
+		                                            JOIN Product P ON I.ProductId = P.ProductId 
+		                                            JOIN [Order] O ON I.OrderId = O.OrderId
+		                                            WHere P.CorpClientId = @corpClientId
+		                                            AND O.OrderStatusId NOT IN (4)
+		                                            AND O.PaymentStatusId  IN (1,3)
+		                                            AND O.OrderStatusId NOT IN (4)) As OrderTotals,
+		                                            (SELECT 
+			                                            ISNULL(  SUM(I.PriceAfterDiscount) ,0)
+		                                            FROM OrderItem I 
+		                                            JOIN Product P ON I.ProductId = P.ProductId 
+		                                            JOIN [Order] O ON I.OrderId = O.OrderId
+		                                            WHere P.CorpClientId = @corpClientId
+		                                            AND O.OrderStatusId NOT IN (4)
+		                                            AND O.PaymentStatusId  IN (1,3)
+		                                            AND O.OrderStatusId IN (3,5)) As FinishedTotals,
+		                                            (SELECT 
+		                                            ISNULL(SUM(T.Amount),0) AS TotalPaid
+		                                            FROM [Transaction] T 
+		                                            JOIN [Order] O ON T.OrderId = O.OrderId
+		                                            JOIN [OrderItem] I ON I.OrderId = O.OrderId
+		                                            JOIN Product P ON I.ProductId = P.ProductId 
+		                                            JOIN TransactionType TT  ON T.TransactionTypeId = TT.TransactionTypeId
+		                                            WHERE P.CorpClientId = @corpClientId
+		                                            AND O.OrderStatusId IN (3,5)
+		                                            AND T.IsOrderPrincipalAmount = 1
+		                                            AND O.PaymentStatusId  IN (1,3)) AS FinishedPaid) X");
             var data = await context.PendingPaymentsSummaries.FromSqlRaw(query.ToString(), sqlParams.ToArray()).FirstOrDefaultAsync();
             return mapper.Map<PendingPaymentsSummary>(data);
         }
@@ -470,9 +500,9 @@ namespace Charcutarie.Repository
 		                                        P.Name as Product,
 		                                        CASE 
 			                                        WHEN U.MeasureUnitTypeId = 1 THEN
-				                                        CAST(dbo.ConvertMeasure(I.MeasureUnitId,I.Quantity,@mid) as Decimal(18,2))
+				                                        CAST(dbo.ConvertMeasure(I.MeasureUnitId,I.Quantity,@mid) as decimal(18,2))
 			                                        ELSE
-				                                        CAST(dbo.ConvertMeasure(I.MeasureUnitId,I.Quantity,@vid) as Decimal(18,2))
+				                                        CAST(dbo.ConvertMeasure(I.MeasureUnitId,I.Quantity,@vid) as decimal(18,2))
 		                                        END as Quantity,
 		                                        CASE 
 			                                        WHEN U.MeasureUnitTypeId = 1 THEN 1

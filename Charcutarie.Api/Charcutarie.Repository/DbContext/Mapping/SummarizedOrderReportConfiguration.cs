@@ -14,7 +14,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("UNIQUEIDENTIFIER")
                 .IsRequired();
             builder.Property(p => p.Quantity)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.MeasureUnitTypeId)
                 .HasColumnType("INT")

@@ -8,7 +8,7 @@ namespace Charcutarie.Models.ViewModels
     {
         public long ProductId { get; set; }
         public string ProcedureDescription { get; set; }
-        public double WeightVariationPercentage { get; set; }
+        public decimal WeightVariationPercentage { get; set; }
         public bool IncreaseWeight { get; set; }
     }
 }

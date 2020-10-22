@@ -12,7 +12,7 @@ namespace Charcutarie.Models.Entities
         public int ItemNumber { get; set; }
         public long ProductId { get; set; }
         public Product Product { get; set; }
-        public double  Quantity{ get; set; }
+        public decimal  Quantity{ get; set; }
         public OrderItemStatusEnum OrderItemStatusId { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
         public DateTime CreatedOn { get; set; }
@@ -20,13 +20,13 @@ namespace Charcutarie.Models.Entities
         
         public DateTime? LastUpdated { get; set; }
         public string AdditionalInfo { get; set; }
-        public double OriginalPrice { get; set; }
-        public double Discount { get; set; }
-        public double PriceAfterDiscount { get; set; }
-        public double ProductPrice { get; set; }
-        public double? Cost { get; set; }
-        public double? Profit { get; set; }
-        public double? ProfitPercentage { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public decimal Discount { get; set; }
+        public decimal PriceAfterDiscount { get; set; }
+        public decimal ProductPrice { get; set; }
+        public decimal? Cost { get; set; }
+        public decimal? Profit { get; set; }
+        public decimal? ProfitPercentage { get; set; }
         
         public Order Order { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }

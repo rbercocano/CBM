@@ -7,7 +7,7 @@ namespace Charcutarie.Models.ViewModels
     public class SalesSummary
     {
         public Guid RowId { get; set; }
-        public double TotalSales { get; set; }
-        public double CurrentMonthSales { get; set; }
+        public decimal TotalSales { get; set; }
+        public decimal CurrentMonthSales { get; set; }
     }
 }

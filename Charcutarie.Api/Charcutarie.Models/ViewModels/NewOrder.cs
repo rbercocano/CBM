@@ -21,6 +21,6 @@ namespace Charcutarie.Models.ViewModels
         [JsonIgnore]
         public int OrderStatusId { get; set; }
         [JsonIgnore]
-        public int OrderNumber { get; set; }
+        public long OrderNumber { get; set; }
     }
 }

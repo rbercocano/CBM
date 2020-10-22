@@ -25,7 +25,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                                 v => (MeasureUnitEnum)v);
 
             builder.Property(p => p.Price)
-                .HasColumnType("DECIMAL(10,2)")
+                .HasColumnType("decimal(10,2)")
                 .IsRequired();
 
             builder.Property(p => p.ActiveForSale)

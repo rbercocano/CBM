@@ -11,10 +11,10 @@ namespace Charcutarie.Models.ViewModels
         {
             ProductionItems = new List<ProductionItem>();
         }
-        public double ProductionCost { get { return Math.Round(ProductionItems.Sum(i => i.Cost), 2); } }
-        public double SalePrice { get; set; }
-        public double Profit { get { return Math.Round(SalePrice - ProductionCost, 2); } }
-        public double ProfitPercentage { get { return Math.Round(Profit / ProductionCost * 100, 2); } }
+        public decimal ProductionCost { get { return Math.Round(ProductionItems.Sum(i => i.Cost), 2); } }
+        public decimal SalePrice { get; set; }
+        public decimal Profit { get { return Math.Round(SalePrice - ProductionCost, 2); } }
+        public decimal ProfitPercentage { get { return Math.Round(Profit / ProductionCost * 100, 2); } }
         public List<ProductionItem> ProductionItems { get; set; }
     }
 }

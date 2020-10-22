@@ -7,7 +7,7 @@ namespace Charcutarie.Application
 {
     public class UnitConverter
     {
-        public static double ToBaseUnit(MeasureUnitEnum from, double quantity, MeasureUnitTypeEnum type)
+        public static double ToBaseUnit(MeasureUnitEnum from, decimal quantity, MeasureUnitTypeEnum type)
         {
             if (type == MeasureUnitTypeEnum.Mass)
                 return from switch

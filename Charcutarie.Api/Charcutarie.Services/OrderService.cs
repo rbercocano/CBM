@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Application.Contracts;
+using Charcutarie.Core.ExceptionHandling;
 using Charcutarie.Models;
 using Charcutarie.Models.Enums;
 using Charcutarie.Models.Enums.OrderBy;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Charcutarie.Services
 {
@@ -19,8 +21,15 @@ namespace Charcutarie.Services
         private readonly IOrderItemApp orderItemApp;
         private readonly IMeasureUnitApp measureUnitApp;
         private readonly IDataSheetService dataSheetService;
+        private readonly ITransactionApp transactionApp;
 
-        public OrderService(IOrderApp orderApp, IPricingApp pricingApp, IProductApp productApp, IOrderItemApp orderItemApp, IMeasureUnitApp measureUnitApp, IDataSheetService dataSheetService)
+        public OrderService(IOrderApp orderApp,
+            IPricingApp pricingApp,
+            IProductApp productApp,
+            IOrderItemApp orderItemApp,
+            IMeasureUnitApp measureUnitApp,
+            IDataSheetService dataSheetService,
+            ITransactionApp transactionApp)
         {
             this.orderApp = orderApp;
             this.pricingApp = pricingApp;
@@ -28,8 +37,9 @@ namespace Charcutarie.Services
             this.orderItemApp = orderItemApp;
             this.measureUnitApp = measureUnitApp;
             this.dataSheetService = dataSheetService;
+            this.transactionApp = transactionApp;
         }
-        public async Task<int> Add(NewOrder model, int corpClientId)
+        public async Task<long> Add(NewOrder model, int corpClientId)
         {
             var ids = model.OrderItems.Select(i => i.ProductId).ToList();
             var prods = await productApp.GetRange(corpClientId, ids);
@@ -57,8 +67,8 @@ namespace Charcutarie.Services
                 QuantityMeasureUnit = item.MeasureUnitId
             }, pType, qType);
             var prodSummary = await dataSheetService.CalculateProduction(item.ProductId, item.MeasureUnitId, item.Quantity, corpClientId);
-            item.Cost = prodSummary.ProductionItems.Any() ? prodSummary.ProductionCost : new double?();
-            item.Profit = prodSummary.ProductionItems.Any() ? (item.PriceAfterDiscount - prodSummary.ProductionCost) : new double?();
+            item.Cost = prodSummary.ProductionItems.Any() ? prodSummary.ProductionCost : new decimal?();
+            item.Profit = prodSummary.ProductionItems.Any() ? (item.PriceAfterDiscount - prodSummary.ProductionCost) : new decimal?();
         }
         public async Task ChangeStatus(UpdateOrderStatus model, int corpClientId)
         {
@@ -71,16 +81,116 @@ namespace Charcutarie.Services
             return await orderApp.Get(orderId, corpClientId);
         }
 
-        public async Task<Order> GetByNumber(int orderNumber, int corpClientId)
+        public async Task<Order> GetByNumber(long orderNumber, int corpClientId)
         {
             return await orderApp.GetByNumber(orderNumber, corpClientId);
+        }
+        public async Task AddPayment(PayOrder model, int corpClientId, long userId)
+        {
+            if (model.Amount <= 0)
+                throw new BusinessException("O valor do pagamento deve ser maior que zero");
+
+            var currentOrder = await GetByNumber(model.OrderNumber, corpClientId);
+            var payments = await transactionApp.GetTransactions(currentOrder.OrderId, corpClientId);
+            var totalPaid = payments.Where(p => (p.IsOrderPrincipalAmount ?? false)).Sum(s => s.Amount);
+            if (totalPaid + model.Amount > currentOrder.ItemsTotalAfterDiscounts)
+                throw new BusinessException("O valor total pago não pode ser maior que o total da venda");
+
+            var nextPaymentStatus = (totalPaid + model.Amount == currentOrder.ItemsTotalAfterDiscounts) ?
+                PaymentStatusEnum.Pago : PaymentStatusEnum.ParcialmentePago;
+
+            using var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            await orderApp.Update(new UpdateOrder
+            {
+                CompleteBy = currentOrder.CompleteBy,
+                FreightPrice = currentOrder.FreightPrice,
+                OrderNumber = currentOrder.OrderNumber,
+                PaymentStatusId = nextPaymentStatus
+            }, corpClientId);
+
+            await transactionApp.AddTransaction(new NewTransaction
+            {
+                Amount = model.Amount,
+                CorpClientId = corpClientId,
+                Date = DateTime.Now,
+                Description = $"Recebimento referente ao Pedido #{currentOrder.OrderNumber}",
+                MerchantName = currentOrder.Customer.Name,
+                OrderId = currentOrder.OrderId,
+                TransactionTypeId = model.OrderPaymentMethod,
+                TransactionStatusId = 1,
+                IsOrderPrincipalAmount = true
+            }, userId);
+            if (model.Tip > 0)
+            {
+                await transactionApp.AddTransaction(new NewTransaction
+                {
+                    Amount = model.Tip,
+                    CorpClientId = corpClientId,
+                    Date = DateTime.Now,
+                    Description = $"Recebimento de Tips referente ao Pedido #{currentOrder.OrderNumber}",
+                    MerchantName = currentOrder.Customer.Name,
+                    OrderId = currentOrder.OrderId,
+                    TransactionTypeId = model.TipPaymentMethod,
+                    TransactionStatusId = 1,
+                    IsOrderPrincipalAmount = false
+                }, userId);
+            }
+            trans.Complete();
+        }
+        public async Task RefundPayment(RefundPayment model, int corpClientId, long userId)
+        {
+
+            var currentOrder = await GetByNumber(model.OrderNumber, corpClientId);
+            var payments = await transactionApp.GetTransactions(currentOrder.OrderId, corpClientId);
+            var transaction = payments.FirstOrDefault(p => p.TransactionId == model.TransactionId);
+
+            if (transaction.TransactionStatusId != 1)
+                throw new BusinessException("Não é possível fazer estorno desta transação.");
+
+            var totalPaid = payments.Where(s => s.IsIncome && s.TransactionStatusId == 1).Sum(s => s.Amount);
+
+            var nextPaymentStatus = (PaymentStatusEnum)currentOrder.PaymentStatusId;
+            if ((transaction.IsOrderPrincipalAmount ?? false))
+            {
+                if ((currentOrder.ItemsTotalAfterDiscounts - transaction.Amount) == 0)
+                    nextPaymentStatus = PaymentStatusEnum.Estornado;
+                else if ((currentOrder.ItemsTotalAfterDiscounts - transaction.Amount) == currentOrder.ItemsTotalAfterDiscounts)
+                    nextPaymentStatus = PaymentStatusEnum.Pago;
+                else if (totalPaid - transaction.Amount <= 0)
+                    nextPaymentStatus = PaymentStatusEnum.Pendente;
+                else
+                    nextPaymentStatus = PaymentStatusEnum.ParcialmentePago;
+            }
+
+            using var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            await orderApp.Update(new UpdateOrder
+            {
+                CompleteBy = currentOrder.CompleteBy,
+                FreightPrice = currentOrder.FreightPrice,
+                OrderNumber = currentOrder.OrderNumber,
+                PaymentStatusId = nextPaymentStatus
+            }, corpClientId);
+            await transactionApp.ChangeStatus(transaction.TransactionId, corpClientId, 2);
+            await transactionApp.AddTransaction(new NewTransaction
+            {
+                Amount = transaction.Amount,
+                CorpClientId = corpClientId,
+                Date = DateTime.Now,
+                Description = $"Transação (#{transaction.TransactionId}) do pedido #{currentOrder.OrderNumber} estornada",
+                MerchantName = transaction.MerchantName,
+                OrderId = transaction.OrderId,
+                TransactionTypeId = 9,
+                TransactionStatusId = 1,
+                IsOrderPrincipalAmount = transaction.IsOrderPrincipalAmount
+            }, userId);
+            trans.Complete();
         }
 
         public async Task Update(UpdateOrder model, int corpClientId)
         {
             await orderApp.Update(model, corpClientId);
         }
-        public async Task<OrderStatusEnum> RestoreOrderStatus(int orderNumber, int corpClientId)
+        public async Task<OrderStatusEnum> RestoreOrderStatus(long orderNumber, int corpClientId)
         {
             var status = await orderApp.GetCurrentStatus(orderNumber, corpClientId);
             if (status != OrderStatusEnum.Cancelado) return status;
@@ -92,7 +202,7 @@ namespace Charcutarie.Services
             }, corpClientId);
             return nextStatus;
         }
-        private async Task<OrderStatusEnum> GetNextOrderStatus(int orderNumber, int corpClientId)
+        private async Task<OrderStatusEnum> GetNextOrderStatus(long orderNumber, int corpClientId)
         {
             var nextStatus = OrderStatusEnum.Criado;
             var orderItems = await orderItemApp.GetAll(orderNumber, corpClientId);
@@ -136,7 +246,7 @@ namespace Charcutarie.Services
                 model.Profit = null;
             }
             else
-                await CalculateItem(model as NewOrderItem, prod.MeasureUnitId, pType, qType, corpClientId);
+                await CalculateItem(model, prod.MeasureUnitId, pType, qType, corpClientId);
 
             await orderItemApp.Update(model, corpClientId);
             var nextStatus = await GetNextOrderStatus(item.Order.OrderNumber, corpClientId);
@@ -174,9 +284,9 @@ namespace Charcutarie.Services
 
         public PagedResult<OrderItemReport> GetOrderItemReport(int corpClientId, int? orderNumber, List<long> productIds, int massUnitId, int volumeUnitId, List<OrderStatusEnum> orderStatus, List<OrderItemStatusEnum> itemStatus, DateTime? completeByFrom, DateTime? completeByTo, string customer, long? customerId, OrderItemReportOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
         {
-            return orderApp.GetOrderItemReport(corpClientId, orderNumber, productIds,  massUnitId,  volumeUnitId, orderStatus, itemStatus, completeByFrom, completeByTo, customer, customerId, orderBy, direction, page, pageSize);
+            return orderApp.GetOrderItemReport(corpClientId, orderNumber, productIds, massUnitId, volumeUnitId, orderStatus, itemStatus, completeByFrom, completeByTo, customer, customerId, orderBy, direction, page, pageSize);
         }
-        public async Task CloseOrder(int orderNumber, int corpClientId)
+        public async Task CloseOrder(long orderNumber, int corpClientId)
         {
             await orderItemApp.UpdateAllOrderItemStatus(orderNumber, OrderItemStatusEnum.Entregue, corpClientId);
             var nextStatus = await GetNextOrderStatus(orderNumber, corpClientId);

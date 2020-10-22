@@ -29,7 +29,7 @@
                             </div>
                             <div class="input-group">
                                 <input [disabled]="loading" type="text" class="form-control" placeholder="Login"
-                                    [(ngModel)]="login.username" #username="ngModel" required name="username">
+                                    [(ngModel)]="login.username" #username="ngModel" mask="00000000" required name="username">
                                 <div *ngIf="f.submitted && username.invalid" class="error">
                                     <div *ngIf="username.errors.required">Informe seu login</div>
                                 </div>

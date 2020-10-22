@@ -9,6 +9,7 @@ import { ContactType } from '../../models/contactType';
 import { PaymentStatus } from '../../models/paymentStatus';
 import { OrderStatus } from '../../models/orderStatus';
 import { OrderItemStatus } from '../../models/orderItemStatus';
+import { TransactionType } from '../../models/transactionType';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,8 @@ export class DomainService {
   }
   public GetOrderItemStatus(): Observable<OrderItemStatus[]> {
     return this.httpClient.get<OrderItemStatus[]>(`${environment.apiUrl}/Domain/OrderItemStatus`);
+  }
+  public GetTransactionTypes(): Observable<TransactionType[]> {
+    return this.httpClient.get<TransactionType[]>(`${environment.apiUrl}/Domain/TransactionType`);
   }
 }

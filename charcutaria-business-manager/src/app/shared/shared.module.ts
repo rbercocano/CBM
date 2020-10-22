@@ -39,6 +39,8 @@ import { CpfDirective } from './directives/cpf-validator/cpf.directive';
 import { CnpjDirective } from './directives/cnpj/cnpj.directive';
 import { SecurePasswordDirective } from './directives/secure-password/secure-password.directive';
 import { MobilePhoneDirective } from './directives/mobile-phone/mobile-phone.directive';
+import { TransactionService } from './services/transaction/transaction.service';
+import { MinValueDirective } from './directives/min-value/min-value.directive';
 
 
 
@@ -62,7 +64,8 @@ import { MobilePhoneDirective } from './directives/mobile-phone/mobile-phone.dir
     CpfDirective,
     CnpjDirective,
     SecurePasswordDirective,
-    MobilePhoneDirective],
+    MobilePhoneDirective,
+    MinValueDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -94,7 +97,8 @@ import { MobilePhoneDirective } from './directives/mobile-phone/mobile-phone.dir
     CpfDirective,
     CnpjDirective,
     SecurePasswordDirective,
-    MobilePhoneDirective
+    MobilePhoneDirective,
+    MinValueDirective
   ],
   providers: [
     UserService,
@@ -108,6 +112,7 @@ import { MobilePhoneDirective } from './directives/mobile-phone/mobile-phone.dir
     PricingService,
     OrderService,
     ValidatorService,
+    TransactionService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpsRequestInterceptor,

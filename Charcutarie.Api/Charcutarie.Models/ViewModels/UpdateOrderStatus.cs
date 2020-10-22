@@ -8,6 +8,6 @@ namespace Charcutarie.Models.ViewModels
     public class UpdateOrderStatus
     {
         public OrderStatusEnum OrderStatusId { get; set; }
-        public int OrderNumber { get; set; }
+        public long OrderNumber { get; set; }
     }
 }

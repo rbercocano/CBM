@@ -2,6 +2,7 @@ import { OrderStatus } from './orderStatus';
 import { PaymentStatus } from './paymentStatus';
 import { MergedCustomer } from './mergedCustomer';
 import { OrderItemDetails } from './orderItemDetails';
+import { Transaction } from './transaction';
 
 export interface OrderDetails {
     orderId: number;
@@ -23,4 +24,8 @@ export interface OrderDetails {
     orderTotal: number;
     itemsTotalCost: number;
     itemsTotalProfit: number;
+    payments: number;
+    tips: number;
+    remainingBalance: number;
+    transactions: Transaction[];
 }

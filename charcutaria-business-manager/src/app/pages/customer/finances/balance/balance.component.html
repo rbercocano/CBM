@@ -1,0 +1,226 @@
+<app-toolbar [title]="'Lançamentos / Extrato'">
+    <button type="button" class="btn btn-mini btn-primary" placement="top" ngbTooltip="Incluir Lançamento"
+        (click)="openTransactionModal()">
+        <i class="fa fa-plus"></i>
+    </button>
+    <button type="button" class="btn btn-mini btn-primary" placement="top" ngbTooltip="Buscar por período"
+        (click)="openSearchModal()">
+        <i class="fa fa-search"></i>
+    </button>
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Atualizar" (click)="search()">
+        <i class="fa fa-refresh"></i>
+    </button>
+</app-toolbar>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Lançamentos do período de <span class="theme-color inline">{{start | date: 'dd/MM/yyyy'}}</span> à
+                    <span class="theme-color inline">{{end | date: 'dd/MM/yyyy'}}</span></h5>
+                <span class="balance">Saldo: <span class="balance-amount" [ngClass]="{'positive-amount':totalBalance>=0,'text-danger':totalBalance
+                        <0}">
+                        {{totalBalance|cbmCurrency}}</span></span>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="balance != null && balance.length>0">
+
+                            <ng-container *ngFor="let b of balance;let odd=odd">
+                                <tr [class.bg-gray]="odd">
+                                    <td>
+                                        <button class="btn btn-primary btn-mini" type="button"
+                                            (click)="b.showDetails= !b.showDetails">
+                                            <i class="fa"
+                                                [ngClass]="{'fa-plus': !b.showDetails, 'fa-minus': b.showDetails}"></i>
+                                        </button>
+                                    </td>
+                                    <td>{{b.transactionDate | date: 'dd/MM/yyyy HH:mm'}}</td>
+                                    <td>{{b.description}}</td>
+                                    <td [ngClass]="{'positive-amount':b.amount>=0,'text-danger':b.amount<0}">
+                                        {{b.amount | cbmCurrency}}</td>
+                                    <td
+                                        [ngClass]="{'positive-amount':b.remainingBalance>=0,'text-danger':b.remainingBalance<0}">
+                                        {{b.remainingBalance | cbmCurrency}}</td>
+                                </tr>
+                                <tr *ngIf="b.showDetails" [class.bg-gray]="odd">
+                                    <td class="details"></td>
+                                    <td colspan="4" class="details">
+                                        <div class="row">
+                                            <div class="col-6"><b>Forma de Pagamento:</b>
+                                                {{b.transactionType}}</div>
+                                            <div class="col-6 text-right"><b>Transação efetuada por:</b>
+                                                {{b.userFullName}}({{b.username}})</div>
+                                            <div class="col-6"><b>Mercante:</b> {{b.merchantName}}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                        <tr *ngIf="balance == null || balance.length == 0 ">
+                            <td colspan="5" class="text-center bg-gray">
+                                Não existem lançamentos para este período
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #transModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">Efetuar Lançamento</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form name="form" #f="ngForm" (ngSubmit)="add(f)" novalidate>
+        <div class="modal-body ">
+            <div class="row form-group">
+                <div class="col-6">
+                    <label class="m-b-0">Tipo de Lançamento</label>
+                    <select class="form-control" (change)="filterTypes()" [(ngModel)]="selectedInOut" name="fInOut"
+                        #fInOut="ngModel">
+                        <option [ngValue]="t.id" *ngFor="let t of inOut">
+                            {{t.desc}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="m-b-0">Forma de Pagamento</label>
+                    <select class="form-control" [(ngModel)]="transaction.transactionTypeId" name="transactionTypeId"
+                        #transactionTypeId="ngModel">
+                        <option [ngValue]="t.transactionTypeId" *ngFor="let t of filteredTypes">
+                            {{t.description}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-6" [class.has-danger]="amount.invalid && f.submitted">
+                    <label class="m-b-0">Valor</label>
+                    <input class="form-control" [(ngModel)]="transaction.amount" type="text" currencyMask
+                        [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" required name="amount"
+                        #amount="ngModel" minValue="0.01" maxlength="10" />
+                    <div class="col-form-label" *ngIf="amount.invalid && f.submitted">
+                        <span style="display: table;" *ngIf="amount.errors.required">Campo Obrigatório</span>
+                        <span style="display: table;" *ngIf="amount.errors.minValue">O valor deve ser maior que
+                            Zero</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label class="m-b-0">Data da Transacão</label>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group">
+                                <input class="form-control" type="text" [(ngModel)]="transaction.date" name="date"
+                                    #date="ngbDatepicker" placement="bottom-left" readonly ngbDatepicker
+                                    [maxDate]="maxDate">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm" (click)="date.toggle()" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <ngb-timepicker [(ngModel)]="time" name="time" [spinners]="false"></ngb-timepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" [class.has-danger]="merchantName.invalid && f.submitted">
+                    <label class="m-b-0">Mercante</label>
+                    <input class="form-control" [(ngModel)]="transaction.merchantName" type="text" name="merchantName"
+                        #merchantName="ngModel" required maxlength="50" />
+                    <div class="col-form-label" *ngIf="amount.invalid && amount.errors.required  && f.submitted">
+                        Campo obrigatório
+                    </div>
+                </div>
+                <div class="col-12" [class.has-danger]="description.invalid && f.submitted">
+                    <label class="m-b-0">Descrição</label>
+                    <textarea class="form-control" [(ngModel)]="transaction.description" type="text" name="description"
+                        #description="ngModel" required rows="4" maxlength="200"></textarea>
+                    <div class="col-form-label"
+                        *ngIf="description.invalid && description.errors.required  && f.submitted">
+                        Campo obrigatório
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger btn-mini" (click)="modal.dismiss()">
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary btn-mini">
+                Confirmar
+            </button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #searchModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">Efetuar Lançamento</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="row form-group">
+            <div class="col-6">
+                <label class="m-b-0">Data de Início</label>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <input class="form-control" type="text" [(ngModel)]="start" name="dstart"
+                                #dstart="ngbDatepicker" placement="bottom-left" readonly ngbDatepicker
+                                [maxDate]="maxDate">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-sm" (click)="dstart.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="m-b-0">Data Final</label>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <input class="form-control" type="text" [(ngModel)]="end" name="dend" #dend="ngbDatepicker"
+                                placement="bottom-left" readonly ngbDatepicker [maxDate]="maxDate">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-sm" (click)="dend.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-danger text-center" *ngIf="!canSearch">
+                O período não pode ser maior que 180 dias
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mini" (click)="modal.dismiss()">
+            Cancelar
+        </button>
+        <button type="button" class="btn btn-primary btn-mini" (click)="search()" [disabled]="!canSearch">
+            Buscar
+        </button>
+    </div>
+</ng-template>
+<app-toasts></app-toasts>

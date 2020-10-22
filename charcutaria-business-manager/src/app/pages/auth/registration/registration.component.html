@@ -74,8 +74,8 @@
                                         </div>
                                     </div>
                                     <div class="left-panel">
-                                        <ng-container *ngIf="client.customerTypeId==1" [class.has-danger]="f.submitted && name.invalid">
-                                            <div class="input-group">
+                                        <ng-container *ngIf="client.customerTypeId==1" >
+                                            <div class="input-group" [class.has-danger]="f.submitted && name.invalid">
                                                 <input type="text" class="form-control" placeholder="Nome"
                                                     [(ngModel)]="client.name" #name="ngModel" name="name" required>
                                                 <span class="md-line"></span>

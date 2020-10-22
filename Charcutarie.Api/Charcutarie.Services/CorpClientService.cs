@@ -28,6 +28,7 @@ namespace Charcutarie.Services
         }
         public async Task<CorpClient> Register(ClientRegistration model)
         {
+            using var trans = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             model.Mobile = $"+55 {model.Mobile}";
             var type = model.CustomerTypeId == 1 ? "CPF" : "CNPJ";
             var existingClient = await (model.CustomerTypeId == 1 ?

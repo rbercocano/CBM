@@ -25,7 +25,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                  .HasConversion(v => (int)v,
                                 v => (MeasureUnitTypeEnum)v);
             builder.Property(p => p.Quantity)
-                .HasColumnType("DECIMAL(18,2)")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
         }
     }

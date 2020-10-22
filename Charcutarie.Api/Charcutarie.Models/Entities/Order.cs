@@ -8,7 +8,7 @@ namespace Charcutarie.Models.Entities
     public class Order
     {
         public long OrderId { get; set; }
-        public int OrderNumber { get; set; }
+        public long OrderNumber { get; set; }
         public long CustomerId { get; set; }
         public Customer Customer { get; set; }
         public DateTime CreatedOn { get; set; }
@@ -21,5 +21,6 @@ namespace Charcutarie.Models.Entities
         public PaymentStatus PaymentStatus { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public List<OrderItem> OrderItems { get; set; }
+        public List<Transaction> Transactions { get; set; }
     }
 }

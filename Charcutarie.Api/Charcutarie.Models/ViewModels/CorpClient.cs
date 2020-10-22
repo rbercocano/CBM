@@ -10,7 +10,8 @@ namespace Charcutarie.Models.ViewModels
         public DateTime CreatedOn { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string DBAName { get; set; }
+        public string DbaName { get; set; }
+        public string Mobile { get; set; }
         public bool Active { get; set; }
         public string Currency { get; set; }
         public int CustomerTypeId { get; set; }

@@ -21,6 +21,10 @@ import { OrderItemDetails } from 'src/app/shared/models/orderItemDetails';
 import { OrderItem } from 'src/app/shared/models/orderItem';
 import { NewOrderItem } from 'src/app/shared/models/NewOrderItem';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
+import { PayOrder } from 'src/app/shared/models/payOrder';
+import { TransactionType } from 'src/app/shared/models/transactionType';
+import { Transaction } from 'src/app/shared/models/transaction';
+import { RefundPayment } from 'src/app/shared/models/refundPayment';
 
 @Component({
   selector: 'app-edit-order',
@@ -33,19 +37,26 @@ export class EditOrderComponent implements OnInit {
   @ViewChild("restore", { static: false }) cRestore: ConfirmModalComponent;
   @ViewChild("cancelorder", { static: false }) cCancelOrder: ConfirmModalComponent;
   @ViewChild("removeitem", { static: false }) cRemoveItem: ConfirmModalComponent;
+  @ViewChild('confirmRefund', { static: false }) cRefund: ConfirmModalComponent;
+  @ViewChild('paymentModal', { static: true }) paymentModalContent: any;
   public order: OrderDetails;
   public minDate: NgbDateStruct;
-  public paymentStatus: PaymentStatus[] = [];
+  public transactionTypes: TransactionType[] = [];
   public orderStatus: OrderStatus[] = [];
   public orderItemStatus: OrderItemStatus[] = [];
   public products: Product[] = [];
   public measures: MeasureUnit[] = [];
   private modal: NgbModalRef;
+  public payment: PayOrder = {} as PayOrder;
   private lastStatus: { paymentStatusId, orderStatusId } = null;
   public currentQuote: ProductQuote = { orderItemId: null, orderItemStatus: null, quantity: 0, discount: 0, finalPrice: 0, measureUnit: null, price: 0, product: null, additionalInfo: '' };
   private qtdSubject: Subject<number> = new Subject();
   public canEditItem = true;
   private itemToRemove: OrderItem;
+  private selectedTransction: Transaction;
+
+  public showTransactions = false;
+
   constructor(private orderService: OrderService,
     private route: ActivatedRoute,
     private router: Router,
@@ -63,18 +74,27 @@ export class EditOrderComponent implements OnInit {
     };
     this.qtdSubject.pipe(debounceTime(500)).subscribe(r => this.calculatePrice());
   }
-
+  private resetPayemnt() {
+    this.payment.amount = 0;
+    this.payment.tip = 0;
+    this.payment.orderPaymentMethod = 8;
+    this.payment.tipPaymentMethod = 8;
+    this.payment.orderNumber = this.order.orderNumber;
+  }
   ngOnInit(): void {
     this.spinner.show();
     let orderNumber = this.route.snapshot.params.id;
-    let oPaymentStatus = this.domainService.GetPaymentStatus();
+    let oTransactionTypes = this.domainService.GetTransactionTypes();
     let oOrderStatus = this.domainService.GetOrderStatus();
     let oOrderItemStatus = this.domainService.GetOrderItemStatus();
     let oOrder = this.orderService.getByNumber(orderNumber);
     let oMeasures = this.domainService.GetMeasureUnits();
     let oProducts = this.productService.GetAll();
-    forkJoin([oPaymentStatus, oOrderStatus, oOrderItemStatus, oOrder, oMeasures, oProducts]).subscribe(r => {
-      this.paymentStatus = r[0] ?? [];
+    forkJoin([oTransactionTypes, oOrderStatus, oOrderItemStatus, oOrder, oMeasures, oProducts]).subscribe(r => {
+      (r[0] ?? []).filter((v, i) => {
+        if (v.type == 'I')
+          this.transactionTypes.push(v);
+      });
       this.orderStatus = r[1] ?? [];
       this.orderItemStatus = r[2] ?? [];
       this.setOrder(r[3]);
@@ -95,6 +115,8 @@ export class EditOrderComponent implements OnInit {
   }
   private setOrder(result: OrderDetails) {
     this.order = result;
+
+    this.order.transactions = (this.order.transactions ?? []);
     if (result == null) return;
     this.lastStatus = {
       orderStatusId: this.order.orderStatusId,
@@ -104,8 +126,39 @@ export class EditOrderComponent implements OnInit {
     this.spinner.hide();
   }
   private setOrderStatuses() {
-    this.order.paymentStatus = this.paymentStatus.filter((v, i) => v.paymentStatusId == this.order.paymentStatusId)[0];
     this.order.orderStatus = this.orderStatus.filter((v, i) => v.orderStatusId == this.order.orderStatusId)[0];
+  }
+  pay() {
+    this.modal.close();
+    this.spinner.show();
+    this.orderService.addPayment(this.payment).pipe(flatMap(r => {
+      return this.orderService.getByNumber(this.order.orderNumber)
+    })).subscribe(r => {
+      this.setOrder(r);
+      this.spinner.hide();
+      this.notificationService.showSuccess('Sucesso', 'Pagamento realizado com sucesso.');
+    }, e => {
+      this.spinner.hide();
+      this.notificationService.notifyHttpError(e);
+    });
+  }
+  refund() {
+    this.cRefund.close();
+    this.spinner.show();
+    let refund: RefundPayment = {
+      orderNumber: this.order.orderNumber,
+      transactionId: this.selectedTransction.transactionId
+    };
+    this.orderService.refundPayment(refund).pipe(flatMap(r => {
+      return this.orderService.getByNumber(this.order.orderNumber)
+    })).subscribe(r => {
+      this.setOrder(r);
+      this.spinner.hide();
+      this.notificationService.showSuccess('Sucesso', 'Pagamento estornado com sucesso.');
+    }, e => {
+      this.spinner.hide();
+      this.notificationService.notifyHttpError(e);
+    });
   }
   save() {
     if (this.order.completeBy == null) return;
@@ -114,7 +167,7 @@ export class EditOrderComponent implements OnInit {
       completeBy: this.order.completeBy,
       freightPrice: this.order.freightPrice,
       orderNumber: this.order.orderNumber,
-      paymentStatusId: this.order.paymentStatus.paymentStatusId
+      paymentStatusId: this.order.paymentStatusId,
     }).pipe(flatMap(r => {
       return this.orderService.getByNumber(this.order.orderNumber)
     })).subscribe(r => {
@@ -165,9 +218,17 @@ export class EditOrderComponent implements OnInit {
   public confirmCancelOrder() {
     this.cCancelOrder.open();
   }
+  public openPayments() {
+    this.resetPayemnt();
+    this.modal = this.modalService.open(this.paymentModalContent, { size: 'lg' });
+  }
   public confirmRemoval(item: OrderItem) {
     this.itemToRemove = item;
     this.cRemoveItem.open();
+  }
+  public confirmRefund(item: Transaction) {
+    this.selectedTransction = item;
+    this.cRefund.open();
   }
   public closeOrder(orderNumber: any) {
     this.cClose.close();
