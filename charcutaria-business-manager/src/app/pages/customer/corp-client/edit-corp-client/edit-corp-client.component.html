@@ -53,11 +53,11 @@
                                     maxlength="14" mask="000.000.000-00" [dropSpecialCharacters]="false"
                                     [disabled]="!editing">
                                 <span class="md-line"></span>
-                                <div *ngIf="f.submitted && cpf.invalid" class="error">
-                                    <div *ngIf="cpf.errors.required">Campo Obrigatório</div>
-                                    <div *ngIf="cpf.errors.cpf">CPF Inválido</div>
-                                </div>
                             </div>
+                        </div>
+                        <div *ngIf="f.submitted && cpf.invalid" class="error">
+                            <div *ngIf="cpf.errors.required">Campo Obrigatório</div>
+                            <div *ngIf="cpf.errors.cpf">CPF Inválido</div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="client.customerTypeId==2">
@@ -102,9 +102,8 @@
                     <div class="row form-group" [class.has-danger]="f.submitted && mobile.invalid">
                         <label class="col-4 m-b-0">Celular</label>
                         <div class="col-8">
-                            <input type="text" class="form-control" placeholder="Celular"
-                                 [(ngModel)]="client.mobile" #mobile="ngModel"
-                                name="mobile" required [disabled]="!editing">
+                            <input type="text" class="form-control" placeholder="Celular" [(ngModel)]="client.mobile"
+                                #mobile="ngModel" name="mobile" required [disabled]="!editing">
                             <span class="md-line"></span>
                             <div *ngIf="f.submitted && mobile.invalid" class="error">
                                 <div *ngIf="mobile.errors.required">Campo Obrigatório</div>

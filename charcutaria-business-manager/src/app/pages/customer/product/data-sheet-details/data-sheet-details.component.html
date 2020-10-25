@@ -1,12 +1,13 @@
 <app-toolbar [title]="title">
-    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar Ficha Técnica" (click)="datasheet()">
+    <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Editar Ficha Técnica" (click)="datasheet()"
+        *ngIf="products.length > 0">
         <i class="fa fa-pencil"></i>
     </button>
     <button class="btn btn-primary btn-mini" placement="top" ngbTooltip="Ir para Produtos" (click)="back()">
         <i class="fa fa-list"></i>
     </button>
 </app-toolbar>
-<div class="row">
+<div class="row" *ngIf="products.length > 0">
     <div class="col-5">
         <div class="card">
             <div class="card-header p-b-0">
@@ -117,6 +118,14 @@
                     <b>Procedimento não cadastrado</b>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="products.length == 0">
+    <div class="col-12">
+        <div class="alert alert-warning background-warning text-center">
+            Nenhum produto cadastrado!
         </div>
     </div>
 </div>

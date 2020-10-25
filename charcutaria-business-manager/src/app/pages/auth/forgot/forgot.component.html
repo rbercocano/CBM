@@ -19,17 +19,17 @@
                             </p>
                             <hr />
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Conta"
+                                <input type="text" class="form-control" placeholder="Conta" mask="00000000"
                                     [(ngModel)]="login.accountNumber" #accountNumber="ngModel" name="accountNumber"
-                                    required digitOnly maxlength="10">
+                                    required digitOnly maxlength="8">
                                 <div *ngIf="f.submitted && accountNumber.invalid" class="error">
                                     <div *ngIf="accountNumber.errors.required">Informe o número da conta</div>
                                 </div>
                                 <span class="md-line"></span>
                             </div>
                             <div class="input-group">
-                                <input [disabled]="loading" type="text" class="form-control" placeholder="Login"
-                                    [(ngModel)]="login.username" #username="ngModel" mask="00000000" required name="username">
+                                <input  type="text" class="form-control" placeholder="Login"
+                                    [(ngModel)]="login.username" #username="ngModel"  required name="username">
                                 <div *ngIf="f.submitted && username.invalid" class="error">
                                     <div *ngIf="username.errors.required">Informe seu login</div>
                                 </div>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="row m-t-15">
                                 <div class="col-md-12">
-                                    <button type="button" type="submit" [disabled]="loading"
+                                    <button type="button" type="submit" 
                                         class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Redefinir
                                         Senha</button>
                                     <div class="input-group" *ngIf="email.length">

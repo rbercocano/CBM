@@ -41,6 +41,13 @@ import { SecurePasswordDirective } from './directives/secure-password/secure-pas
 import { MobilePhoneDirective } from './directives/mobile-phone/mobile-phone.directive';
 import { TransactionService } from './services/transaction/transaction.service';
 import { MinValueDirective } from './directives/min-value/min-value.directive';
+import { TotalSalesComponent } from './dashboard-components/total-sales/total-sales.component';
+import { TotalProfitComponent } from './dashboard-components/total-profit/total-profit.component';
+import { TotalPendingPaymentsComponent } from './dashboard-components/total-pending-payments/total-pending-payments.component';
+import { TopFiveProfitComponent } from './dashboard-components/top-five-profit/top-five-profit.component';
+import { SalesLastSixMonthsComponent } from './dashboard-components/sales-last-six-months/sales-last-six-months.component';
+import { TotalOrdersComponent } from './dashboard-components/total-orders/total-orders.component';
+import { TopFiveSalesComponent } from './dashboard-components/top-five-sales/top-five-sales.component';
 
 
 
@@ -65,7 +72,15 @@ import { MinValueDirective } from './directives/min-value/min-value.directive';
     CnpjDirective,
     SecurePasswordDirective,
     MobilePhoneDirective,
-    MinValueDirective],
+    MinValueDirective,
+    TotalOrdersComponent,
+    TotalSalesComponent,
+    TotalProfitComponent,
+    TotalPendingPaymentsComponent,
+    TopFiveSalesComponent,
+    TopFiveProfitComponent,
+    SalesLastSixMonthsComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -98,7 +113,14 @@ import { MinValueDirective } from './directives/min-value/min-value.directive';
     CnpjDirective,
     SecurePasswordDirective,
     MobilePhoneDirective,
-    MinValueDirective
+    MinValueDirective,
+    TotalOrdersComponent,
+    TotalSalesComponent,
+    TotalProfitComponent,
+    TotalPendingPaymentsComponent,
+    TopFiveSalesComponent,
+    TopFiveProfitComponent,
+    SalesLastSixMonthsComponent
   ],
   providers: [
     UserService,

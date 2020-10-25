@@ -26,7 +26,6 @@ export class EditCorpClientComponent implements OnInit {
     private notificationService: NotificationService) { }
 
   ngOnInit(): void {
-    if (this.form.invalid) return;
     this.spinner.show();
     this.corpClientService.GetCorpClient(this.authService.userData.corpClientId).subscribe(r => {
       this.client = r;
@@ -39,10 +38,12 @@ export class EditCorpClientComponent implements OnInit {
     });
   }
   public save(): void {
+    if (this.form.invalid) return;
     this.spinner.show();
     this.corpClientService.Update(this.client).subscribe(r => {
       this.spinner.hide();
       this.editing = false;
+      this.notificationService.showSuccess('Sucesso', 'Dados atualizados com sucesso');
     }, (e) => {
       this.spinner.hide();
       this.notificationService.notifyHttpError(e);

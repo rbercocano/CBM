@@ -12,6 +12,7 @@ import { MeasureUnit } from 'src/app/shared/models/measureUnit';
 import { ProductionItem } from 'src/app/shared/models/productionItem';
 import { flatMap, tap } from 'rxjs/operators';
 import { ProductionSummary } from 'src/app/shared/models/productionSummary';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-data-sheet-details',
@@ -43,7 +44,13 @@ export class DataSheetDetailsComponent implements OnInit {
     }
     this.productService.GetAll().pipe(
       flatMap(r => {
-        this.products = r;
+        this.products = r ?? [];
+        let oDataSheet = of(this.dataSheet);
+        let oMeasures = of(this.measures);
+
+        if (this.products.length == 0)
+          return forkJoin([oDataSheet, oMeasures]);
+
         if (state != null) {
           this.production.quantity = state.quantity;
           this.production.measureUnit = state.measureUnitId;
@@ -53,8 +60,6 @@ export class DataSheetDetailsComponent implements OnInit {
 
         var prod = this.products.filter(p => p.productId == this.production.productId);
         this.product = prod[0];
-        let oDataSheet = this.productService.getDataSheet(this.production.productId);
-        let oMeasures = this.domainService.GetMeasureUnits();
         return forkJoin([oDataSheet, oMeasures]);
       }),
       flatMap(r => {
@@ -62,9 +67,11 @@ export class DataSheetDetailsComponent implements OnInit {
           this.production.measureUnit = this.product.measureUnitId;
           this.production.quantity = 1;
         }
-        let result: ProductionItem[] = [];
         this.dataSheet = r[0] ?? { dataSheetId: null, dataSheetItems: [], procedureDescription: null, productId: this.product.productId, weightVariationPercentage: 0, increaseWeight: true };
         this.measures = r[1] ?? [];
+
+        if (this.products.length == 0)
+          return of(this.summary);
 
         return this.productService.calculateProduction(this.product.productId, this.production.measureUnit, this.production.quantity);
       })).subscribe(r => {
@@ -101,7 +108,7 @@ export class DataSheetDetailsComponent implements OnInit {
     return this.summary.productionItems.filter(i => !i.isBaseItem);
   }
   public get title(): string {
-    return `${this.product.name} / Ficha Técnica`;
+    return this.product != null ? `${this.product.name} / Ficha Técnica` : 'Ficha Técnica';
   }
   calculate() {
     this.spinner.show();

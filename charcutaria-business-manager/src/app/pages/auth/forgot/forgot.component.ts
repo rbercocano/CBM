@@ -12,19 +12,12 @@ import { NotificationService } from 'src/app/shared/services/notification/notifi
 })
 export class ForgotComponent implements OnInit {
   @ViewChild('f', { static: true }) form: NgForm;
-  public loading = true;
   public email: string = "";
-  public corpClients: CorpClient[] = [];
   public login = { accountNumber: "", username: "" };
-  constructor(private corpClientService: CorpClientService,
-    private notificationService: NotificationService,
+  constructor(private notificationService: NotificationService,
     private userService: UserService) { }
 
   ngOnInit(): void {
-    this.corpClientService.GetActives().subscribe(c => {
-      this.corpClients = c;
-      this.loading = false;
-    });
   }
   reset(): void {
     this.email = "";

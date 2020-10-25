@@ -464,7 +464,22 @@ namespace Charcutarie.Repository
 	                                            CAST(CAST(YEAR(O.CreatedOn) AS VARCHAR(4)) + '-'+CAST(MONTH(O.CreatedOn) AS VARCHAR(2))+'-01' AS DATE)
                                             ORDER BY 1 DESC");
             var data = await context.SalesPerMonths.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToListAsync();
+            var range = new[] { DateTime.Now,
+                DateTime.Now.AddMonths(-1),
+                DateTime.Now.AddMonths(-2),
+                DateTime.Now.AddMonths(-3),
+                DateTime.Now.AddMonths(-4),
+                DateTime.Now.AddMonths(-5) }.ToList();
             var result = mapper.Map<IEnumerable<SalesPerMonth>>(data);
+            result = (from d in range
+                      join r in result on d.ToString("yyyy/MM") equals r.Date.ToString("yyyy/MM") into gj
+                      from s in gj.DefaultIfEmpty()
+                      select new SalesPerMonth
+                      {
+                          Date = new DateTime(d.Year, d.Month, 1),
+                          TotalProfit = s?.TotalProfit ?? 0,
+                          TotalSales = s?.TotalSales ?? 0
+                      }).ToList();
             return result.OrderBy(o => o.Date);
         }
 

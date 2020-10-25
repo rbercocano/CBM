@@ -18,7 +18,7 @@
                 <h5>Lançamentos do período de <span class="theme-color inline">{{start | date: 'dd/MM/yyyy'}}</span> à
                     <span class="theme-color inline">{{end | date: 'dd/MM/yyyy'}}</span></h5>
                 <span class="balance">Saldo: <span class="balance-amount" [ngClass]="{'positive-amount':totalBalance>=0,'text-danger':totalBalance
-                        <0}">
+                        < 0}">
                         {{totalBalance|cbmCurrency}}</span></span>
             </div>
             <div class="card-body">

@@ -59,7 +59,7 @@ export class BalanceComponent implements OnInit {
     forkJoin([oTypes, oBal, oTotalBal]).subscribe(r => {
       this.types = r[0] ?? [];
       this.balance = r[1] ?? [];
-      this.totalBalance = r[2] ?? 0;
+      this.totalBalance = r[2];
       this.spinner.hide();
     }, e => {
       this.spinner.hide();
@@ -85,10 +85,13 @@ export class BalanceComponent implements OnInit {
     this.spinner.show();
     this.transactionService.Add(this.transaction)
       .pipe(flatMap(r => {
-        return this.transactionService.GetBalance(this.start, this.end);
+        var oBal = this.transactionService.GetBalance(this.start, this.end);
+        var oTot = this.transactionService.GetTotalBalance();
+        return forkJoin([oBal, oTot]);
       }))
       .subscribe(r => {
-        this.balance = r;
+        this.balance = r[0] ?? [];
+        this.totalBalance = r[1];
         this.transaction = {} as NewTransaction;
         this.spinner.hide();
       }, e => {

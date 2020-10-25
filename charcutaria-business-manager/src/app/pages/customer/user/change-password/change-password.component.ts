@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { NotificationService } from 'src/app/shared/services/notification/notification.service';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { ChangePassword } from 'src/app/shared/models/ChangePassword';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-change-password',
@@ -15,12 +16,13 @@ export class ChangePasswordComponent implements OnInit {
   public email: string = "";
   public login: ChangePassword = {} as ChangePassword;
   constructor(private notificationService: NotificationService,
+    private spinner: NgxSpinnerService,
     private userService: UserService) { }
 
   ngOnInit(): void {
   }
   confirm(): void {
-    if(this.login.newPassword != this.login.newPasswordConfirmation){
+    if (this.login.newPassword != this.login.newPasswordConfirmation) {
       this.notificationService.showError('Atenção', 'As novas senhas não coincidem');
       return;
     }
@@ -30,12 +32,15 @@ export class ChangePasswordComponent implements OnInit {
       return;
     }
     if (this.form.valid) {
+      this.spinner.show();
       this.userService.changePassword(this.login).subscribe(r => {
         this.email = r.email;
         this.login = {} as ChangePassword;
-        this.notificationService.showSuccess('Sucesso','Senha atualizada com sucesso');
+        this.notificationService.showSuccess('Sucesso', 'Senha atualizada com sucesso');
+        this.spinner.hide();
 
       }, e => {
+        this.spinner.hide();
         this.notificationService.notifyHttpError(e);
       });
     }
