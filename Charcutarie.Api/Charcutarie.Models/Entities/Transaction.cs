@@ -8,7 +8,7 @@ namespace Charcutarie.Models.Entities
     {
         public long TransactionId { get; set; }
         public decimal Amount { get; set; }
-        public DateTimeOffset Date { get; set; }
+        public DateTime Date { get; set; }
         public string Description { get; set; }
         public string MerchantName { get; set; }
         public int TransactionTypeId { get; set; }

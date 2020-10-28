@@ -32,10 +32,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired()
                 .HasConversion(v => Password.Encrypt(v), v => Password.Decrypt(v));
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DateTimeOffset")
+                .HasColumnType("DateTime")
                 .IsRequired();
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DateTimeOffset");
+                .HasColumnType("DateTime");
 
             builder.Property(p => p.DateOfBirth)
                 .HasColumnType("DATETIME");

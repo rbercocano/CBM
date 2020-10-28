@@ -25,11 +25,11 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
 
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DateTimeOffset")
+                .HasColumnType("DateTime")
                 .IsRequired();
 
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DateTimeOffset");
+                .HasColumnType("DateTime");
 
 
             //builder.Property(p => p.Name)

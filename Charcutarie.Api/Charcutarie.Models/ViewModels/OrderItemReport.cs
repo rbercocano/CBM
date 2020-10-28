@@ -20,7 +20,7 @@ namespace Charcutarie.Models.ViewModels
         public string OrderItemStatus { get; set; }
         public int OrderItemStatusId { get; set; }
         public decimal FinalPrice { get; set; }
-        public DateTimeOffset LastStatusDate { get; set; }
+        public DateTime LastStatusDate { get; set; }
         public DateTime CompleteBy { get; set; }
     }
 }

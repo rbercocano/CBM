@@ -6,8 +6,8 @@ namespace Charcutarie.Models.ViewModels
 {
     public class User
     {
-        public DateTimeOffset CreatedOn { get; set; }
-        public DateTimeOffset? LastUpdated { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? LastUpdated { get; set; }
         public int? CorpClientId { get; set; }
         public long UserId { get; set; }
         public string Username { get; set; }

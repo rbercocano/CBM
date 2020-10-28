@@ -16,6 +16,6 @@ namespace Charcutarie.Models.ViewModels
         public string CPF { get; set; }
         public string CNPJ { get; set; }
         public string Mobile { get; set; }
-        public DateTimeOffset? LicenseExpirationDate { get; set; }
+        public DateTime? LicenseExpirationDate { get; set; }
     }
 }

@@ -15,10 +15,10 @@ namespace Charcutarie.Models.ViewModels
         public long OrderId { get; set; }
         public long CustomerId { get; set; }
         public long OrderNumber { get; set; }
-        public DateTimeOffset CreatedOn { get; set; }
-        public DateTimeOffset? LastUpdated { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? LastUpdated { get; set; }
         public DateTime CompleteBy { get; set; }
-        public DateTimeOffset? PaidOn { get; set; }
+        public DateTime? PaidOn { get; set; }
         public int OrderStatusId { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public int PaymentStatusId { get; set; }

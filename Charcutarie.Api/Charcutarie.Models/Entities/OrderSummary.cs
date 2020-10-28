@@ -17,8 +17,8 @@ namespace Charcutarie.Models.Entities
         public int PaymentStatusId { get; set; }
         public string PaymentStatus { get; set; }
         public DateTime CompleteBy { get; set; }
-        public DateTimeOffset CreatedOn { get; set; }
-        public DateTimeOffset? PaidOn { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? PaidOn { get; set; }
         public decimal FinalPrice { get; set; }
         public long CustomerId { get; set; }
     }

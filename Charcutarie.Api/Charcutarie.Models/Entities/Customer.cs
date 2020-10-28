@@ -8,8 +8,8 @@ namespace Charcutarie.Models.Entities
     {
         public long CustomerId { get; set; }
         public int CustomerTypeId { get; set; }
-        public DateTimeOffset CreatedOn { get; set; }
-        public DateTimeOffset? LastUpdated { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? LastUpdated { get; set; }
         public int CorpClientId { get; set; }
         public CustomerType CustomerType { get; set; }
         public List<Order> Orders { get; set; }
