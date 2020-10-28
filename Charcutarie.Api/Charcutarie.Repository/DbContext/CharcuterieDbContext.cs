@@ -29,14 +29,14 @@ namespace Charcutarie.Repository.DbContext
                 {
                     var property = entityEntry.Properties.FirstOrDefault(p => p.Metadata.Name == "CreatedOn");
                     if (property != null)
-                        entityEntry.Property("CreatedOn").CurrentValue = DateTime.Now;
+                        entityEntry.Property("CreatedOn").CurrentValue = DateTimeOffset.UtcNow;
                 }
 
                 if (entityEntry.State == EntityState.Modified)
                 {
                     var property = entityEntry.Properties.FirstOrDefault(p => p.Metadata.Name == "LastUpdated");
                     if (property != null)
-                        entityEntry.Property("LastUpdated").CurrentValue = DateTime.Now;
+                        entityEntry.Property("LastUpdated").CurrentValue = DateTimeOffset.UtcNow;
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

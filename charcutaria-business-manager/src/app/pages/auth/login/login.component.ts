@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 import { flatMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user/user.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -20,13 +21,15 @@ export class LoginComponent implements OnInit {
   public login: Login = { accountNumber: null, password: "", username: "" };
   constructor(
     private userService: UserService,
-    private authService: AuthService, private route: Router) { }
+    private authService: AuthService, private route: Router,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
   }
   signIn(): void {
     this.authRes = "";
     if (this.form.valid) {
+      this.spinner.show();
       this.authService.logIn(this.login)
         .pipe(flatMap(r => {
           if (r && r.authenticated)
@@ -37,6 +40,7 @@ export class LoginComponent implements OnInit {
           else
             return of(r);
         })).subscribe(r => {
+          this.spinner.hide();
           if (r && r.authenticated)
             this.route.navigate(['/']);
           else

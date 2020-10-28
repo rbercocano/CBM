@@ -1,4 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { NotificationService } from '../../services/notification/notification.service';
+import { OrderService } from '../../services/order/order.service';
 
 @Component({
   selector: 'total-orders',
@@ -6,11 +8,19 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./total-orders.component.scss']
 })
 export class TotalOrdersComponent implements OnInit {
-  @Input() totalOrders: number;
-  @Input() totalCompletedOrders: number;
-  constructor() { }
+  public totalOrders: number;
+  public totalCompletedOrders: number;
+  constructor(private orderService: OrderService,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
+    this.orderService.getOrderCountSummary().subscribe(r => {
+      this.totalOrders = r.totalOrders;
+      this.totalCompletedOrders = r.totalCompletedOrders;
+    },
+      e => {
+        this.notificationService.notifyHttpError(e);
+      });
   }
 
 }

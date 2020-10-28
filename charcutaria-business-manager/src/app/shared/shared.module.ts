@@ -48,6 +48,8 @@ import { TopFiveProfitComponent } from './dashboard-components/top-five-profit/t
 import { SalesLastSixMonthsComponent } from './dashboard-components/sales-last-six-months/sales-last-six-months.component';
 import { TotalOrdersComponent } from './dashboard-components/total-orders/total-orders.component';
 import { TopFiveSalesComponent } from './dashboard-components/top-five-sales/top-five-sales.component';
+import { ComponentHostDirective } from './directives/component-host/component-host.directive';
+
 
 
 
@@ -79,7 +81,8 @@ import { TopFiveSalesComponent } from './dashboard-components/top-five-sales/top
     TotalPendingPaymentsComponent,
     TopFiveSalesComponent,
     TopFiveProfitComponent,
-    SalesLastSixMonthsComponent
+    SalesLastSixMonthsComponent,
+    ComponentHostDirective
   ],
   imports: [
     CommonModule,
@@ -120,7 +123,8 @@ import { TopFiveSalesComponent } from './dashboard-components/top-five-sales/top
     TotalPendingPaymentsComponent,
     TopFiveSalesComponent,
     TopFiveProfitComponent,
-    SalesLastSixMonthsComponent
+    SalesLastSixMonthsComponent,
+    ComponentHostDirective
   ],
   providers: [
     UserService,

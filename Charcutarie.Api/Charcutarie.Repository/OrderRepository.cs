@@ -36,7 +36,7 @@ namespace Charcutarie.Repository
             var entity = mapper.Map<EF.Order>(model);
             entity.OrderItems.ForEach(i => i.LastStatusDate = DateTime.Now);
             if (model.PaymentStatusId == PaymentStatusEnum.Pago)
-                entity.PaidOn = DateTime.Now;
+                entity.PaidOn = DateTimeOffset.UtcNow;
             context.Orders.Add(entity);
             var rows = await context.SaveChangesAsync();
             return await Task.FromResult(entity.OrderNumber);

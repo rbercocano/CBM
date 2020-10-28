@@ -1,24 +1,34 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import 'd3';
 import * as c3 from 'c3';
 import * as moment from 'moment';
 import { SalesPerMonth } from '../../models/salesPerMonth';
+import { OrderService } from '../../services/order/order.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'sales-last-six-months',
   templateUrl: './sales-last-six-months.component.html',
-  styleUrls: ['./sales-last-six-months.component.scss']
+  styleUrls: ['./sales-last-six-months.component.scss',
+    '../../../../../node_modules/c3/c3.min.css'],
+  encapsulation: ViewEncapsulation.None
 })
-export class SalesLastSixMonthsComponent implements OnInit, OnChanges {
-  @Input("monthlysales") monthlySales: SalesPerMonth[] = [];
-  constructor() { }
-  ngOnChanges(changes: SimpleChanges): void {
-    this.renderMonthlySales();
-  }
+export class SalesLastSixMonthsComponent implements OnInit {
+  monthlySales: SalesPerMonth[] = [];
+
+  constructor(private orderService: OrderService,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
-    this.renderMonthlySales();
+    this.orderService.getSalesPerMonth().subscribe(r => {
+      this.monthlySales = r;
+      this.renderMonthlySales();
+    },
+      e => {
+        this.notificationService.notifyHttpError(e);
+      });
   }
+
   private renderMonthlySales() {
     setTimeout(() => {
       let profits: Array<any> = ['Lucro'];

@@ -60,6 +60,8 @@ export class DataSheetDetailsComponent implements OnInit {
 
         var prod = this.products.filter(p => p.productId == this.production.productId);
         this.product = prod[0];
+        oDataSheet = this.productService.getDataSheet(this.product.productId);
+        oMeasures = this.domainService.GetMeasureUnits();
         return forkJoin([oDataSheet, oMeasures]);
       }),
       flatMap(r => {

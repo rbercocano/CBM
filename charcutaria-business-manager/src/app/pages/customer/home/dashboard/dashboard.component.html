@@ -1,20 +1,18 @@
 <div class="row">
-  <total-orders [totalOrders]="orderCountSummary.totalOrders" class="col-3"
-    [totalCompletedOrders]="orderCountSummary.totalCompletedOrders">
+  <total-orders class="col-3">
   </total-orders>
-  <total-sales [totalSales]="salesSummary.totalSales" class="col-3"
-    [currentMonthSales]="salesSummary.currentMonthSales">
+  <total-sales class="col-3">
   </total-sales>
-  <total-profit [totalProfit]="profitSummary.totalProfit" class="col-3"
-    [currentMonthProfit]="profitSummary.currentMonthProfit">
+  <total-profit class="col-3">
   </total-profit>
-  <total-pending-payments class="col-3" [totalPendingPayments]="pendingPaymentsSummary.totalPendingPayments"
-    [finishedOrdersPendingPayment]="pendingPaymentsSummary.finishedOrdersPendingPayment">
+  <total-pending-payments class="col-3">
   </total-pending-payments>
-  <top-five-profit [data]="profitAndCost" class="col-3">
+  <top-five-profit class="col-3">
   </top-five-profit>
-  <top-five-sales [data]="production" class="col-3">
+  <top-five-sales class="col-3">
   </top-five-sales>
-  <sales-last-six-months [monthlysales]="monthlySales" class="col-6">
+  <sales-last-six-months class="col-6">
   </sales-last-six-months>
 </div>
+<!-- <div componentHost [componentName]="'total-orders'"
+  [data]="[{key:'totalOrders', value: 5},{key:'totalCompletedOrders', value: 3}]" class="col-3"> </div> -->

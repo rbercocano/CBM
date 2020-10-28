@@ -11,10 +11,10 @@ namespace Charcutarie.Models.Entities
         public long OrderNumber { get; set; }
         public long CustomerId { get; set; }
         public Customer Customer { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
         public DateTime CompleteBy { get; set; }
-        public DateTime? PaidOn { get; set; }
+        public DateTimeOffset? PaidOn { get; set; }
         public OrderStatusEnum OrderStatusId { get; set; }
         public PaymentStatusEnum PaymentStatusId { get; set; }
         public decimal FreightPrice { get; set; }

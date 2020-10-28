@@ -1,10 +1,10 @@
 <div class="card bg-c-green order-card">
     <div class="card-block">
         <h6 class="m-b-20">Top 5 mais lucrativos</h6>
-        <div *ngIf="profitAndCost.length == 0">
+        <div *ngIf="profitAndCost == null || profitAndCost.length == 0">
             Nenhum dado encontrado.
         </div>
-        <table class="table numeric" *ngIf="profitAndCost.length > 0">
+        <table class="table numeric" *ngIf="profitAndCost != null && profitAndCost.length > 0">
             <tr *ngFor="let p of profitAndCost">
                 <td>{{p.product}}</td>
                 <td>{{p.profitPercentage}}%</td>
@@ -12,3 +12,4 @@
         </table>
     </div>
 </div>
+<app-toasts></app-toasts>

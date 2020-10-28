@@ -48,7 +48,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("DATETIME")
                 .IsRequired();
             builder.Property(p => p.LastStatusDate)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DateTimeOffset");
             builder.Property(p => p.OrderItemStatus)
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();

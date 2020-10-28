@@ -1,10 +1,10 @@
 <div class="card bg-c-blue order-card">
     <div class="card-block">
         <h6 class="m-b-20">Top 5 mais vendidos</h6>
-        <div *ngIf="production.length == 0">
+        <div *ngIf="production == null || production.length == 0">
             Nenhum dado encontrado.
         </div>
-        <table class="table numeric" *ngIf="production.length > 0">
+        <table class="table numeric" *ngIf="production != null && production.length > 0">
             <tr *ngFor="let p of production" >
                 <td>{{p.product}}</td>
                 <td>{{p.quantity}} {{p.measureUnit}}</td>
@@ -12,3 +12,4 @@
         </table>
     </div>
 </div>
+<app-toasts></app-toasts>

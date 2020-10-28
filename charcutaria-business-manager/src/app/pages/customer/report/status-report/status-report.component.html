@@ -1,10 +1,10 @@
 <app-toolbar [title]="title">
     <div class="btn-group">
         <button type="button" class="btn btn-mini" [ngClass]="{'btn-secondary':view==1,'btn-primary':view==2}"
-            placement="top" ngbTooltip="Analítico" (click)="view=1;">
+            placement="top" ngbTooltip="Sintético" (click)="view=1;">
             <i class="fa fa-list-alt"></i></button>
         <button type="button" class="btn btn-mini" [ngClass]="{'btn-secondary':view==2,'btn-primary':view==1}"
-            placement="top" ngbTooltip="Sintético" (click)="view=2;">
+            placement="top" ngbTooltip="Analítico" (click)="view=2;">
             <i class="fa fa-th-list"></i>
         </button>
     </div>

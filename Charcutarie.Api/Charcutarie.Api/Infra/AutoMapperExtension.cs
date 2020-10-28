@@ -1,4 +1,5 @@
 ﻿using Charcutarie.Models.MappingProfile;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Charcutarie.Api.Infra

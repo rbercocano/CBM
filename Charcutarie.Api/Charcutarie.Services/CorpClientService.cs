@@ -62,6 +62,7 @@ namespace Charcutarie.Services
                 RoleId = 2,
                 Username = model.Username
             }, result.CorpClientId);
+            trans.Complete();
             emailManager.SendRegistrationEmail(result.AccountNumber, model.Username, model.Email, model.Name, model.CustomerTypeId, model.SocialIdentifier);
             return result;
         }

@@ -20,10 +20,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("BIGINT")
                 .IsRequired();
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DATETIME")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DateTimeOffset");
             builder.Property(p => p.CompleteBy)
                 .HasColumnType("DATETIME")
                 .IsRequired();
@@ -41,7 +41,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.PaidOn)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DateTimeOffset");
             builder.HasMany(p => p.OrderItems)
                 .WithOne(p => p.Order);
             builder.HasOne(p => p.OrderStatus)

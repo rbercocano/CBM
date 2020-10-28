@@ -15,10 +15,10 @@ namespace Charcutarie.Models.Entities
         public decimal  Quantity{ get; set; }
         public OrderItemStatusEnum OrderItemStatusId { get; set; }
         public MeasureUnitEnum MeasureUnitId { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime LastStatusDate { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset LastStatusDate { get; set; }
         
-        public DateTime? LastUpdated { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
         public string AdditionalInfo { get; set; }
         public decimal OriginalPrice { get; set; }
         public decimal Discount { get; set; }

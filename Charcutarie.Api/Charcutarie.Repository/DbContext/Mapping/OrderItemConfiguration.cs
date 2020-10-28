@@ -16,10 +16,12 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("BIGINT")
                 .IsRequired();
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DATETIME")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DateTimeOffset");
+            builder.Property(p => p.LastStatusDate)
+                .HasColumnType("DateTimeOffset");
             builder.Property(p => p.ProductId)
                 .HasColumnType("BIGINT")
                 .IsRequired();

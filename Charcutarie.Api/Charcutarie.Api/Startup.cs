@@ -12,12 +12,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Charcutarie.Api.Infra.Middlewares;
 using Charcutarie.Core.SMTP;
+using System;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Charcutarie.Api
 {
     public class Startup
     {
         public static readonly LoggerFactory DbCommandDebugLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider() });
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +28,7 @@ namespace Charcutarie.Api
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
             services.AddDbContext<CharcuterieDbContext>(options =>
             {
                 options.UseLoggerFactory(DbCommandDebugLoggerFactory);
@@ -46,10 +50,10 @@ namespace Charcutarie.Api
             });
             services.ConfigureJWT(Configuration);
             services.AddHttpContextAccessor();
+            services.AddDIServices();
             services.AddAutoMapper();
             services.AddApiVersioning();
             services.AddControllers();
-            services.AddDIServices();
             services.AddSwagger();
 
             services.AddOptions<SMTPSettings>().Bind(Configuration.GetSection("Smtp"));
