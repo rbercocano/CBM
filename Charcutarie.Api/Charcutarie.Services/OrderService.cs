@@ -112,7 +112,7 @@ namespace Charcutarie.Services
             {
                 Amount = model.Amount,
                 CorpClientId = corpClientId,
-                Date = DateTime.Now,
+                Date = DateTimeOffset.UtcNow,
                 Description = $"Recebimento referente ao Pedido #{currentOrder.OrderNumber}",
                 MerchantName = currentOrder.Customer.Name,
                 OrderId = currentOrder.OrderId,
@@ -126,7 +126,7 @@ namespace Charcutarie.Services
                 {
                     Amount = model.Tip,
                     CorpClientId = corpClientId,
-                    Date = DateTime.Now,
+                    Date = DateTimeOffset.UtcNow,
                     Description = $"Recebimento de Tips referente ao Pedido #{currentOrder.OrderNumber}",
                     MerchantName = currentOrder.Customer.Name,
                     OrderId = currentOrder.OrderId,
@@ -139,7 +139,6 @@ namespace Charcutarie.Services
         }
         public async Task RefundPayment(RefundPayment model, int corpClientId, long userId)
         {
-
             var currentOrder = await GetByNumber(model.OrderNumber, corpClientId);
             var payments = await transactionApp.GetTransactions(currentOrder.OrderId, corpClientId);
             var transaction = payments.FirstOrDefault(p => p.TransactionId == model.TransactionId);
@@ -175,7 +174,7 @@ namespace Charcutarie.Services
             {
                 Amount = transaction.Amount,
                 CorpClientId = corpClientId,
-                Date = DateTime.Now,
+                Date = DateTimeOffset.UtcNow,
                 Description = $"Transação (#{transaction.TransactionId}) do pedido #{currentOrder.OrderNumber} estornada",
                 MerchantName = transaction.MerchantName,
                 OrderId = transaction.OrderId,

@@ -20,7 +20,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.RemainingBalance)
                 .HasColumnType("decimal(18,2)");
             builder.Property(p => p.TransactionDate)
-                .HasColumnType("DATE");
+                .HasColumnType("DateTimeOffset");
             builder.Property(p => p.Description)
                 .HasColumnType("VARCHAR(200)");
             builder.Property(p => p.MerchantName)

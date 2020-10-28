@@ -16,7 +16,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
             builder.Property(p => p.Date)
-                .HasColumnType("DateTime")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
             builder.Property(p => p.Description)
                 .HasColumnType("VARCHAR(200)")

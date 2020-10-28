@@ -25,30 +25,11 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
 
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DateTime")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
 
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DateTime");
-
-
-            //builder.Property(p => p.Name)
-            //    .HasColumnName("Name")
-            //    .HasColumnType("VARCHAR(100)");
-            //builder.Property(p => p.LastName)
-            //    .HasColumnName("LastName")
-            //    .HasColumnType("VARCHAR(100)");
-            //builder.Property(p => p.DateOfBirth)
-            //    .HasColumnName("DateOfBirth")
-            //    .HasColumnType("DATETIME");
-
-            //builder.Property(p => p.DBAName)
-            //    .HasColumnName("DBANAME")
-            //    .HasColumnType("VARCHAR(100)");
-            //builder.Property(p => p.Cnpj)
-            //    .HasColumnName("CNPJ")
-            //    .HasColumnType("VARCHAR(18)");
-
+                .HasColumnType("DateTimeOffset");
         }
     }
 }

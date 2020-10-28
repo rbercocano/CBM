@@ -44,12 +44,12 @@ export class BalanceComponent implements OnInit {
       year: parseInt(today.format('YYYY'))
     };
     this.time = {
-      hour: parseInt(today.format('hh')),
+      hour: parseInt(today.format('HH')),
       minute: parseInt(today.format('mm'))
     };
-    this.end = today.format("YYYY-MM-DDThh:mm:ss");
+    this.end = today.format("YYYY-MM-DDTHH:mm:ss");
     let dStart = today.subtract(30, 'd');
-    this.start = dStart.format("YYYY-MM-DDThh:mm:ss");
+    this.start = dStart.format("YYYY-MM-DDTHH:mm:ss");
   }
   ngOnInit(): void {
     var oTypes = this.domainService.GetTransactionTypes();
@@ -110,7 +110,7 @@ export class BalanceComponent implements OnInit {
   }
   openTransactionModal() {
     this.filterTypes();
-    this.transaction.date = moment(new Date()).format("YYYY-MM-DDThh:mm:ss");
+    this.transaction.date = moment(new Date()).format("YYYY-MM-DDTHH:mm:ss");
     this.modal = this.modalService.open(this.transModal, { size: 'lg' });
   }
   openSearchModal() {
@@ -126,7 +126,7 @@ export class BalanceComponent implements OnInit {
       minute: this.time.minute
     };
     var result = moment(`${d.year}-${d.month}-${d.day} ${d.hour}:${d.minute}:00`);
-    return result.format("YYYY-MM-DDThh:mm:ss");
+    return result.format("YYYY-MM-DDTHH:mm:ss");
   }
   public get totalDays(): number {
     var dstart = moment(this.start);

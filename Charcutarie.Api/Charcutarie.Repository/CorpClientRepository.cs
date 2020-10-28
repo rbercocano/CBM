@@ -29,16 +29,16 @@ namespace Charcutarie.Repository
         {
             var @params = new[]
                 {
-                   new SqlParameter("@p0", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 100, Value= model.Name},
-                   new SqlParameter("@p1", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 100, Value = model.DBAName},
+                   new SqlParameter("@p0", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 100, Value= string.IsNullOrEmpty(model.Name) ? DBNull.Value :(object) model.Name},
+                   new SqlParameter("@p1", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 100, Value = string.IsNullOrEmpty(model.DBAName) ? DBNull.Value :(object) model.DBAName},
                    new SqlParameter("@p2", SqlDbType.Bit) {Direction = ParameterDirection.Input, Value =model.Active},
-                   new SqlParameter("@p3", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size =200, Value = model.Email},
-                   new SqlParameter("@p4", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 20, Value = model.Mobile},
-                   new SqlParameter("@p5", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 4, Value = model.Currency},
+                   new SqlParameter("@p3", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size =200, Value = string.IsNullOrEmpty(model.Email) ? DBNull.Value : (object)model.Email},
+                   new SqlParameter("@p4", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 20, Value = string.IsNullOrEmpty(model.Mobile) ? DBNull.Value : (object)model.Mobile},
+                   new SqlParameter("@p5", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 4, Value = string.IsNullOrEmpty(model.Currency) ? DBNull.Value : (object)model.Currency},
                    new SqlParameter("@p6", SqlDbType.Int) {Direction = ParameterDirection.Input, Value = model.CustomerTypeId},
-                   new SqlParameter("@p7", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 14, Value = model.CPF},
-                   new SqlParameter("@p8", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 18, Value = model.CNPJ},
-                   new SqlParameter("@p9", SqlDbType.DateTime) {Direction = ParameterDirection.Input, Value = model.LicenseExpirationDate.HasValue ? (object)model.LicenseExpirationDate.Value: DBNull.Value},
+                   new SqlParameter("@p7", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 14, Value = string.IsNullOrEmpty(model.CPF) ? DBNull.Value : (object)model.CPF},
+                   new SqlParameter("@p8", SqlDbType.VarChar) {Direction = ParameterDirection.Input, Size = 18, Value = string.IsNullOrEmpty(model.CNPJ) ? DBNull.Value :(object) model.CNPJ},
+                   new SqlParameter("@p9", SqlDbType.DateTimeOffset) {Direction = ParameterDirection.Input, Value = model.LicenseExpirationDate.HasValue ? (object)model.LicenseExpirationDate.Value: DBNull.Value},
                    new SqlParameter("@ID", SqlDbType.Int) {Direction = ParameterDirection.Output}
                  };
             var id = await context.Database.ExecuteSqlRawAsync("exec @ID = AddCorpClient @p0,@p1,@p2,@p3,@p4,@p5,@p6,@p7,@p8,@p9", @params);

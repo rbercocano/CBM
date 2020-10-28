@@ -14,8 +14,8 @@ namespace Charcutarie.Models.ViewModels
         public string Currency { get; set; }
         public bool Active { get; set; }
         public int RoleId { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
         public string DBAName { get; set; }
         public string CompanyName { get; set; }
     }

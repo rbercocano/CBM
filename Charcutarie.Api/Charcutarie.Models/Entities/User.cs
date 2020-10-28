@@ -13,8 +13,8 @@ namespace Charcutarie.Models.Entities
         public bool Active { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
         public CorpClient CorpClient { get; set; }
         public string Email { get; set; }
         public string LastName { get; set; }
@@ -25,6 +25,5 @@ namespace Charcutarie.Models.Entities
         public MeasureUnit VolumeMeasureUnit { get; set; }
         public MeasureUnitEnum DefaultMassMid { get; set; }
         public MeasureUnitEnum DefaultVolumeMid { get; set; }
-        public string TimeZoneId { get; set; }
     }
 }

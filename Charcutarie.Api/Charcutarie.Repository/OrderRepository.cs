@@ -34,9 +34,9 @@ namespace Charcutarie.Repository
             model.OrderNumber = lastNumber + 1;
 
             var entity = mapper.Map<EF.Order>(model);
-            entity.OrderItems.ForEach(i => i.LastStatusDate = DateTime.Now);
+            entity.OrderItems.ForEach(i => i.LastStatusDate = DateTimeOffset.UtcNow);
             if (model.PaymentStatusId == PaymentStatusEnum.Pago)
-                entity.PaidOn = DateTime.UtcNow;
+                entity.PaidOn = DateTimeOffset.UtcNow;
             context.Orders.Add(entity);
             var rows = await context.SaveChangesAsync();
             return await Task.FromResult(entity.OrderNumber);
@@ -47,7 +47,7 @@ namespace Charcutarie.Repository
 
             if (entity.PaymentStatusId != PaymentStatusEnum.Pago &&
                 (model.PaymentStatusId == PaymentStatusEnum.Pago || model.PaymentStatusId == PaymentStatusEnum.ParcialmentePago))
-                entity.PaidOn = DateTime.Now;
+                entity.PaidOn = DateTimeOffset.UtcNow;
             else if ((entity.PaymentStatusId == PaymentStatusEnum.Pago || entity.PaymentStatusId == PaymentStatusEnum.ParcialmentePago)
                 && model.PaymentStatusId != PaymentStatusEnum.Pendente)
                 entity.PaidOn = null;
@@ -132,9 +132,9 @@ namespace Charcutarie.Repository
                             C.CustomerId,
 	                        P.Description AS PaymentStatus,
 	                        OS.Description AS OrderStatus,
-	                        CAST( O.CompleteBy AS DATE) CompleteBy,
-	                        CAST( O.CreatedOn AS DATE) CreatedOn,
-	                        CAST( O.PaidOn AS DATE) PaidOn,
+	                        O.CompleteBy CompleteBy,
+	                        O.CreatedOn CreatedOn,
+	                        O.PaidOn PaidOn,
 	                        ISNULL((SELECT SUM(OI.PriceAfterDiscount) FROM OrderItem OI WHERE OI.OrderId = O.OrderId AND OI.OrderItemStatusId NOT IN (3)),0)  AS FinalPrice
                         FROM Customer C 
                         JOIN [Order] O ON C.CustomerId = O.CustomerId
@@ -464,12 +464,12 @@ namespace Charcutarie.Repository
 	                                            CAST(CAST(YEAR(O.CreatedOn) AS VARCHAR(4)) + '-'+CAST(MONTH(O.CreatedOn) AS VARCHAR(2))+'-01' AS DATE)
                                             ORDER BY 1 DESC");
             var data = await context.SalesPerMonths.FromSqlRaw(query.ToString(), sqlParams.ToArray()).ToListAsync();
-            var range = new[] { DateTime.Now,
-                DateTime.Now.AddMonths(-1),
-                DateTime.Now.AddMonths(-2),
-                DateTime.Now.AddMonths(-3),
-                DateTime.Now.AddMonths(-4),
-                DateTime.Now.AddMonths(-5) }.ToList();
+            var range = new[] { DateTimeOffset.UtcNow,
+                DateTimeOffset.UtcNow.AddMonths(-1),
+                DateTimeOffset.UtcNow.AddMonths(-2),
+                DateTimeOffset.UtcNow.AddMonths(-3),
+                DateTimeOffset.UtcNow.AddMonths(-4),
+                DateTimeOffset.UtcNow.AddMonths(-5) }.ToList();
             var result = mapper.Map<IEnumerable<SalesPerMonth>>(data);
             result = (from d in range
                       join r in result on d.ToString("yyyy/MM") equals r.Date.ToString("yyyy/MM") into gj

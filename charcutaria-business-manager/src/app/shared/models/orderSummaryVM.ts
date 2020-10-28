@@ -13,7 +13,7 @@ export class OrderSummaryVM implements OrderSummary {
     paymentStatus: string;
     orderStatus: string;
     completeBy: string;
-    CreatedOn: string;
+    createdOn: string;
     paidOn: string;
     finalPrice: number;
     isExpanded: boolean = false;

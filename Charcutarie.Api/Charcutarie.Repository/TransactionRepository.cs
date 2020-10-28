@@ -46,6 +46,7 @@ namespace Charcutarie.Repository
         public async Task<Transaction> AddTransaction(NewTransaction transaction)
         {
             var newT = mapper.Map<EF.Transaction>(transaction);
+            newT.Date = newT.Date.ToUniversalTime();
             var trans = context.Transactions.Add(newT);
             await context.SaveChangesAsync();
             return mapper.Map<Transaction>(newT);

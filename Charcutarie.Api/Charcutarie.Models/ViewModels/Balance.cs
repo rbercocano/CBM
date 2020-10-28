@@ -8,7 +8,7 @@ namespace Charcutarie.Models.ViewModels
     {
         public long RID { get; set; }
         public long? TransactionId { get; set; }
-        public DateTime TransactionDate { get; set; }
+        public DateTimeOffset TransactionDate { get; set; }
         public decimal Amount { get; set; }
         public decimal RemainingBalance { get; set; }
         public string Description { get; set; }

@@ -51,6 +51,6 @@ export class EditCorpClientComponent implements OnInit {
   }
   cancel(): void {
     this.client = { ...this.currentClient };
-
+    this.editing = false;
   }
 }

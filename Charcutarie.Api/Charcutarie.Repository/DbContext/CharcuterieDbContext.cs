@@ -25,18 +25,19 @@ namespace Charcutarie.Repository.DbContext
 
             foreach (var entityEntry in entries)
             {
+                if (entityEntry.Entity is UserToken) continue;
                 if (entityEntry.State == EntityState.Added)
                 {
                     var property = entityEntry.Properties.FirstOrDefault(p => p.Metadata.Name == "CreatedOn");
                     if (property != null)
-                        entityEntry.Property("CreatedOn").CurrentValue = DateTime.UtcNow;
+                        entityEntry.Property("CreatedOn").CurrentValue = DateTimeOffset.UtcNow;
                 }
 
                 if (entityEntry.State == EntityState.Modified)
                 {
                     var property = entityEntry.Properties.FirstOrDefault(p => p.Metadata.Name == "LastUpdated");
                     if (property != null)
-                        entityEntry.Property("LastUpdated").CurrentValue = DateTime.UtcNow;
+                        entityEntry.Property("LastUpdated").CurrentValue = DateTimeOffset.UtcNow;
                 }
             }
             return base.SaveChangesAsync(cancellationToken);
@@ -116,7 +117,7 @@ namespace Charcutarie.Repository.DbContext
             modelBuilder.ApplyConfiguration(new TransactionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new BalanceConfiguration());
-            
+
         }
         public async Task<int> ExecuteScalar(string command)
         {

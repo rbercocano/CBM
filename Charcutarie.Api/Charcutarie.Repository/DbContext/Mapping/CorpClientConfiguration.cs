@@ -24,7 +24,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
 
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DateTime")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
 
             builder.Property(p => p.Active)
@@ -36,10 +36,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired();
 
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DateTimeOffset");
 
             builder.Property(p => p.LicenseExpirationDate)
-                .HasColumnType("DATETIME");
+                .HasColumnType("DateTimeOffset");
 
             builder.Property(p => p.AccountNumber)
                 .HasColumnType("VARCHAR(8)")

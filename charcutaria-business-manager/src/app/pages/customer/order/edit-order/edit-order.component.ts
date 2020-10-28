@@ -68,7 +68,7 @@ export class EditOrderComponent implements OnInit {
     private pricingService: PricingService) {
     let today = new Date();
     this.minDate = {
-      day: today.getUTCDate(),
+      day: today.getDate(),
       month: today.getMonth() + 1,
       year: today.getFullYear()
     };

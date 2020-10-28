@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Balance } from '../../models/balance';
 import { NewTransaction } from '../../models/newTransaction';
+import * as moment from 'moment-timezone';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class TransactionService {
     return this.httpClient.get<number>(`${environment.apiUrl}/Transaction/Balance/Total`);
   }
   public Add(transaction: NewTransaction): Observable<Balance[]> {
+    transaction.date = moment(transaction.date).format();
     return this.httpClient.post<Balance[]>(`${environment.apiUrl}/Transaction`, transaction);
   }
 }

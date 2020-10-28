@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { OrderDetails } from '../../models/orderDetails';
 import { UpdateOrder } from '../../models/updateOrder';
-import { OrderItem } from '../../models/orderItem';
 import { NewOrderItem } from '../../models/NewOrderItem';
 import { OrderSummary } from '../../models/orderSummary';
 import { orderSummaryFilter } from '../../models/orderSummaryFilter';
@@ -21,6 +20,8 @@ import { SummarizedProductionFilter } from '../../models/summarizedProductionFil
 import { SummarizedOrderReport } from '../../models/summarizedOrderReport';
 import { PayOrder } from '../../models/payOrder';
 import { RefundPayment } from '../../models/refundPayment';
+import { map } from 'rxjs/operators';
+import * as moment from 'moment-timezone';
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +34,30 @@ export class OrderService {
     return this.httpClient.post<number>(`${environment.apiUrl}/Order`, order);
   }
   public get(orderId: number): Observable<OrderDetails> {
-    return this.httpClient.get<OrderDetails>(`${environment.apiUrl}/Order/${orderId}`);
+    return this.httpClient.get<OrderDetails>(`${environment.apiUrl}/Order/${orderId}`).pipe(map(r => {
+      var zone = moment.tz.guess();
+      if (r.paidOn != null)
+        r.paidOn = moment(r.paidOn).tz(zone).format();
+      if (r.createdOn != null)
+        r.createdOn = moment(r.createdOn).tz(zone).format();
+      if (r.lastUpdated != null)
+        r.lastUpdated = moment(r.lastUpdated).tz(zone).format();
+      return r;
+    }));
   }
   public getByNumber(orderNumber: number): Observable<OrderDetails> {
-    return this.httpClient.get<OrderDetails>(`${environment.apiUrl}/Order/number/${orderNumber}`);
+    return this.httpClient.get<OrderDetails>(`${environment.apiUrl}/Order/number/${orderNumber}`).pipe(map(r => {
+      var zone = moment.tz.guess();
+      if (r.paidOn != null)
+        r.paidOn = moment(r.paidOn).tz(zone).format();
+      if (r.createdOn != null)
+        r.createdOn = moment(r.createdOn).tz(zone).format();
+      if (r.lastUpdated != null)
+        r.lastUpdated = moment(r.lastUpdated).tz(zone).format();
+      return r;
+    }));
   }
-  public update(model: UpdateOrder): Observable<OrderDetails> {
+  public update(model: UpdateOrder): Observable<any> {
     return this.httpClient.put<OrderDetails>(`${environment.apiUrl}/Order`, model);
   }
   public addPayment(model: PayOrder): Observable<any> {
@@ -91,7 +110,16 @@ export class OrderService {
       params = params.append('orderBy', String(filter.orderBy));
     if (filter.direction != null)
       params = params.append('direction', String(filter.direction));
-    return this.httpClient.get<PagedResult<OrderSummary>>(`${environment.apiUrl}/Order/${page}/${pageSize}`, { params: params });
+    return this.httpClient.get<PagedResult<OrderSummary>>(`${environment.apiUrl}/Order/${page}/${pageSize}`, { params: params }).pipe(map(data => {
+      var zone = moment.tz.guess();
+      (data.data ?? []).forEach(r => {
+        if (r.paidOn != null)
+          r.paidOn = moment(r.paidOn).tz(zone).format();
+        if (r.createdOn != null)
+          r.createdOn = moment(r.createdOn).tz(zone).format();
+      })
+      return data;
+    }));
 
   }
   public getOrderItemReport(filter: OrderItemReportFilter, page: number, pageSize: number): Observable<PagedResult<OrderItemReport>> {
@@ -123,7 +151,14 @@ export class OrderService {
       params = params.append('orderBy', String(filter.orderBy));
     if (filter.direction != null)
       params = params.append('direction', String(filter.direction));
-    return this.httpClient.get<PagedResult<OrderItemReport>>(`${environment.apiUrl}/Order/Report/Item/${page}/${pageSize}`, { params: params });
+    return this.httpClient.get<PagedResult<OrderItemReport>>(`${environment.apiUrl}/Order/Report/Item/${page}/${pageSize}`, { params: params }).pipe(map(data => {
+      var zone = moment.tz.guess();
+      (data.data ?? []).forEach(r => {
+        if (r.lastStatusDate != null)
+          r.lastStatusDate = moment(r.lastStatusDate).tz(zone).format();
+      });
+      return data;
+    }));
 
   }
   public getOrderCountSummary(): Observable<OrderCountSummary> {

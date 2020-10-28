@@ -32,10 +32,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .IsRequired()
                 .HasConversion(v => Password.Encrypt(v), v => Password.Decrypt(v));
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DateTime")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
             builder.Property(p => p.LastUpdated)
-                .HasColumnType("DateTime");
+                .HasColumnType("DateTimeOffset");
 
             builder.Property(p => p.DateOfBirth)
                 .HasColumnType("DATETIME");
@@ -63,11 +63,6 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.HasOne(p => p.VolumeMeasureUnit)
                 .WithMany()
                 .HasForeignKey(p => p.DefaultVolumeMid);
-
-
-
-            builder.Property(p => p.TimeZoneId)
-                .HasColumnType("VARCHAR(200)");
         }
     }
 }

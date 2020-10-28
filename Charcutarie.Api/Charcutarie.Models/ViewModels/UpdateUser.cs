@@ -14,7 +14,6 @@ namespace Charcutarie.Models.ViewModels
         public string Mobile { get; set; }
         public MeasureUnitEnum DefaultMassMid { get; set; }
         public MeasureUnitEnum DefaultVolumeMid { get; set; }
-        public string TimeZoneId { get; set; }
         
     }
 }

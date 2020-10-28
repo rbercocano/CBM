@@ -23,8 +23,10 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(MAX)")
                 .IsRequired();
             builder.Property(p => p.CreatedOn)
-                .HasColumnType("DateTime")
+                .HasColumnType("DateTimeOffset")
                 .IsRequired();
+            builder.Property(p => p.PaidOn)
+                .HasColumnType("DateTimeOffset");
             builder.Property(p => p.CompleteBy)
                 .HasColumnType("DATETIME")
                 .IsRequired();
@@ -39,8 +41,6 @@ namespace Charcutarie.Repository.DbContext.Mapping
             builder.Property(p => p.FinalPrice)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
-            builder.Property(p => p.PaidOn)
-                .HasColumnType("DateTime");
         }
     }
 }

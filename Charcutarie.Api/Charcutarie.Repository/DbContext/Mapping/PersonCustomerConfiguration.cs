@@ -17,7 +17,7 @@ namespace Charcutarie.Repository.DbContext.Mapping
                 .HasColumnType("VARCHAR(100)");
             builder.Property(p => p.DateOfBirth)
                 .HasColumnName("DateOfBirth")
-                .HasColumnType("DATETIME");
+                .HasColumnType("DATE");
         }
     }
 }

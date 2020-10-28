@@ -12,13 +12,13 @@ namespace Charcutarie.Models.Entities
         public string Currency { get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
         public List<Customer> Customers { get; set; }
         public int CustomerTypeId { get; set; }
         public string CPF { get; set; }
         public string CNPJ { get; set; }
-        public DateTime? LicenseExpirationDate { get; set; }
+        public DateTimeOffset? LicenseExpirationDate { get; set; }
         public string AccountNumber { get; private set; }
     }
 }

@@ -8,6 +8,7 @@ import { flatMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NotificationService } from 'src/app/shared/services/notification/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private userService: UserService,
     private authService: AuthService, private route: Router,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
   }
@@ -45,6 +47,9 @@ export class LoginComponent implements OnInit {
             this.route.navigate(['/']);
           else
             this.authRes = r.message;
+        }, e => {
+          this.spinner.hide();
+          this.notificationService.notifyHttpError(e);
         });
     }
   }

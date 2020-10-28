@@ -43,7 +43,7 @@ namespace Charcutarie.Repository
         public async Task<long> AddOrderItem(NewOrderItem model, int corpClientId)
         {
             var orderItem = mapper.Map<EF.OrderItem>(model);
-            orderItem.LastStatusDate = DateTime.Now;
+            orderItem.LastStatusDate = DateTimeOffset.UtcNow;
             context.OrderItems.Add(orderItem);
             var result = await context.SaveChangesAsync();
             return orderItem.OrderItemId;
@@ -62,7 +62,7 @@ namespace Charcutarie.Repository
                   .Where(i => i.OrderItemId == model.OrderItemId && i.Order.Customer.CorpClientId == corpClientId)
                   .FirstOrDefaultAsync();
             if (model.OrderItemStatusId != data.OrderItemStatusId)
-                data.LastStatusDate = DateTime.Now;
+                data.LastStatusDate = DateTimeOffset.UtcNow;
             data.MeasureUnitId = model.MeasureUnitId;
             data.Quantity = model.Quantity;
             data.Discount = model.Discount;

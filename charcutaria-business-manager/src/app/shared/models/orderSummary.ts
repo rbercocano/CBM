@@ -9,7 +9,7 @@ export interface OrderSummary {
     paymentStatus: string;
     orderStatus: string;
     completeBy: string;
-    CreatedOn: string;
+    createdOn: string;
     paidOn: string;
     finalPrice: number;
     customerId: number;

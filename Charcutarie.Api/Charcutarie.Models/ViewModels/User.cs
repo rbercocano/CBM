@@ -6,8 +6,8 @@ namespace Charcutarie.Models.ViewModels
 {
     public class User
     {
-        public DateTime CreatedOn { get; set; }
-        public DateTime? LastUpdated { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
         public int? CorpClientId { get; set; }
         public long UserId { get; set; }
         public string Username { get; set; }
@@ -23,6 +23,5 @@ namespace Charcutarie.Models.ViewModels
         public string Mobile { get; set; }
         public MeasureUnitEnum DefaultMassMid { get; set; }
         public MeasureUnitEnum DefaultVolumeMid { get; set; }
-        public string TimeZoneId { get; set; }
     }
 }
