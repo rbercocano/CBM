@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Charcutarie.Models;
 using Charcutarie.Models.ViewModels;
-using EF = Charcutarie.Models.Entities;
 using Charcutarie.Repository.Contracts;
 using Charcutarie.Repository.DbContext;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Text;
 
 namespace Charcutarie.Repository
 {

@@ -23,12 +23,12 @@ namespace Charcutarie.Repository
             this.context = context;
             this.mapper = mapper;
         }
-        public IEnumerable<Balance> GetBalance(DateTime start, DateTime end, int corpClientId)
+        public IEnumerable<Balance> GetBalance(DateTimeOffset start, DateTimeOffset end, int corpClientId)
         {
             var @params = new[]
             {
-                new SqlParameter("@start",start){SqlDbType = System.Data.SqlDbType.Date},
-                new SqlParameter("@end",end){SqlDbType = System.Data.SqlDbType.Date},
+                new SqlParameter("@start",start.ToUniversalTime().Date){SqlDbType = System.Data.SqlDbType.Date},
+                new SqlParameter("@end",end.ToUniversalTime().Date){SqlDbType = System.Data.SqlDbType.Date},
                 new SqlParameter("@cid",corpClientId){SqlDbType = System.Data.SqlDbType.Int}
             };
             var data = context.Balance.FromSqlRaw(@"EXEC [dbo].[GetBalance]   

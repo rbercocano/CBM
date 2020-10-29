@@ -17,11 +17,11 @@ export class ComponentHostDirective implements AfterViewInit {
     let cName = 'total-orders';
     import('src/app/shared/shared.module').then(
       (module) => {
-        var moduleFactory = this.compiler.compileModuleAndAllComponentsSync(SharedModule);
-        var cFactory = moduleFactory.componentFactories.filter(c => c.selector == this.componentName)[0];
-        const component = this.componentFactoryResolver.resolveComponentFactory(cFactory.componentType);
-        const componentRef = this.templateViewContainerRef.createComponent(component);
-        this.templateViewContainerRef.createComponent
+        // var moduleFactory = this.compiler.compileModuleAndAllComponentsSync(SharedModule);
+        // var cFactory = moduleFactory.componentFactories.filter(c => c.selector == this.componentName)[0];
+        // const component = this.componentFactoryResolver.resolveComponentFactory(cFactory.componentType);
+        // const componentRef = this.templateViewContainerRef.createComponent(component);
+        // this.templateViewContainerRef.createComponent
         // this.data.forEach((v, i) => {
         //   componentRef.instance[v.key] = v.value;
         // })

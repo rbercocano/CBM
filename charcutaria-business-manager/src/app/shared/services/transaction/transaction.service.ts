@@ -14,8 +14,8 @@ export class TransactionService {
   constructor(private httpClient: HttpClient) { }
   public GetBalance(start: string, end: string): Observable<Balance[]> {
     let params = new HttpParams();
-    params = params.append('start', start);
-    params = params.append('end', end);
+    params = params.append('start', moment(start).format());
+    params = params.append('end', moment(end).format());
     return this.httpClient.get<Balance[]>(`${environment.apiUrl}/Transaction/Balance`, { params: params });
   }
   public GetTotalBalance(): Observable<number> {

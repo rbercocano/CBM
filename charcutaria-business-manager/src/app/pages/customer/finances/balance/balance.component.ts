@@ -47,9 +47,9 @@ export class BalanceComponent implements OnInit {
       hour: parseInt(today.format('HH')),
       minute: parseInt(today.format('mm'))
     };
-    this.end = today.format("YYYY-MM-DDTHH:mm:ss");
+    this.end = today.format("YYYY-MM-DDT00:00:00");
     let dStart = today.subtract(30, 'd');
-    this.start = dStart.format("YYYY-MM-DDTHH:mm:ss");
+    this.start = dStart.format("YYYY-MM-DDT00:00:00");
   }
   ngOnInit(): void {
     var oTypes = this.domainService.GetTransactionTypes();
@@ -68,7 +68,8 @@ export class BalanceComponent implements OnInit {
   }
 
   public search(): void {
-    this.modal.close();
+    if (this.modal)
+      this.modal.close();
     this.spinner.show();
     this.transactionService.GetBalance(this.start, this.end).subscribe(r => {
       this.balance = r ?? [];

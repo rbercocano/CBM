@@ -8,7 +8,7 @@ namespace Charcutarie.Services.Contracts
     public interface ITransactionService
     {
         Task<Transaction> AddTransaction(NewTransaction transaction, long userId);
-        IEnumerable<Balance> GetBalance(DateTime start, DateTime end, int corpClientId);
+        IEnumerable<Balance> GetBalance(DateTimeOffset start, DateTimeOffset end, int corpClientId);
         Task RemoveTransaction(int corpClientId, long transactionId);
         decimal GetTotalBalance(int corpClientId);
     }

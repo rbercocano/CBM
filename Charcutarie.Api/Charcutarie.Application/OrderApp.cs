@@ -53,7 +53,7 @@ namespace Charcutarie.Application
             return repository.GetOrderItemReport(corpClientId, orderNumber, productIds, massUnitId, volumeUnitId, orderStatus, itemStatus, completeByFrom, completeByTo, customer, customerId, orderBy, direction, page, pageSize);
         }
 
-        public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo, DateTime? paidOnFrom, DateTime? paidOnTo, DateTime? completeByFrom, DateTime? completeByTo, List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
+        public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTimeOffset? createdOnFrom, DateTimeOffset? createdOnTo, DateTimeOffset? paidOnFrom, DateTimeOffset? paidOnTo, DateTime? completeByFrom, DateTime? completeByTo, List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction, int? page, int? pageSize)
         {
             return repository.GetOrderSummary(corpClientId, customer, createdOnFrom, createdOnTo, paidOnFrom, paidOnTo, completeByFrom, completeByTo, paymentStatus, orderStatus, orderBy, direction, page, pageSize);
         }

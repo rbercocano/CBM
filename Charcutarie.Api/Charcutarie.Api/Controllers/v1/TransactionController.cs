@@ -23,7 +23,7 @@ namespace Charcutarie.Api.Controllers.v1
         }
 
         [HttpGet("Balance")]
-        public ActionResult<IEnumerable<Balance>> GetBalance([FromQuery] DateTime start, [FromQuery] DateTime end)
+        public ActionResult<IEnumerable<Balance>> GetBalance([FromQuery] DateTimeOffset start, [FromQuery] DateTimeOffset end)
         {
             var data = service.GetBalance(start, end, UserData.CorpClientId.Value);
             if (data.Any())

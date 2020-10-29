@@ -21,7 +21,7 @@ namespace Charcutarie.Services
             return await app.AddTransaction(transaction, userId);
         }
 
-        public IEnumerable<Balance> GetBalance(DateTime start, DateTime end, int corpClientId)
+        public IEnumerable<Balance> GetBalance(DateTimeOffset start, DateTimeOffset end, int corpClientId)
         {
             return app.GetBalance(start, end, corpClientId);
         }

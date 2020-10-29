@@ -101,7 +101,7 @@ namespace Charcutarie.Api.Controllers.v1
             return Ok(id);
         }
         [HttpGet("{page:int}/{pageSize:int}")]
-        public ActionResult<PagedResult<OrderSummary>> GetOrderSummary([FromQuery] string? customer, [FromQuery] DateTime? createdOnFrom, [FromQuery] DateTime? createdOnTo, [FromQuery] DateTime? paidOnFrom, [FromQuery] DateTime? paidOnTo, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] List<int> paymentStatus, [FromQuery] List<int> orderStatus, [FromQuery] OrderSummaryOrderBy orderBy = OrderSummaryOrderBy.CreatedOn, [FromQuery] OrderByDirection direction = OrderByDirection.Desc, int? page = 1, int? pageSize = 10)
+        public ActionResult<PagedResult<OrderSummary>> GetOrderSummary([FromQuery] string? customer, [FromQuery] DateTimeOffset? createdOnFrom, [FromQuery] DateTimeOffset? createdOnTo, [FromQuery] DateTimeOffset? paidOnFrom, [FromQuery] DateTimeOffset? paidOnTo, [FromQuery] DateTime? completeByFrom, [FromQuery] DateTime? completeByTo, [FromQuery] List<int> paymentStatus, [FromQuery] List<int> orderStatus, [FromQuery] OrderSummaryOrderBy orderBy = OrderSummaryOrderBy.CreatedOn, [FromQuery] OrderByDirection direction = OrderByDirection.Desc, int? page = 1, int? pageSize = 10)
         {
             var data = service.GetOrderSummary(UserData.CorpClientId.Value, customer, createdOnFrom, createdOnTo, paidOnFrom, paidOnTo, completeByFrom, completeByTo, paymentStatus, orderStatus, orderBy, direction, page, pageSize);
             if (data.Data.Any())

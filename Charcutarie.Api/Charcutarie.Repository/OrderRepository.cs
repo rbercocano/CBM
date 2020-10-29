@@ -111,8 +111,8 @@ namespace Charcutarie.Repository
         {
             return await context.Orders.Where(o => o.OrderNumber == orderNumber && o.Customer.CorpClientId == corpClientId).Select(o => o.OrderStatusId).FirstOrDefaultAsync();
         }
-        public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo,
-                                                         DateTime? paidOnFrom, DateTime? paidOnTo,
+        public PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTimeOffset? createdOnFrom, DateTimeOffset? createdOnTo,
+                                                         DateTimeOffset? paidOnFrom, DateTimeOffset? paidOnTo,
                                                          DateTime? completeByFrom, DateTime? completeByTo,
                                                           List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
                                                          int? page, int? pageSize)
@@ -148,23 +148,23 @@ namespace Charcutarie.Repository
             }
             if (createdOnFrom.HasValue)
             {
-                query.Append(" AND CreatedOn >= @createdOnFrom");
-                sqlParams.Add(new SqlParameter("@createdOnFrom", createdOnFrom) { SqlDbType = SqlDbType.Date });
+                query.Append(" AND CAST(CreatedOn AS DATE) >= @createdOnFrom");
+                sqlParams.Add(new SqlParameter("@createdOnFrom", createdOnFrom.Value.ToUniversalTime().Date) { SqlDbType = SqlDbType.Date });
             }
             if (createdOnTo.HasValue)
             {
-                query.Append(" AND CreatedOn <= @createdOnTo");
-                sqlParams.Add(new SqlParameter("@createdOnTo", createdOnTo) { SqlDbType = SqlDbType.Date });
+                query.Append(" AND CAST(CreatedOn AS DATE) <= @createdOnTo");
+                sqlParams.Add(new SqlParameter("@createdOnTo", createdOnTo.Value.ToUniversalTime().Date) { SqlDbType = SqlDbType.Date });
             }
             if (paidOnFrom.HasValue)
             {
-                query.Append(" AND PaidOn >= @paidOnFrom");
-                sqlParams.Add(new SqlParameter("@paidOnFrom", paidOnFrom) { SqlDbType = SqlDbType.Date });
+                query.Append(" AND CAST(PaidOn AS DATE) >= @paidOnFrom");
+                sqlParams.Add(new SqlParameter("@paidOnFrom", paidOnFrom.Value.ToUniversalTime().Date) { SqlDbType = SqlDbType.Date });
             }
             if (paidOnTo.HasValue)
             {
-                query.Append(" AND PaidOn <= @paidOnTo");
-                sqlParams.Add(new SqlParameter("@paidOnTo", paidOnTo) { SqlDbType = SqlDbType.Date });
+                query.Append(" AND CAST(PaidOn AS DATE) <= @paidOnTo");
+                sqlParams.Add(new SqlParameter("@paidOnTo", paidOnTo.Value.ToUniversalTime().Date) { SqlDbType = SqlDbType.Date });
             }
             if (completeByFrom.HasValue)
             {
@@ -361,8 +361,8 @@ namespace Charcutarie.Repository
             var sqlParams = new List<SqlParameter>
             {
                 new SqlParameter("@corpClientId", corpClientId),
-                new SqlParameter("@start", new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date) { SqlDbType = SqlDbType.Date },
-                new SqlParameter("@end", new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Date)
+                new SqlParameter("@start", new DateTime(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month, 1).Date) { SqlDbType = SqlDbType.Date },
+                new SqlParameter("@end", new DateTime(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month, DateTime.DaysInMonth(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month)).Date)
                 { SqlDbType = SqlDbType.Date }
             };
             var query = new StringBuilder(@"SELECT 
@@ -394,8 +394,8 @@ namespace Charcutarie.Repository
             var sqlParams = new List<SqlParameter>
             {
                 new SqlParameter("@corpClientId", corpClientId),
-                new SqlParameter("@start", new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date) { SqlDbType = SqlDbType.Date },
-                new SqlParameter("@end", new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).Date)
+                new SqlParameter("@start", new DateTime(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month, 1).Date) { SqlDbType = SqlDbType.Date },
+                new SqlParameter("@end", new DateTime(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month, DateTime.DaysInMonth(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month)).Date)
                 { SqlDbType = SqlDbType.Date }
             };
             var query = new StringBuilder(@"SELECT 

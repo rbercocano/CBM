@@ -27,7 +27,7 @@ namespace Charcutarie.Application
             return await repository.AddTransaction(transaction);
         }
 
-        public IEnumerable<Balance> GetBalance(DateTime start, DateTime end, int corpClientId)
+        public IEnumerable<Balance> GetBalance(DateTimeOffset start, DateTimeOffset end, int corpClientId)
         {
             var totalDays = (end - start).TotalDays;
             if (totalDays > 180)

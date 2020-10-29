@@ -16,8 +16,8 @@ namespace Charcutarie.Repository.Contracts
         Task Update(UpdateOrder model, int corpClientId);
         Task ChangeStatus(UpdateOrderStatus model, int corpClientId);
         Task<OrderStatusEnum> GetCurrentStatus(long orderNumber, int corpClientId);
-        PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTime? createdOnFrom, DateTime? createdOnTo,
-                                                         DateTime? paidOnFrom, DateTime? paidOnTo,
+        PagedResult<OrderSummary> GetOrderSummary(int corpClientId, string customer, DateTimeOffset? createdOnFrom, DateTimeOffset? createdOnTo,
+                                                         DateTimeOffset? paidOnFrom, DateTimeOffset? paidOnTo,
                                                          DateTime? completeByFrom, DateTime? completeByTo,
                                                           List<int> paymentStatus, List<int> orderStatus, OrderSummaryOrderBy orderBy, OrderByDirection direction,
                                                          int? page, int? pageSize);
